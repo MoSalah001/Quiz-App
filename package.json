@@ -11,11 +11,12 @@
   "author": "Mohamed Salah-Eldeen Mahmoud <mhmdsalah707@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^5.1.0",
+    "bcrypt": "^5.1.1",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^7.4.3"
+    "mongoose": "^7.4.3",
+    "node-gyp": "^10.0.1"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
