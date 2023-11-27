@@ -1,0 +1,82 @@
+:root{
+    --bg-light: rgba(255,255,255,1);
+    --clr-logo: red;
+    --btn-light: hsl(120,100%,35%);
+}
+
+h1 {
+    margin: 0 auto;
+    font-size: 72px;
+    color: var(--clr-logo);
+}
+
+body {
+    background-color: var(--bg-light);
+    width: 99.4vw;
+    height: 96vh;
+    display: flex;
+    flex-direction: column;
+    place-content: center;
+    font-size: 32px;
+}
+
+#app {
+    display: flex;
+    flex-direction: column;
+    place-content: center;
+    width: 100%;
+    height: 100%;
+    flex-wrap: wrap;
+}
+
+#form {
+    border-radius: 10px;
+    padding: 25px;
+    width: 50%;
+    height: 40%;
+    display: flex;
+    flex-direction: column;
+    place-content: center;
+    flex-wrap: wrap;
+    margin: 25px auto;
+    background-color: var(--clr-logo);
+}
+
+#form input , #form label {
+    width: 100%;
+}
+#form label {
+    color: white;
+}
+#form input {
+    margin: 10px 0px;
+    font-size: 32px;
+    color: var(--clr-logo);
+}
+
+#form button {
+    background-color: var(--btn-light);
+    margin: 20px auto;
+    width: 50%;
+    height: 48px;
+    font-size: 24px;
+    font-weight: 600;
+    border: 3px solid hsl(60, 100%, 60%);
+    letter-spacing: 10px;
+    border-radius: 25px;
+    text-transform: uppercase;
+    color: white;
+    cursor: pointer;
+}
+
+#app a, #app a:visited {
+    padding: 5px;
+    background-color: hsl(60, 100%, 50%);
+    color: hsl(120,75%,35%);
+    border-radius: 5px;
+    text-decoration:none;
+    font-weight: 700;
+    margin: 0 auto;
+}
+
+

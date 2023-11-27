@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App</title>
+    <link rel="stylesheet" href="./style/index.css">
+</head>
+<body>
+    <h1>Quiz App</h1>
+    <div id="app">
+        <form action="/login" method="post" id="form">
+            <label for="ID">Staff ID:</label>
+            <input type="number" required name="ID" placeholder="Staff ID">
+            <label for="pass">Password</label>
+            <input type="password" required name="pass" placeholder="Password">
+            <button type="submit" id="btn">Login</button>
+        </form>
+        <p id="response"></p>
+        <a href="./request">Request new access</a>
+    </div>
+    <script src="./js/index.js"></script>
+</body>
+</html>

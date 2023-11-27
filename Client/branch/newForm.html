@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../style/admin.css">
+    <title>Quiz Hub - admin portal</title>
+</head>
+<body>
+    <h5 id="user"></h5>
+    <h1>Quiz App</h1>
+    <div id="form-div">
+        <form action="newq/newquiz" method="post" name="newQuiz">
+            <label for="date">Quiz Date</label>
+            <input type="datetime-local" name="date" required>
+            <label for="duration">Quiz duration</label>
+            <select id="duration" name="duration" required>
+                <option value="30">30 Min</option>
+                <option value="60">60 Min</option>
+                <option value="90">90 Min</option>
+                <option value="120">120 Min</option>
+            </select>
+            <button id="quizBtn">Set Quiz</button>
+        </form>
+    </div>
+    <a id="back" href="./">back</a>
+    <script src="../js/admin.js"></script>
+</body>
+</html>

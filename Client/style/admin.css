@@ -1,0 +1,217 @@
+:root{
+    --bg-light: rgba(255,255,255,1);
+    --clr-logo: red;
+    --btn-light: hsl(120,100%,35%);
+    --marker-light: hsl(220,100%,50%);
+    --text-light : hsl(120,100%,35%);
+    --nav-light: hsl(60,100%,65%);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+h5 {
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    font-size: 36px;
+    color: red;
+}
+
+span {
+    color: green;
+    text-shadow: 0px 0px 5px yellow;
+    font: 700 36px "Bodoni MT";
+}
+
+h1 {
+    margin: 0 auto;
+    font-size: 72px;
+    color: var(--clr-logo);
+    height: 15vh;
+}
+
+body {
+    background-color: var(--bg-light);
+    width: 99.4vw;
+    height: 96vh;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    font-size: 32px;
+}
+
+.admin-panel-nav {
+    /* parent nav */
+    display: flex;
+    flex-direction: column;
+    place-items: center;
+    width: 100%;
+}
+
+.nav-ul {
+    display: flex;
+    flex-direction: column;
+    place-content: center;
+    list-style: none;
+}
+.nav-ul li {
+    text-align: center;
+    margin: 25px auto;
+    /* border: 2px solid var(--clr-logo); */
+    border-radius: 25px;
+    transition: 0.7s;
+    padding: 0;
+    max-width: fit-content;
+}
+.nav-ul li::before {
+    /* content: "\2020  "; */
+    content: "\261B  ";
+    font-size: 48px;
+    color: var(--clr-logo);
+    transition: 0.7s;
+}
+.nav-ul li::after {
+    content: "  \261A";
+    font-size: 48px;
+    color: var(--clr-logo);
+    transition: 0.7s;
+}
+
+.nav-ul li:hover {
+    background-color: var(--nav-light);
+}
+
+.nav-ul li:hover::before {
+    color: var(--marker-light);
+}
+.nav-ul li:hover::after {
+    color: var(--marker-light);
+}
+
+.nav-ul li a , .nav-ul li a:visited {
+    font-size: 48px;
+    text-decoration: none;
+    color: var(--text-light);
+}
+/* form styling */
+#form-div {
+    display: flex;
+    flex-direction: column;
+    width: 50vw;
+    margin: 0 auto;
+    height: auto;
+    place-content: center;
+    background-color: red;
+    border-radius: 10px;
+}
+#form-div form {
+    display: flex;
+    flex-direction: column;
+    margin: 25px 0;
+    place-items: center;
+}
+
+#form-div form input ,#form-div form select  {
+    width: 80%;
+    text-align: center;
+    height: 40px;
+    font-size: 28px;
+    cursor: pointer;
+    border: 1px red solid;
+    border-radius: 10px;
+}
+
+#form-div form button {
+    height: 50px;
+    font-size: 28px;
+    margin-top: 25px;
+    width: 50%;
+    border: 2px red solid;
+    border-radius: 25px;
+    cursor: pointer;
+    color: red;
+    transition: 0.3s;
+}
+
+#form-div form button:hover {
+    background-color: green;
+    color: yellow;
+}
+a#back {
+    margin: 5px auto;
+    width: fit-content;
+    padding: 5px 25px;
+    border: 5px solid red;
+    border-radius: 25px;
+    transition: 0.3s;
+}
+
+a#back:hover {
+    background-color: red;
+}
+
+.labels{
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+}
+
+#secondForm {
+    width: 100%;
+}
+
+#bug {
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+#mark-true:checked {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    content: "\2027";
+    text-wrap: nowrap;
+    color: Yellow;
+    left: 5px;
+}
+
+#mark-true::after {
+    position: relative;
+    left: 25px;
+    font-size: 22px;
+    width: 20px;
+    height: 20px;
+    content: "True Answer";
+    text-wrap: nowrap;
+    font-weight: 600;
+}
+
+.options {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.questionField {
+    width: 85%;
+    margin-top: 5px;
+    border-radius: 15px;
+    word-wrap: break-word;
+    text-overflow: clip;
+    max-width: 85%;
+    height: 80px;
+    font-size: 20px;
+    resize: vertical;
+    padding-left: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    overflow-wrap: break-word;
+    overflow-y: auto;
+}
+
