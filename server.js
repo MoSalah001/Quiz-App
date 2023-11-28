@@ -5,6 +5,7 @@ const bcrypt = require("bcryptjs")
 const jwt = require('jsonwebtoken')
 const app = express()
 require('dotenv').config()
+const port = 3001
 
 const admin = require('./Routes/admin')
 
@@ -25,7 +26,7 @@ app.use(express.urlencoded({
 app.use('/admin',admin)
 
 
-app.listen(()=>{
+app.listen(port,()=>{
     console.log(`http://127.0.0.1`);
 })
 
