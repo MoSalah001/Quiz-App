@@ -5,7 +5,7 @@ const bcrypt = require("bcryptjs")
 const jwt = require('jsonwebtoken')
 const app = express()
 require('dotenv').config()
-let port = process.env.PORT || 5500
+const port = 4000
 
 const admin = require('./Routes/admin')
 
