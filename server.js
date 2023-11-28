@@ -11,7 +11,7 @@ const admin = require('./Routes/admin')
 const mongo = require('mongoose')
 
 mongo.connect(process.env.DBHost).then(()=>{
-    console.log("connected");
+    console.log("connected successfully");
 }).catch(err=>{
     console.log('auth with db failed');;
 })
