@@ -101,3 +101,6 @@ app.post('/firstReg',async (req,res)=>{ // first admin user
 app.get('/lgout',(req,res)=>{
     res.send("logout Khalaf")
 })
+
+
+// test server deployment
