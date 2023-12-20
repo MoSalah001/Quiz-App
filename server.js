@@ -4,19 +4,35 @@ const path = require("path")
 const bcrypt = require("bcryptjs")
 const jwt = require('jsonwebtoken')
 const app = express()
+const mysql = require('mysql')
 // require('dotenv').config()
+let DBConnect = mysql.createConnection({
+    host : process.env.DBHost,
+    user : process.env.DBUser,
+    password : process.env.DBPass,
+    database : process.env.DBName
+}) 
+
+
 const port = process.env.PORT || 8800
 
 const admin = require('./Routes/admin')
 
-const mongo = require('mongoose')
+// const mongo = require('mongoose')
 
-mongo.connect(process.env.DBHost).then(()=>{
-    console.log("connected successfully");
-}).catch(err=>{
-    console.log('auth with db failed');;
+// mongo.connect(process.env.DBHost).then(()=>{
+//     console.log("connected successfully");
+// }).catch(err=>{
+//     console.log('auth with db failed');;
+// })
+DBConnect.connect((err)=>{
+    if(err){
+        console.log(`error connecting: `,err.stack);
+        return
+    } else {
+        console.log(`Connected as id `,DBConnect.threadId);
+    }
 })
-
 app.use(express.static("Client"))
 app.use(express.json())
 app.use(express.urlencoded({
@@ -31,34 +47,42 @@ app.listen(port,()=>{
 })
 
 app.post('/login',async (req,res)=>{
-    const user = await User.find({staffID : req.body.ID})
-    if(user[0]){
-        bcrypt.compare(req.body.pass,user[0].password,(err,result)=>{
-            if(err){
-                res.send("Wrong Credintals")
-            }
-            else {
-                jwt.sign(JSON.stringify(user[0]),process.env.JWTSecret,(err,token)=>{
-                    if (err) res.send(err)
-                    else {
-                        if(user[0].userType === 1) {
-                            res.cookie("token",token,{
-                                httpOnly: true
-                            })
-                            res.cookie('user',user[0].staffID)
-                            res.redirect('../admin')
-                        } else {
-                            res.cookie("token",token)
-                            res.redirect('../main')
+    DBConnect.query("SELECT StaffID , PHashed, Admin FROM Users WHERE StaffID =?",parseInt(req.body.ID),(error,result,fields)=>{
+        if(error) {
+            console.log(error);
+            res.status(404).send('Wrong User or Password')
+        }
+        let data = result[0]
+        if(data){
+            bcrypt.compare(req.body.pass,data.PHashed,(err,result)=>{
+                if(err){
+                    console.log(err);
+                    res.send("Wrong Credintals")
+                }
+                else {
+                    jwt.sign(JSON.stringify(data.StaffID),process.env.JWTSecret,(err,token)=>{
+                        if (err) res.send(err)
+                        else {
+                            if(data.Admin === 1) {
+                                res.cookie("token",token,{
+                                    httpOnly: true
+                                })
+                                res.cookie('user',data.StaffID)
+                                res.redirect('../admin')
+                            } else {
+                                res.cookie("token",token)
+                                res.redirect('../main')
+                            }
                         }
-                    }
-                })
-            }
-        })
-    } else {
-        res.append('message',"Wrong Credintals")
-        res.redirect('..')
-    }
+                    })
+                }
+            })
+        } else {
+            res.append('message',"Wrong Credintals")
+            res.redirect('..')
+        }
+    })
+
 })
 
 app.get('/admin',(req,res)=>{
@@ -74,7 +98,6 @@ app.get('/request',(req,res)=>{
 })
 
 app.post('/firstReg',async (req,res)=>{ // first admin user
-    console.log(req.body);
     const saltRounds = 15;
     const salt = await bcrypt.genSalt(saltRounds)
     bcrypt.hash(req.body.password,salt,(err,hash)=>{
@@ -82,19 +105,34 @@ app.post('/firstReg',async (req,res)=>{ // first admin user
             console.log(err);
             return err
         }
-        const user = new User({
-            staffID: req.body.staffID,
-            password : hash,
-            storeID : req.body.storeID,
-            email : req.body.email,
-            userType : 1,
-            KYC : true
+        let admin = false
+        if(req.body.userType === "1"){
+            admin = true
+        }
+
+        let regQuery = `INSERT INTO Users (StaffID, PHashed, StoreID, Admin) 
+        VALUES (?,?,?,?)`
+
+        DBConnect.query(regQuery,[req.body.staffID,hash,req.body.storeID,admin],(error, result, fields)=>{
+            if(error) {
+                res.send("User Not Saved");
+            }
+            res.send('User Saved')
         })
-        user.save().then(()=>{
-            res.status(200).send("user saved")
-        }).catch(err=>{
-            res.status(200).send("user not saved")
-        });
+
+        // const user = new User({
+        //     staffID: req.body.staffID,
+        //     password : hash,
+        //     storeID : req.body.storeID,
+        //     email : req.body.email,
+        //     userType : 1,
+        //     KYC : true
+        // })
+        // user.save().then(()=>{
+        //     res.status(200).send("user saved")
+        // }).catch(err=>{
+        //     res.status(200).send("user not saved")
+        // });
     })
 })
 

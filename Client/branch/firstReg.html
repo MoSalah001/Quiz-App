@@ -7,11 +7,16 @@
 </head>
 <body>
     <form action="/firstReg" method="post">
+        <label>StaffID</label>
         <input type="number" name="staffID">
+        <label>Pass</label>
         <input type="password" name="password">
+        <label>Store</label>
         <input type="number" name="storeID">
-        <input type="email" name="email">
-        <input type="number" name="userType">
+        <!-- <label>Email</label>
+        <input type="email" name="email"> -->
+        <label>UserLevel</label>
+        <input type="number" name="userType" min="0" max="1">
         <button type="submit">send</button>
     </form>
 </body>
