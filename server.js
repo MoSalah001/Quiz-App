@@ -1,5 +1,4 @@
 const express = require('express')
-const User = require('./Models/User')
 const path = require("path")
 const bcrypt = require("bcryptjs")
 const jwt = require('jsonwebtoken')
@@ -18,13 +17,6 @@ const port = process.env.PORT || 8800
 
 const admin = require('./Routes/admin')
 
-// const mongo = require('mongoose')
-
-// mongo.connect(process.env.DBHost).then(()=>{
-//     console.log("connected successfully");
-// }).catch(err=>{
-//     console.log('auth with db failed');;
-// })
 DBConnect.connect((err)=>{
     if(err){
         console.log(`error connecting: `,err.stack);
@@ -119,20 +111,6 @@ app.post('/firstReg',async (req,res)=>{ // first admin user
             }
             res.send('User Saved')
         })
-
-        // const user = new User({
-        //     staffID: req.body.staffID,
-        //     password : hash,
-        //     storeID : req.body.storeID,
-        //     email : req.body.email,
-        //     userType : 1,
-        //     KYC : true
-        // })
-        // user.save().then(()=>{
-        //     res.status(200).send("user saved")
-        // }).catch(err=>{
-        //     res.status(200).send("user not saved")
-        // });
     })
 })
 

@@ -14,9 +14,7 @@ router.post('/newq/newquiz',(req,res)=>{
     }
     console.log(req.body);
     const quizData = {
-        quizID: req.body.date.split('T')[0],
         quizDate: req.body.date,
-        quizCreationDate: new Date(),
         quizCreator: cleanCookie.user,
         quizDuration: req.body.duration
     }
