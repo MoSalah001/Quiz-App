@@ -215,3 +215,22 @@ a#back:hover {
     overflow-y: auto;
 }
 
+.loadPage {
+    position: absolute;
+    display: flex;
+    place-content: center;
+    place-items: center;
+    top: 0;
+    right: 0;
+    z-index: 1;
+    background-color: rgba(0,0,0,0.7);
+    width: 100dvw;
+    height: 100dvb;
+}
+
+.box {
+    width: 80dvw;
+    height: 5dvh;
+    background-color: red;
+    border-radius: 25px;
+}

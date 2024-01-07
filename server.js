@@ -4,7 +4,8 @@ const bcrypt = require("bcryptjs")
 const jwt = require('jsonwebtoken')
 const app = express()
 const mysql = require('mysql')
-// require('dotenv').config()
+require('dotenv').config()
+
 let DBConnect = mysql.createConnection({
     host : process.env.DBHost,
     user : process.env.DBUser,

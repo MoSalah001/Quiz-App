@@ -6,6 +6,20 @@ const btn = document.getElementById('quizBtn')
 
 const form = document.forms["newQuiz"]
 
+function loadingSlider(res){
+    const page = document.createElement('div')
+    console.log("here");
+    const box = document.createElement('div')
+    page.classList.add('loadPage')
+    box.classList.add('box')
+    page.append(box)
+    document.body.append(page)
+}
+    
+    loadingSlider(user,"tests");
+
+
+
 
 btn.addEventListener('click',saveQuiz)
 
