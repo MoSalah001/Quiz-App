@@ -229,8 +229,44 @@ a#back:hover {
 }
 
 .box {
-    width: 80dvw;
+    width: 40dvw;
     height: 5dvh;
-    background-color: red;
+    background-color: black;
     border-radius: 25px;
+}
+
+.eye {
+    position: relative;
+    background-color: red;
+    width: 100px;
+    height: 50px;
+    border-radius: 25px;
+    z-index: 2;
+    animation: loader linear 1.5s infinite;
+}
+
+
+@keyframes loader {
+    0% {
+        width: 50px;
+        left: 0;
+    }
+    5% {
+        width: 50px;
+        left: 5%;
+    }
+    15%{
+        width: 100px;
+    }
+    85%{
+        width: 100px;
+    }
+    95% {
+        width: 50px;
+        left: 95%;
+    }
+    100% {
+        width: 5px;
+        left: 100%;
+    }
 }

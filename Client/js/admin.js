@@ -8,11 +8,13 @@ const form = document.forms["newQuiz"]
 
 function loadingSlider(res){
     const page = document.createElement('div')
-    console.log("here");
     const box = document.createElement('div')
+    const eye = document.createElement('div')
     page.classList.add('loadPage')
     box.classList.add('box')
+    eye.classList.add('eye')
     page.append(box)
+    box.append(eye)
     document.body.append(page)
 }
     
