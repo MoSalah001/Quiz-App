@@ -27,7 +27,13 @@ router.post('/newq/newquiz',(req,res)=>{
     }
     DBConnect.query("INSERT INTO Quiz (QuizID,QDate,QCreator,Duration) VALUES (?,?,?,?)",[quizData.quizID,quizData.quizDate,quizData.quizCreator,quizData.quizDuration],(err,rows)=>{
         if(err) {
-            res.status(400).send({"message":"You already set a quiz on the selected month"})
+            res.status(400).send({"msg":"You already set a quiz on the selected month"})
+        } else {
+            res.cookie("quizID",quizData.quizID)
+            res.status(200).send({
+                "quizID":quizData.quizID,
+                "msg":"Quiz Assigned Successfully"
+            })
         }
     })
 })

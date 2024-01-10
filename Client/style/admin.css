@@ -246,13 +246,22 @@ a#back:hover {
 }
 
 .dialog {
-    background-color: red;
+    transition-duration: 2s;
     max-width: 280px;
     height: auto;
     position: absolute;
     bottom: 2dvh;
     right: 1dvw;
     border-radius: 5px;
+    color: White;
+}
+
+.error {
+    background-color: red;
+}
+
+.respond {
+    background-color: green;
 }
 
 

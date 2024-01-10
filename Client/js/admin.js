@@ -7,11 +7,17 @@ const btn = document.getElementById('quizBtn')
 const form = document.forms["newQuiz"]
 
 
-function responseMsg(msg,state){
+function responseMsg(msg,status){
     const box = document.createElement('div')
     box.classList.add('dialog')
-    box.textContent = msg
+    const filterMsg = JSON.parse(msg)
+    box.textContent = filterMsg.msg
+    if(status == 400){box.classList.add('error')}
+    else {box.classList.add('respond')}
     document.body.append(box)
+    setTimeout(()=>{
+        document.body.removeChild(box)
+    },3000)
 }
 
 function loadingSlider(res){
@@ -47,11 +53,9 @@ function saveQuiz(e){
     xhr.send(JSON.stringify(data))
     loadingSlider(xhr)
     xhr.onreadystatechange = ()=>{
-        if(xhr.status === 400) {
-            responseMsg(xhr.responseText)
-        }
         if(xhr.readyState === 4){
             loadingSlider(xhr)
+            responseMsg(xhr.responseText,xhr.status)
         }
     }
 }
