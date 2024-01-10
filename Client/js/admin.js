@@ -6,22 +6,32 @@ const btn = document.getElementById('quizBtn')
 
 const form = document.forms["newQuiz"]
 
-function loadingSlider(res){
-    const page = document.createElement('div')
+
+function responseMsg(msg,state){
     const box = document.createElement('div')
-    const eye = document.createElement('div')
-    page.classList.add('loadPage')
-    box.classList.add('box')
-    eye.classList.add('eye')
-    page.append(box)
-    box.append(eye)
-    document.body.append(page)
+    box.classList.add('dialog')
+    box.textContent = msg
+    document.body.append(box)
 }
-    
-    loadingSlider(user,"tests");
 
-
-
+function loadingSlider(res){
+    if(res.readyState === 1) {
+        const page = document.createElement('div')
+        const box = document.createElement('div')
+        const eye = document.createElement('div')
+        page.id = "page"
+        page.classList.add('loadPage')
+        box.classList.add('box')
+        eye.classList.add('eye')
+        page.append(box)
+        box.append(eye)
+        document.body.append(page)
+    }
+    if (res.readyState === 4) {
+        const getPage = document.getElementById("page")
+        document.body.removeChild(getPage)
+    }
+}
 
 btn.addEventListener('click',saveQuiz)
 
@@ -35,14 +45,13 @@ function saveQuiz(e){
     xhr.open("post","newq/newquiz",true)
     xhr.setRequestHeader("content-type","application/json")
     xhr.send(JSON.stringify(data))
+    loadingSlider(xhr)
     xhr.onreadystatechange = ()=>{
+        if(xhr.status === 400) {
+            responseMsg(xhr.responseText)
+        }
         if(xhr.readyState === 4){
-            const data = JSON.parse(xhr.responseText)
-            window.localStorage.setItem("quizDate",new Date(data.quizDate).toISOString())
-            window.localStorage.setItem("quizDuration",data.quizDuration)
-            window.localStorage.setItem("quizCreator",data.quizCreator)
-            app.textContent = ""
-            quizDiv(app)
+            loadingSlider(xhr)
         }
     }
 }

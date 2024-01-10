@@ -245,6 +245,16 @@ a#back:hover {
     animation: loader linear 1.5s infinite;
 }
 
+.dialog {
+    background-color: red;
+    max-width: 280px;
+    height: auto;
+    position: absolute;
+    bottom: 2dvh;
+    right: 1dvw;
+    border-radius: 5px;
+}
+
 
 @keyframes loader {
     0% {
