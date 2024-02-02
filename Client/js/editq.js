@@ -17,17 +17,17 @@ window.onload = ()=>{
                 const div = document.createElement('div')
                 div.classList.add('quizCard')
                 const quizID = document.createElement('p')
-                quizID.textContent = quizList[i].QuizID
+                quizID.textContent = `Quiz ID:${quizList[i].QuizID}`
                 const qDate = document.createElement('p')
-                qDate.textContent = quizList[i].QDate
+                qDate.textContent = `Quiz Date:${quizList[i].QDate}`
                 const qStatus = document.createElement('p')
-                qStatus.textContent = quizList[i].QStatus
+                qStatus.textContent = `Quiz Status:${quizList[i].QStatus}`
                 const qCreator = document.createElement('p')
-                qCreator.textContent = quizList[i].QCreator
+                qCreator.textContent = `Staff ID:${quizList[i].QCreator}`
                 const qDuration = document.createElement('p')
-                qDuration.textContent = quizList[i].Duration
-                div.append(quizID,qDate,qStatus,qCreator,qDuration)
-                div.addEventListener(selectQuiz)
+                qDuration.textContent = `Quiz Duration:${quizList[i].Duration}`
+                div.append(quizID,qDate,qStatus,qDuration,qCreator)
+                div.addEventListener('click',selectQuiz)
                 main.append(div)
             }
         }
