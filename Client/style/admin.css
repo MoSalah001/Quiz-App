@@ -35,8 +35,8 @@ h1 {
 
 body {
     background-color: var(--bg-light);
-    width: 99.4vw;
-    height: 96vh;
+    width: 1000dvw;
+    height: 100dvh;
     display: flex;
     flex-direction: column;
     align-content: center;
@@ -309,4 +309,8 @@ a#back:hover {
         width: 5px;
         left: 100%;
     }
+}
+
+@media only screen and (max-width : 640px) {
+        
 }

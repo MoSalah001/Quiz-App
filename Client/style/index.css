@@ -12,11 +12,12 @@ h1 {
 
 body {
     background-color: var(--bg-light);
-    width: 99.4vw;
-    height: 96vh;
+    width: 100dvw;
+    height: 100dvh;
     display: flex;
     flex-direction: column;
     place-content: center;
+    place-items: center;
     font-size: 32px;
 }
 
@@ -80,3 +81,12 @@ body {
 }
 
 
+@media screen and (max-width: 640px) {
+    body{
+        width: auto;
+    }
+    #form {
+        width: 80dvw;
+        padding: 20px;
+    }    
+}
