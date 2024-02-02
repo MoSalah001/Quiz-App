@@ -39,4 +39,19 @@ router.post('/newq/newquiz',(req,res)=>{
 })
 
 
+router.get('/editq',async (req,res)=>{
+    res.sendFile('./editq.html',{root: path.join(__dirname,'../Client/branch')})
+})
+
+router.post('/getQuizList',async (req,res)=>{
+    const user = req.headers.cookie.split('=')[2]
+    DBConnect.query("SELECT * FROM Quiz WHERE QCreator = ?",user,(err,rows)=>{
+        if(err) {
+            res.send(err)
+        } else {
+            res.send(rows)
+        }
+    })
+})
+
 module.exports = router;
