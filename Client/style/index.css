@@ -8,6 +8,7 @@ h1 {
     margin: 0 auto;
     font-size: 72px;
     color: var(--clr-logo);
+    text-shadow: 0px 0px 3px black;
 }
 
 body {
@@ -41,6 +42,7 @@ body {
     flex-wrap: wrap;
     margin: 25px auto;
     background-color: var(--clr-logo);
+    box-shadow: 0px 0px 5px black;
 }
 
 #form input , #form label {
@@ -73,6 +75,7 @@ body {
 #app a, #app a:visited {
     padding: 5px;
     background-color: hsl(60, 100%, 50%);
+    box-shadow: 0px 0px 5px 2px black;
     color: hsl(120,75%,35%);
     border-radius: 5px;
     text-decoration:none;
@@ -83,10 +86,26 @@ body {
 
 @media screen and (max-width: 640px) {
     body{
-        width: auto;
+        width: 90dvw;
+        height: 98dvh;
+        overflow-y: hidden;
+        display: flex;
+        place-items: center;
+        place-content: center;
+    }
+    #app {
+        width: 90dvw;
+        place-content: center;
+        place-items: center;
     }
     #form {
+        place-content: center;
         width: 80dvw;
+        height: 45dvh;
         padding: 20px;
-    }    
+        margin: 0;
+    }
+    #form input , #form label {
+        width: 80dvw;
+    }   
 }
