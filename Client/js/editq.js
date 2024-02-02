@@ -1,4 +1,9 @@
 const uid = document.cookie.split('=')[1]
+
+function selectQuiz(e){
+    console.log(e.target);
+}
+
 window.onload = ()=>{
     const xhr = new XMLHttpRequest()
     xhr.open("post",'./getQuizList')
@@ -22,6 +27,7 @@ window.onload = ()=>{
                 const qDuration = document.createElement('p')
                 qDuration.textContent = quizList[i].Duration
                 div.append(quizID,qDate,qStatus,qCreator,qDuration)
+                div.addEventListener(selectQuiz)
                 main.append(div)
             }
         }
