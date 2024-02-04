@@ -54,4 +54,10 @@ router.post('/getQuizList',async (req,res)=>{
     })
 })
 
+router.post('/deleteQuiz', async (req,res)=>{
+    const user = req.headers.cookie.split('=')[2]
+    const quizID = req.body
+    console.log(quizID);
+})
+
 module.exports = router;

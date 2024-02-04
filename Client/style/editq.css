@@ -1,0 +1,47 @@
+.quizCard {
+    display: flex;
+    place-content: center;
+    place-items: center;
+    flex-direction: column;
+    width: 40dvw;
+    max-width: 60dvw;
+    border-radius: 5px;
+    box-shadow:  0px 0px 8px black;
+    margin: 10px 0px;
+    z-index: 0;
+}
+
+.quizCard[status="Assigned"]{
+    background-color: goldenrod;
+}
+
+.quizCard[status="Done"] {
+    background-color: var(--text-light-green);
+}
+
+.buttons-section {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    place-content: space-around;
+    box-sizing: border-box;
+    padding: 10px 10px;
+}
+
+.buttons-section button {
+    margin: 0 5px;
+    font-size: 28px;
+    border-radius: 5px;
+    padding: 4px 10px;
+    color: var(--text-light-yellow);
+    box-shadow: 0px 0px 3px black;
+    z-index: 1;
+}
+
+.delete {
+    background-color: var(--btn-light-red);
+}
+.assigned {
+    background-color: var(--btn-light-green);
+
+}

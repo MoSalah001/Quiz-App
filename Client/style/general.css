@@ -1,0 +1,148 @@
+/*light
+Start of general styling
+*/
+:root{
+    --bg-light: rgba(255,255,255,1);
+    --clr-logo-red: red;
+    --btn-light-green: hsl(120,100%,35%);
+    --btn-light-yellow: hsl(60,100%,65%);
+    --btn-light-red: hsl(0,100%,50%);
+    --marker-light-blue: hsl(220,100%,50%);
+    --text-light-green : hsl(120,100%,35%);
+    --text-light-yellow : hsl(60,100%,65%);
+    --nav-light-yellow: hsl(60,100%,65%);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+h5 {
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    font-size: 36px;
+    color: red;
+}
+
+span {
+    color: var(--btn-light-green);
+    text-shadow: 0px 0px 5px var(--nav-light-yellow);
+    font: 700 36px "Bodoni MT";
+}
+
+h1 {
+    margin: 0 auto;
+    font-size: 72px;
+    color: var(--clr-logo-red);
+    height: 15vh;
+}
+
+body {
+    background-color: var(--bg-light);
+    width: 100dvw;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    font-size: 32px;
+}
+
+#app {
+    display: flex;
+    place-content: center;
+    place-items: center;
+    flex-direction: column;
+}
+
+.loadPage {
+    position: absolute;
+    display: flex;
+    place-content: center;
+    place-items: center;
+    top: 0;
+    right: 0;
+    z-index: 1;
+    background-color: rgba(0,0,0,0.7);
+    width: 100dvw;
+    height: 100dvb;
+}
+
+.box {
+    width: 40dvw;
+    height: 5dvh;
+    background-color: black;
+    border-radius: 25px;
+}
+
+.eye {
+    position: relative;
+    background-color: red;
+    width: 100px;
+    height: 50px;
+    border-radius: 25px;
+    z-index: 2;
+    animation: loader linear 1.5s infinite;
+}
+
+.dialog {
+    transition-duration: 2s;
+    max-width: 280px;
+    height: auto;
+    position: absolute;
+    bottom: 2dvh;
+    right: 1dvw;
+    border-radius: 5px;
+    color: White;
+}
+
+.error {
+    background-color: red;
+}
+
+.respond {
+    background-color: green;
+}
+
+a#back {
+    margin: 5px auto;
+    width: fit-content;
+    padding: 5px 25px;
+    border: 5px solid var(--clr-logo-red);
+    border-radius: 25px;
+    transition: 0.3s;
+    text-decoration: none;
+}
+
+a#back:hover {
+    background-color: var(--clr-logo-red);
+}
+
+@keyframes loader {
+    0% {
+        width: 50px;
+        left: 0;
+    }
+    5% {
+        width: 50px;
+        left: 5%;
+    }
+    15%{
+        width: 100px;
+    }
+    85%{
+        width: 100px;
+    }
+    95% {
+        width: 50px;
+        left: 95%;
+    }
+    100% {
+        width: 5px;
+        left: 100%;
+    }
+}
+/*
+End of general styling
+*/
