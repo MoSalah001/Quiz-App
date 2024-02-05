@@ -55,21 +55,16 @@
 #form-div {
     display: flex;
     flex-direction: column;
-    width: 50vw;
+    width: 50dvw;
     margin: 0 auto;
     height: auto;
     place-content: center;
+    place-items: center;
     background-color: var(--clr-logo-red);
     border-radius: 10px;
 }
-#form-div form {
-    display: flex;
-    flex-direction: column;
-    margin: 25px 0;
-    place-items: center;
-}
 
-#form-div form input ,#form-div form select  {
+#form-div input ,#form-div select  {
     width: 80%;
     text-align: center;
     height: 40px;
@@ -79,7 +74,7 @@
     border-radius: 10px;
 }
 
-#form-div form button {
+#form-div button {
     height: 50px;
     font-size: 28px;
     margin-top: 25px;
@@ -91,7 +86,7 @@
     transition: 0.3s;
 }
 
-#form-div form button:hover {
+#form-div button:hover {
     background-color: var(--text-light-green);
     color: var(--nav-light-yellow);
 }

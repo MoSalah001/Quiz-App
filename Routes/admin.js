@@ -13,7 +13,7 @@ router.get('/newq',(req,res)=>{
     res.sendFile('./newForm.html',{root: path.join(__dirname,"../Client/branch")})
 })
 
-router.post('/newq/newquiz',(req,res)=>{
+router.post('/newq',(req,res)=>{
     const cookies = req.headers.cookie.split('=')
     const cleanCookie = {
         token: cookies[1].split(';')[0],
@@ -56,7 +56,17 @@ router.post('/getQuizList',async (req,res)=>{
 
 router.post('/deleteQuiz', async (req,res)=>{
     const user = req.headers.cookie.split('=')[2]
-    const quizID = req.body
+    const quizID = req.body.uid
+    DBConnect.query("DELETE FROM Quiz WHERE QuizID =? AND QCreator=?",[quizID,user],(err,rows)=>{
+        if(err) {
+            res.send(err)
+        } else {
+            res.status(200).send({
+               "Affected Rows":rows,
+               "msg":"Quiz Deleted Successfully"
+            })
+        }
+    })
     console.log(quizID);
 })
 

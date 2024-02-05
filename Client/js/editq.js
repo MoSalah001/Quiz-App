@@ -1,4 +1,4 @@
-import loadingSlider from "./loader.mjs";
+import {loadingSlider,responseMsg} from "./loader.mjs";
 const uid = document.cookie.split('=')[1]
 
 function selectQuiz(e){
@@ -9,9 +9,18 @@ function deleteQuiz(e) {
     const confirm = window.confirm("Are you sure you want to delete this Quiz? \nPlease note that this action can't be undone")
     if(confirm === true) {
         const xhr = new XMLHttpRequest()
-        xhr.open('post','deleteQuiz')
-        xhr.send({'data':e.target.id})
+        xhr.open('post','deleteQuiz',true)
+        xhr.setRequestHeader("content-type","application/json")
+        const data = {
+            uid: e.target.id
+        }
+        xhr.send(JSON.stringify(data))
         loadingSlider(xhr)
+        if(xhr.readyState === 4) {
+            loadingSlider(xhr)
+            responseMsg(xhr.responseText,xhr.status)
+        }
+
     } else {
         return null
     }

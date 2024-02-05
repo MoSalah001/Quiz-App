@@ -1,4 +1,4 @@
-export default function loadingSlider(res){
+export function loadingSlider(res){
     if(res.readyState === 1) {
         const page = document.createElement('div')
         const box = document.createElement('div')
@@ -15,4 +15,18 @@ export default function loadingSlider(res){
         const getPage = document.getElementById("page")
         document.body.removeChild(getPage)
     }
+}
+
+
+export function responseMsg(msg,status){
+    const box = document.createElement('div')
+    box.classList.add('dialog')
+    const filterMsg = JSON.parse(msg)
+    box.textContent = filterMsg.msg
+    if(status == 400){box.classList.add('error')}
+    else {box.classList.add('respond')}
+    document.body.append(box)
+    setTimeout(()=>{
+        document.body.removeChild(box)
+    },3000)
 }
