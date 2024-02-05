@@ -25,31 +25,31 @@
     /* content: "\2020  "; */
     content: "\261B  ";
     font-size: 48px;
-    color: var(--clr-logo);
+    color: var(--clr-logo-red);
     transition: 0.7s;
 }
 .nav-ul li::after {
     content: "  \261A";
     font-size: 48px;
-    color: var(--clr-logo);
+    color: var(--clr-logo-red);
     transition: 0.7s;
 }
 
 .nav-ul li:hover {
-    background-color: var(--nav-light);
+    background-color: var(--nav-light-yellow);
 }
 
 .nav-ul li:hover::before {
-    color: var(--marker-light);
+    color: var(--marker-light-blue);
 }
 .nav-ul li:hover::after {
-    color: var(--marker-light);
+    color: var(--marker-light-blue);
 }
 
 .nav-ul li a , .nav-ul li a:visited {
     font-size: 48px;
     text-decoration: none;
-    color: var(--text-light);
+    color: var(--text-light-green);
 }
 /* form styling */
 #form-div {
@@ -59,7 +59,7 @@
     margin: 0 auto;
     height: auto;
     place-content: center;
-    background-color: var(--clr-logo);
+    background-color: var(--clr-logo-red);
     border-radius: 10px;
 }
 #form-div form {
@@ -75,7 +75,7 @@
     height: 40px;
     font-size: 28px;
     cursor: pointer;
-    border: 1px var(--clr-logo) solid;
+    border: 1px var(--clr-logo-red) solid;
     border-radius: 10px;
 }
 
@@ -87,13 +87,13 @@
     border: 2px red solid;
     border-radius: 25px;
     cursor: pointer;
-    color: var(--clr-logo);
+    color: var(--clr-logo-red);
     transition: 0.3s;
 }
 
 #form-div form button:hover {
-    background-color: var(--text-light);
-    color: var(--nav-light);
+    background-color: var(--text-light-green);
+    color: var(--nav-light-yellow);
 }
 
 .labels{
