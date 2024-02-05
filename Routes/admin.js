@@ -17,7 +17,7 @@ router.post('/newq',(req,res)=>{
     const cookies = req.headers.cookie.split('=')
     const cleanCookie = {
         token: cookies[1].split(';')[0],
-        user: cookies[2]
+        user: /^[^;]*/.exec(cookies[2])
     }
     const quizData = {
         quizID: `${new Date(req.body.date).getMonth()}-${cleanCookie.user}` ,
