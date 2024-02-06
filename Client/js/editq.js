@@ -28,6 +28,28 @@ function deleteQuiz(e) {
     }
 }
 
+function setQuizQuestions(e){
+    const data = {
+        uid: e.target.id
+    }
+    const xhr = new XMLHttpRequest()
+    xhr.open('post','setQ')
+    xhr.setRequestHeader('content-type',"application/json")
+    xhr.send(JSON.stringify(data))
+    loadingSlider(xhr)
+    xhr.onreadystatechange = ()=>{
+        if(xhr.readyState === 4) {
+            loadingSlider(xhr)
+            responseMsg(xhr.responseText,xhr.status)
+            window.localStorage.setItem("rows",xhr.responseText)
+            // if(xhr.status === 200) {
+            //     const xhr = new XMLHttpRequest()
+            //     xhr.open('get',"setQ/?")
+            // }
+        }
+    }
+}
+
 function getQuizez(){
     const xhr = new XMLHttpRequest()
     xhr.open("post",'./getQuizList')
@@ -74,6 +96,7 @@ function getQuizez(){
                 setQuestionBtn.textContent = "Set Quiz Questions"
                 setQuestionBtn.classList.add('assigned')
                 setQuestionBtn.setAttribute('id',quizList[i].QuizID)
+                setQuestionBtn.addEventListener('click',setQuizQuestions)
                 // setQuestionBtn.addEventListener()
 
                 btnSection.append(deleteBtn,setQuestionBtn)

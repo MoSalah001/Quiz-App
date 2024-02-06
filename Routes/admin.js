@@ -69,4 +69,18 @@ router.post('/deleteQuiz', async (req,res)=>{
     })
 })
 
+router.post('/setQ',async (req,res,next)=>{
+    const quizID = req.body.uid
+    DBConnect.query("SELECT * FROM Questions WHERE QuizID =?",quizID,(err,rows)=>{
+        if(err) {
+            res.status(400).send(err)
+        } else {
+            res.status(200).send({
+                "rows": rows,
+                "qid": quizID
+            })
+        }
+    })
+})
+
 module.exports = router;

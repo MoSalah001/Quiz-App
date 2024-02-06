@@ -36,7 +36,7 @@ h1 {
     margin: 0 auto;
     font-size: 72px;
     color: var(--clr-logo-red);
-    height: 15vh;
+    height: 15dvh;
 }
 
 body {
@@ -141,6 +141,20 @@ a#back:hover {
     100% {
         width: 5px;
         left: 100%;
+    }
+}
+
+@media screen and (max-width:640px) {
+    h1 {
+        margin-top: 40px;
+        font-size: 40px;
+        height: 10dvh;
+    }
+    h5 {
+        font-size: 16px;
+    }
+    span {
+        font-size: 16px;
     }
 }
 /*

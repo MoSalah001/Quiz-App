@@ -108,3 +108,16 @@
     bottom: 0;
     left: 0;
 }
+
+@media screen and (max-width : 640px){
+    
+    .nav-ul li::before {
+        font-size: 28px;
+    }
+    .nav-ul li::after {
+        font-size: 28px;
+    }
+    .nav-ul li a , .nav-ul li a:visited {
+        font-size: 20px;
+    }
+}
