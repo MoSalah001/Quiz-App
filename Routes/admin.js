@@ -13,7 +13,7 @@ router.get('/newq',(req,res)=>{
     res.sendFile('./newForm.html',{root: path.join(__dirname,"../Client/branch")})
 })
 
-router.post('/newq',(req,res)=>{
+router.post('/newq/new',(req,res)=>{
     const cookies = req.headers.cookie.split('=')
     const cleanCookie = {
         token: cookies[1].split(';')[0],

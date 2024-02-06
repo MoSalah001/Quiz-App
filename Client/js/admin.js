@@ -19,7 +19,7 @@ function saveQuiz(e){
         duration: document.getElementById("duration").value
     }
     const xhr = new XMLHttpRequest()
-    xhr.open("post","newq",true)
+    xhr.open("post","newq/new",true)
     xhr.setRequestHeader("content-type","application/json")
     xhr.send(JSON.stringify(data))
     loadingSlider(xhr)
