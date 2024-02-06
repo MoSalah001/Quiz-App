@@ -67,7 +67,6 @@ router.post('/deleteQuiz', async (req,res)=>{
             })
         }
     })
-    console.log(quizID);
 })
 
 module.exports = router;

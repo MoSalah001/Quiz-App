@@ -16,22 +16,25 @@ function deleteQuiz(e) {
         }
         xhr.send(JSON.stringify(data))
         loadingSlider(xhr)
-        if(xhr.readyState === 4) {
-            loadingSlider(xhr)
-            responseMsg(xhr.responseText,xhr.status)
+        xhr.onreadystatechange = ()=>{
+            if(xhr.readyState === 4) {
+                loadingSlider(xhr)
+                responseMsg(xhr.responseText,xhr.status)
+                getQuizez()
+            }
         }
-
     } else {
         return null
     }
 }
 
-window.onload = ()=>{
+function getQuizez(){
     const xhr = new XMLHttpRequest()
     xhr.open("post",'./getQuizList')
     xhr.send()
     let quizList;
     const main = document.getElementById('app')
+    main.textContent = ""
     xhr.onreadystatechange = ()=>{
         if(xhr.readyState === 4) {
             quizList = JSON.parse(xhr.responseText)
@@ -83,5 +86,8 @@ window.onload = ()=>{
             }
         }
     }
+}
 
+window.onload = ()=>{
+    getQuizez()
 }
