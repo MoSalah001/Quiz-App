@@ -156,6 +156,13 @@ a#back:hover {
     span {
         font-size: 16px;
     }
+    .box {
+        width: 90dvw;
+    }
+    .eye {
+        height: 5dvh;
+    }
+
 }
 /*
 End of general styling
