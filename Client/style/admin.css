@@ -92,21 +92,10 @@
 }
 
 .labels{
-    width: 70%;
+    width: 100%;
+    place-items: center;
     display: flex;
     flex-direction: column;
-}
-
-#secondForm {
-    width: 100%;
-}
-
-#bug {
-    width: 200px;
-    height: 200px;
-    position: absolute;
-    bottom: 0;
-    left: 0;
 }
 
 @media screen and (max-width : 640px){
@@ -119,5 +108,18 @@
     }
     .nav-ul li a , .nav-ul li a:visited {
         font-size: 20px;
+    }
+    #form-div {
+        width: 80dvw;
+    }
+    #form-div input,#form-div select {
+        margin: 10px 0px;
+    }
+    #form-div button {
+        margin-bottom: 10px;
+        background-color: var(--nav-light-yellow);
+    }
+    .labels {
+        margin-top: 10px;
     }
 }
