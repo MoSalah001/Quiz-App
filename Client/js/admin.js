@@ -1,4 +1,3 @@
-const app = document.getElementById("form-div")
 const user = document.getElementById('user')
 const regex = /^[^;]*/ //find untill found
 const current = regex.exec(document.cookie.split("=")[1])
@@ -6,9 +5,6 @@ user.innerHTML = `Staff ID: <span>${current}</span>`
 const btn = document.getElementById('quizBtn')
 
 import {loadingSlider, responseMsg} from "./loader.mjs"
-
-
-const form = document.forms["newQuiz"]
 
 btn.addEventListener('click',saveQuiz)
 

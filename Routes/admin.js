@@ -69,7 +69,7 @@ router.post('/deleteQuiz', async (req,res)=>{
     })
 })
 
-router.post('/setQ',async (req,res,next)=>{
+router.post('/setQ',async (req,res)=>{
     const quizID = req.body.uid
     DBConnect.query("SELECT * FROM Questions WHERE QuizID =?",quizID,(err,rows)=>{
         if(err) {
@@ -82,5 +82,21 @@ router.post('/setQ',async (req,res,next)=>{
         }
     })
 })
+
+router.get('/setQ',async (req,res)=>{
+    res.sendFile("setq.html",{root : path.join(__dirname,'../Client/branch')})
+})
+router.post('/setQ/qid',async (req,res)=>{
+    const qid = req.body.qid
+    DBConnect.query("SELECT * FROM Questions JOIN Answers ON Questions.QID = Answers.QID WHERE Questions.QID=?",qid,(err,rows)=>{
+        if(err){
+            res.status(400).send(err)
+            // res.send({"msg":"SQL Error. Please Refer back to system admin"})
+        } else {
+            res.status(200).send(rows)
+        }
+    })
+})
+
 
 module.exports = router;

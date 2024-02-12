@@ -1,9 +1,4 @@
 import {loadingSlider,responseMsg} from "./loader.mjs";
-const uid = document.cookie.split('=')[1]
-
-function selectQuiz(e){
-    console.log(e.target);
-}
 
 function deleteQuiz(e) {
     const confirm = window.confirm("Are you sure you want to delete this Quiz? \nPlease note that this action can't be undone")
@@ -37,16 +32,26 @@ function setQuizQuestions(e){
     xhr.setRequestHeader('content-type',"application/json")
     xhr.send(JSON.stringify(data))
     loadingSlider(xhr)
-    xhr.onreadystatechange = ()=>{
+    xhr.onreadystatechange = ()=>{     
         if(xhr.readyState === 4) {
             loadingSlider(xhr)
             responseMsg(xhr.responseText,xhr.status)
             window.localStorage.setItem("rows",xhr.responseText)
-            // if(xhr.status === 200) {
-            //     const xhr = new XMLHttpRequest()
-            //     xhr.open('get',"setQ/?")
-            // }
+            if(xhr.status === 200 && xhr.readyState === 4) {
+                const qid = JSON.parse(xhr.responseText).qid
+                window.localStorage.setItem('qid',qid)
+                const subXhr = new XMLHttpRequest()
+                loadingSlider(subXhr)
+                subXhr.open('get',"setq/#/?qid="+qid,true)
+                subXhr.send()
+                subXhr.onreadystatechange = ()=>{
+                    if(subXhr.readyState === 4) {
+                        window.location = subXhr.responseURL
+                    }
+                }
+            }
         }
+   
     }
 }
 
@@ -103,7 +108,6 @@ function getQuizez(){
                 // end of buttons section
                 div.setAttribute('status',quizList[i].QStatus)
                 div.setAttribute('ID',quizList[i].QuizID)
-                div.addEventListener('click',selectQuiz)
                 div.append(quizID,qDate,qStatus,qDuration,qCreator,btnSection)
                 main.append(div)
             }
