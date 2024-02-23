@@ -88,8 +88,7 @@ router.get('/setQ',async (req,res)=>{
 })
 router.post('/setQ/qid',async (req,res)=>{
     const qid = req.body.qid
-    console.log(qid);
-    DBConnect.query("SELECT Questions.QValue,Answers.QID,Answers.AID,Answers.AValue FROM Questions JOIN Answers ON Questions.QID = Answers.QID WHERE Questions.QuizID=?",qid,(err,rows)=>{
+    DBConnect.query("SELECT * FROM Questions JOIN Answers ON Questions.QID = Answers.QID WHERE Questions.QuizID=?",qid,(err,rows)=>{
         if(err){
             res.status(400).send(err)
             // res.send({"msg":"SQL Error. Please Refer back to system admin"})

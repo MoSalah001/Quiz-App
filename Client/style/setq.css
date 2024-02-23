@@ -52,4 +52,38 @@
     border: 1px solid black;
 }
 
+.saved-question {
+    width: 40dvw;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px red;
+    background-color: var(--clr-logo-red);
+    margin: 10px 0;
+}
+
+.saved-question #question-h3 {
+    width: 100%;
+    box-shadow: 0px 0px 5px 1px black;
+}
+
+.saved-question h3 label {
+    display: flex;
+    place-content: space-between;
+    padding-left: 5px;
+    align-items: center;
+    margin: 2px 0;
+    box-shadow: 0px 0px 2px 1px var(--nav-light-yellow);
+}
+
+.saved-question h3 label[answer=true] {
+    background-color: var(--text-light-green);
+}
+
+.saved-question button {
+    height: 30px;
+    font-size: 20px;
+    width: 100%;
+    background-color: var(--btn-light-yellow);
+}
 

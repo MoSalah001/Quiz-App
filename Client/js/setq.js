@@ -116,15 +116,31 @@ function addQuestion(e){
     }
 }
 
+function htmlRender(filteredData) {
+    const question = document.createElement("h3")
+    question.textContent = filteredData[0]
+}
+
 function getSaved(data) {
     const filtered = Object.groupBy(data,({QValue})=>QValue)
-    const length = Object.keys(filtered)
-    for(let i=0; i<length.length; i++) {
-        for(let j=0; j<filtered[length[i]].length; j++) {
-            console.log(filtered[length[i]][j]);
+    for(let single in filtered) {
+        let deleteBtn = document.createElement('button')
+        deleteBtn.classList.add('question-delete')
+        deleteBtn.textContent="Delete Question"
+        let container = document.createElement('div')
+        container.classList.add("saved-question")
+        let question = document.createElement('h3')
+        question.setAttribute('id','question-h3')
+        question.textContent = single+' ?'
+        for(let i=0; i<filtered[single].length; i++) { 
+            deleteBtn.setAttribute("QID",filtered[single][i].QID)
+            const answer = document.createElement('label')
+            answer.textContent = filtered[single][i].AValue
+            const isTrue = `${filtered[single][i].IsTrue === 0 ? "false":"true"}`
+            answer.setAttribute('answer',isTrue)
+            question.append(answer)
         }
+        container.append(question,deleteBtn)
+        saved.append(container)
     }
-    // for(let question in filtered) { // get question
-    //     // console.log(question);
-    // }
 }
