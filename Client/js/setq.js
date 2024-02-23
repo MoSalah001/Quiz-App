@@ -140,7 +140,26 @@ function getSaved(data) {
             answer.setAttribute('answer',isTrue)
             question.append(answer)
         }
+        deleteBtn.addEventListener('click',deleteQ)
         container.append(question,deleteBtn)
         saved.append(container)
+    }
+}
+
+function deleteQ(e){
+    const data = {
+        questionID:e.target.getAttribute("QID"),
+        quizID: window.localStorage.getItem('qid')
+    }
+    const xhr = new XMLHttpRequest()
+    xhr.open('post',"delete")
+    xhr.setRequestHeader('content-type','application/json')
+    xhr.send(JSON.stringify(data))
+    loadingSlider(xhr)
+    xhr.onreadystatechange = ()=>{
+        if(xhr.readyState === 4) {
+            loadingSlider(xhr)
+            responseMsg(xhr.responseText,xhr.status)
+        }
     }
 }

@@ -119,5 +119,15 @@ router.post('/setq/save',async (req,res)=>{
     })
 })
 
+router.post('/setq/delete',async (req,res)=>{
+    const parsedData = req.body
+    DBConnect.query("DELETE FROM Questions WHERE QID=?",parsedData.questionID,(err,rows)=>{
+        if(err) {
+            res.send(err)
+        } else {
+            res.status(200).send({"msg":"Question Removed"})
+        }
+    })
+})
 
 module.exports = router;
