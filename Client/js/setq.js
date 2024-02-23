@@ -1,5 +1,6 @@
+import {loadingSlider,responseMsg} from "./loader.mjs";
 window.onload = ()=>{
-    const table = document.getElementById('table-section') // html section
+    const saved = document.getElementById('saved')
     const xhr = new XMLHttpRequest();
     const data = {
         qid: window.localStorage.getItem('qid')
@@ -7,14 +8,19 @@ window.onload = ()=>{
     xhr.open('post','../setQ/qid')
     xhr.setRequestHeader('content-type','application/json')
     xhr.send(JSON.stringify(data))
+    loadingSlider(xhr)
     xhr.onreadystatechange = ()=>{
         if (xhr.readyState === 4) {
+            loadingSlider(xhr)
             const parsedData = JSON.parse(xhr.responseText)
             if(parsedData.length === 0) {
-                const creataQuestion = new questionTemplate
-                creataQuestion.create()
+                const createQuestion = new questionTemplate
+                createQuestion.create()
             } else {
-                // returned question + new question template
+                // show saved questions
+                getSaved(parsedData)
+                const createQuestion = new questionTemplate
+                createQuestion.create()
             }
         }
     }
@@ -32,19 +38,11 @@ class questionTemplate {
         questionHead.classList.add('question-head')
         const questionRow = document.createElement('div') // question div
         questionRow.classList.add('question-row')
-        const question = document.createElement('input')
-        question.type = "text"
+        const question = document.createElement('textarea')
+        question.setAttribute('id','question-text')
         question.placeholder = "Enter Question ..."
         questionRow.append(question)      
         let controlOptions = 1
-        // for(let i =0 ; i < controlOptions; i++) {
-        //     const radioBtn = document.createElement('input')
-        //     radioBtn.type = "radio"
-        //     const option = document.createElement('input')
-        //     option.type = "text"
-        //     option.placeholder = `Option #${i+1}`
-        //     optionRow.append(radioBtn,option)
-        // }
         function changeControlOptions() {
             controlOptions++
             addOptions(controlOptions,questionHead)
@@ -56,6 +54,7 @@ class questionTemplate {
         const pOption = document.createElement('p')
         pOption.textContent = "Add Option"
         pOption.addEventListener('click',changeControlOptions)
+        pQuestion.addEventListener('click',addQuestion)
         controlDiv.append(pOption,pQuestion)
         
         questionHead.append(questionRow)
@@ -65,29 +64,67 @@ class questionTemplate {
 
 }
 function addOptions(control,questionHead) {
-    const getExist = document.getElementsByClassName('option-row')
-    if(getExist.length === 0){
-        const optionRow = document.createElement('div') // option div
-        optionRow.classList.add('option-row')
-        const radioBtn = document.createElement('input')
-        radioBtn.type = "radio"
-        radioBtn.name = "option"
-        const option = document.createElement('input')
-        option.type = "text"
-        option.placeholder = `Option #${control}`
-        optionRow.setAttribute('order',control)
-        optionRow.append(radioBtn,option) 
-        questionHead.append(optionRow)
-    } else {
-        const optionRow = document.createElement('div') // option div
-        optionRow.classList.add('option-row')
-        const radioBtn = document.createElement('input')
-        radioBtn.type = "radio"
-        const option = document.createElement('input')
-        option.type = "text"
-        option.placeholder = `Option #${control}`
-        optionRow.setAttribute('order',control)
-        optionRow.append(radioBtn,option) 
-        questionHead.append(optionRow)                
+    const optionRow = document.createElement('div') // option div
+    optionRow.classList.add('option-row')
+    const radioBtn = document.createElement('input')
+    radioBtn.type = "radio"
+    radioBtn.name = "option"
+    const option = document.createElement('input')
+    option.type = "text"
+    option.placeholder = `Option #${control}`
+    const del = document.createElement('button')
+    del.textContent = "Delete"
+    del.setAttribute('order',control)
+    optionRow.setAttribute('order',control)
+    optionRow.append(radioBtn,option,del) 
+    questionHead.append(optionRow)
+}
+
+
+
+function addQuestion(e){
+    const question = document.getElementById('question-text')
+    const options = document.getElementsByClassName('option-row')
+    const values =[]
+    const optionsValues = [...options].map(option =>{
+        let data = {
+            isChecked: option.children[0].checked,
+            value: option.children[1].value
+        }
+        values.push(data)
+    })
+    let fData = {
+        qValue : question.value,
+        answers : values,
+        qid: window.localStorage.getItem('qid')
     }
+
+    const xhr = new XMLHttpRequest()
+    xhr.open('post','save')
+    xhr.setRequestHeader('content-type','application/json')
+    xhr.send(JSON.stringify(fData))
+    loadingSlider(xhr)
+    xhr.onreadystatechange = ()=>{
+        if(xhr.readyState === 4) {
+            loadingSlider(xhr)
+            responseMsg(xhr.responseText,xhr.status)
+            const table = document.getElementById('table-section')
+            table.textContent = ""
+            const createQuestion = new questionTemplate
+            createQuestion.create()
+        }
+    }
+}
+
+function getSaved(data) {
+    const filtered = Object.groupBy(data,({QValue})=>QValue)
+    const length = Object.keys(filtered)
+    for(let i=0; i<length.length; i++) {
+        for(let j=0; j<filtered[length[i]].length; j++) {
+            console.log(filtered[length[i]][j]);
+        }
+    }
+    // for(let question in filtered) { // get question
+    //     // console.log(question);
+    // }
 }

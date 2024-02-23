@@ -1,0 +1,55 @@
+/*
+:root{
+    --bg-light: rgba(255,255,255,1);
+    --clr-logo-red: red;
+    --btn-light-green: hsl(120,100%,35%);
+    --btn-light-yellow: hsl(60,100%,65%);
+    --btn-light-red: hsl(0,100%,50%);
+    --marker-light-blue: hsl(220,100%,50%);
+    --text-light-green : hsl(120,100%,35%);
+    --text-light-yellow : hsl(60,100%,65%);
+    --nav-light-yellow: hsl(60,100%,65%);
+}
+*/
+#table-section {
+    display: flex;
+    width: 100dvw;
+    flex-direction: column;
+    place-items: center;
+}
+
+.question-head {
+    padding: 10px 0;
+    background-color: var(--clr-logo-red);
+    display: flex;
+    flex-direction: column;
+    place-items: center;
+    width: 42dvw;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 2px black;
+}
+
+.question-row textarea {
+    border-radius: 5px;
+    min-width: 40dvw;
+    max-width: 40dvw;
+    height: 15dvh;
+    max-height: 100px;
+    font-size: 24px;
+    word-wrap: break-word;
+}
+
+.option-row input[type=text] {
+    width: 15dvw;
+    height: 30px;
+    margin: 2px 5px;
+}
+
+.option-row button {
+    padding: 4px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+
+
