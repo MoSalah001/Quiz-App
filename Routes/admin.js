@@ -2,7 +2,7 @@ const router = require('express').Router();
 const path = require('path')
 const mysql = require('mysql')
 
-let DBConnect = mysql.createConnection({
+const DBConnect = mysql.createConnection({
     host : process.env.DBHost,
     user : process.env.DBUser,
     password : process.env.DBPass,
@@ -44,7 +44,7 @@ router.get('/editq',async (req,res)=>{
 })
 
 router.post('/getQuizList',async (req,res)=>{
-    const user = req.headers.cookie.split('=')[2]
+    const user = req.headers.cookie.split('=')[3]
     DBConnect.query("SELECT * FROM Quiz WHERE QCreator = ?",user,(err,rows)=>{
         if(err) {
             res.send(err)

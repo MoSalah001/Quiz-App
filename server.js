@@ -17,6 +17,7 @@ let DBConnect = mysql.createConnection({
 const port = process.env.PORT || 8800
 
 const admin = require('./Routes/admin')
+const agent = require('./Routes/agent')
 
 DBConnect.connect((err)=>{
     if(err){
@@ -32,6 +33,7 @@ app.use(express.urlencoded({
     extended: true
 }))
 app.use('/admin',admin)
+app.use('/agent',agent)
 
 
 app.listen(port,()=>{
@@ -63,6 +65,7 @@ app.post('/login',async (req,res)=>{
                                 res.redirect('../admin')
                             } else {
                                 res.cookie("token",token)
+                                res.cookie('user',data.StaffID)
                                 res.redirect('../main')
                             }
                         }
@@ -115,7 +118,9 @@ app.post('/firstReg',async (req,res)=>{ // first admin user
 })
 
 app.get('/lgout',(req,res)=>{
-    res.send("logout Khalaf")
+    res.cookie("user","")
+    res.cookie("token","")
+    res.send({"msg":"Logged out"})
 })
 
 

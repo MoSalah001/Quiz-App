@@ -49,6 +49,10 @@ body {
     font-size: 32px;
 }
 
+#lgout {
+    cursor: pointer;
+}
+
 #app {
     display: flex;
     place-content: center;
