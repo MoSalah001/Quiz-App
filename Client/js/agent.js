@@ -1,7 +1,7 @@
 import {loadingSlider , responseMsg} from './loader.mjs'
 const user = document.getElementById('user')
 const regex = /^[^;]*/ //find untill found
-const current = regex.exec(document.cookie.split("=")[3])
+const current = regex.exec(document.cookie.split("=")[2])
 user.innerHTML = `Staff ID: <span>${current}</span>`
 const lgout = document.getElementById('lgout')
 const quizDate = document.getElementById('quizDate')
@@ -34,19 +34,16 @@ function getNextQuiz() {
         if(xhr.readyState === 4) {
             loadingSlider(xhr)
             const rows = JSON.parse(xhr.responseText)
-            const date = new Date()
             for(let i of rows) {
                 if(new Date(i.QDate) > new Date()) {
-                    const mainDate = new Date(i.QDate)
                     timer = new Date(i.QDate) - new Date()
-                    quizDate.textContent = `Quiz Date: 
+                    quizDate.textContent = `Quiz Due Date: 
                     ${new Date(timer).getMonth()} M 
                     ${new Date(timer).getDay()} D
-                    ${new Date(timer).getHours()} : 
-                    ${new Date(timer).getMinutes()} : 
-                    ${new Date(timer).getSeconds()}
+                    ${new Date(timer).getHours()} H: 
+                    ${new Date(timer).getMinutes()} M: 
+                    ${new Date(timer).getSeconds()} S
                     `
-                    break;
                 }
             }
         }
@@ -55,8 +52,8 @@ function getNextQuiz() {
 getNextQuiz()
 
 setInterval(()=>{
-    timer--
-    quizDate.textContent = `Quiz Date: 
+    timer-=1000
+    quizDate.textContent = `Quiz Due Date: 
                     ${new Date(timer).getMonth()} M 
                     ${new Date(timer).getDay()} D
                     ${new Date(timer).getHours()} H: 

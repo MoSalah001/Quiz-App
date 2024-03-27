@@ -1,6 +1,6 @@
 const user = document.getElementById('user')
 const regex = /^[^;]*/ //find untill found
-const current = regex.exec(document.cookie.split("=")[2])
+const current = regex.exec(document.cookie.split("=")[1])
 const lgout = document.getElementById('lgout')
 user.innerHTML = `Staff ID: <span>${current}</span>`
 const btn = document.getElementById('quizBtn')
