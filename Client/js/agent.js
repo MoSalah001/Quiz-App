@@ -1,7 +1,9 @@
 import {loadingSlider , responseMsg} from './loader.mjs'
 const user = document.getElementById('user')
-const regex = /^[^;]*/ //find untill found
-const current = regex.exec(document.cookie.split("=")[2])
+const filterCookie = document.cookie.indexOf('user=');
+const current = document.cookie.substring(filterCookie+5,filterCookie+11)
+console.log(current);
+// console.log(current);
 user.innerHTML = `Staff ID: <span>${current}</span>`
 const lgout = document.getElementById('lgout')
 const quizDate = document.getElementById('quizDate')

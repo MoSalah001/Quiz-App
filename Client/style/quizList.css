@@ -1,0 +1,19 @@
+/*
+    --bg-light: rgba(255,255,255,1);
+    --clr-logo-red: red;
+    --btn-light-green: hsl(120,100%,35%);
+    --btn-light-yellow: hsl(60,100%,65%);
+    --btn-light-red: hsl(0,100%,50%);
+    --marker-light-blue: hsl(220,100%,50%);
+    --text-light-green : hsl(120,100%,35%);
+    --text-light-yellow : hsl(60,100%,65%);
+    --nav-light-yellow: hsl(60,100%,65%);
+*/
+
+
+.card {
+    background-color: var(--clr-logo-red);
+    border-radius: 5px;
+    margin: 10px 0px;
+    padding: 0px 5px;
+}
