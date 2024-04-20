@@ -84,7 +84,7 @@ app.get('/admin',(req,res)=>{
     res.sendFile('./branch/admin.html',{root: path.join(__dirname,"./Client")})
 })
 
-app.get('/main',(req,res)=>{
+app.get('/agent',(req,res)=>{
     res.sendFile('./branch/agent.html',{root: path.join(__dirname,"./Client")})
 })
 
