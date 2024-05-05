@@ -19,7 +19,7 @@ router.get('/quizez',async(req,res)=>{
 })
 
 router.get('/quizlist',async(req,res)=>{
-    let testPath = path.relative(__dirname,__dirname+'/Client/agent')
+    let testPath = path.join(__dirname,'/Client/agent')
     res.send(testPath)
     // res.sendFile('./quizlist.html',{root: path.relative(__dirname,__dirname+'/Client/agent')}) 
 })
