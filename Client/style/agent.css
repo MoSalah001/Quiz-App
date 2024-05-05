@@ -51,49 +51,40 @@
     text-decoration: none;
     color: var(--text-light-green);
 }
-/* form styling */
-#form-div {
-    display: flex;
-    flex-direction: column;
-    width: 50dvw;
-    margin: 0 auto;
-    height: auto;
-    place-content: center;
-    place-items: center;
-    background-color: var(--clr-logo-red);
-    border-radius: 10px;
-}
 
-#form-div input ,#form-div select  {
-    width: 80%;
+#quizDateHeader {
     text-align: center;
-    height: 40px;
     font-size: 28px;
-    cursor: pointer;
-    border: 1px var(--clr-logo-red) solid;
-    border-radius: 10px;
 }
 
-#form-div button {
-    height: 50px;
-    font-size: 28px;
-    margin-top: 25px;
-    width: 50%;
-    border: 2px red solid;
-    border-radius: 25px;
-    cursor: pointer;
-    color: var(--clr-logo-red);
-    transition: 0.3s;
+#quizDate {
+    text-align: center;
+    color: red;
+    font-size: 24px;
 }
 
-#form-div button:hover {
-    background-color: var(--text-light-green);
-    color: var(--nav-light-yellow);
-}
-
-.labels{
-    width: 100%;
-    place-items: center;
-    display: flex;
-    flex-direction: column;
+@media screen and (max-width : 640px){
+    
+    .nav-ul li::before {
+        font-size: 28px;
+    }
+    .nav-ul li::after {
+        font-size: 28px;
+    }
+    .nav-ul li a , .nav-ul li a:visited {
+        font-size: 20px;
+    }
+    #form-div {
+        width: 80dvw;
+    }
+    #form-div input,#form-div select {
+        margin: 10px 0px;
+    }
+    #form-div button {
+        margin-bottom: 10px;
+        background-color: var(--nav-light-yellow);
+    }
+    .labels {
+        margin-top: 10px;
+    }
 }

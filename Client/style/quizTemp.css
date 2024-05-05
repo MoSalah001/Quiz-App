@@ -1,0 +1,82 @@
+/* :root{
+    --bg-light: rgba(255,255,255,1);
+    --clr-logo-red: red;
+    --btn-light-green: hsl(120,100%,35%);
+    --btn-light-yellow: hsl(60,100%,65%);
+    --btn-light-red: hsl(0,100%,50%);
+    --marker-light-blue: hsl(220,100%,50%);
+    --text-light-green : hsl(120,100%,35%);
+    --text-light-yellow : hsl(60,100%,65%);
+    --nav-light-yellow: hsl(60,100%,65%);
+} */
+
+
+.holder {
+    display: flex;
+    width: 80dvw;
+    place-items: center;
+    place-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex-basis: 20%;
+    row-gap: 2dvh;
+    margin: 1dvh 0;
+    padding: 15px 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 5px 2px rgba(255,150,150,0.8);
+}
+
+.questionHead {
+    width: 100dvw;
+    display: flex;
+    flex-grow: 5;
+    place-content: center;
+    font-size: 24px;
+    /* border-bottom: 1px solid black; */
+    /* border-top: 1px solid black; */
+    /* border-bottom-left-radius: 10px; */
+    /* border-bottom-right-radius: 10px; */
+    /* border-top-left-radius: 10px; */
+    /* border-top-right-radius: 10px; */
+}
+
+label { 
+    width: 95%;
+    padding-left: 15px;
+    padding-top: 5px;
+    border-bottom: 1px solid black;
+    /* border-top: 1px solid black; */
+    border-bottom-left-radius: 25px;
+    /* border-top-left-radius: 25px; */
+    font-size: 18px;
+}
+
+
+
+.isSelected {
+    background-color: rgba(0,255,0,1);
+}
+
+input {
+    width: 5%;
+}
+
+#submit {
+    width: auto;
+    display: flex;
+    place-self: center;
+    padding: 5px;
+    border-radius: 10px;
+    font-size: 24px;
+    border: none;
+    box-shadow: 0 0 5px 0.5px black;
+    background-color: red;
+    color: white;
+    transition: 0.5s;
+}
+
+@media only screen and (min-width: 680px) {
+    label:hover {
+        background-color: rgba(255,255,0,1);
+    }
+}

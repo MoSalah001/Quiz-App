@@ -39,7 +39,7 @@ function getNextQuiz() {
             for(let i of rows) {
                 if(new Date(i.QDate) > new Date()) {
                     timer = new Date(i.QDate) - new Date()
-                    quizDate.textContent = `Quiz Due Date: 
+                    quizDate.textContent = `
                     ${new Date(timer).getMonth()} M 
                     ${new Date(timer).getDay()} D
                     ${new Date(timer).getHours()} H: 
@@ -55,7 +55,7 @@ getNextQuiz()
 
 setInterval(()=>{
     timer-=1000
-    quizDate.textContent = `Quiz Due Date: 
+    quizDate.textContent = `
                     ${new Date(timer).getMonth()} M 
                     ${new Date(timer).getDay()} D
                     ${new Date(timer).getHours()} H: 
