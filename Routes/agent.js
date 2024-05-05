@@ -47,5 +47,25 @@ router.post('/quiz:id',(req,res)=>{
 router.get('/quiz/q:id',(req,res)=>{
     res.sendFile('./quizTemp.html',{root: path.join(__dirname,"../Client/agent")})
 })
+router.post('/quiz/answers',(req,res)=>{
+    let filterCookie = req.headers.cookie.indexOf('user=');
+    const user = req.headers.cookie.substring(filterCookie+5,filterCookie+11)
+    const quizID = req.body.qid
+    for(let i in req.body) {
+        if(i === "qid") {
+            continue
+        } else {
+            let data = req.body[i.toString()].split('-')
+            const [qid,aid] = data
+            DBConnect.query(`INSERT INTO userAnswers(QID,AID,StaffID,QuizID) VALUES(?,?,?,?)`,[qid,aid,user,quizID],(err,rows)=>{
+                if(err) {
+                    // error mo-1 - insert into DB Error
+                    res.status(500).send("Refer back to system admin - Error mo-1")
+                }
+            })
+        }
+    }
+    res.status(200).send({"msg":"Your answers have been saved Successfully"})
+})
 
 module.exports = router

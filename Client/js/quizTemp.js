@@ -1,4 +1,8 @@
+import {loadingSlider, responseMsg} from './loader.mjs'
+
 window.onload = ()=>{
+    const submitBtn = document.getElementById('submit')
+    submitBtn.addEventListener('click',submitAnswer)
     const data = JSON.parse(window.localStorage.getItem('json'))
     for(let i = 0; i< data.length;i++) {
         let newQuestion = new Question(data[i].QValue,data[i].AValue,data[i].QID,data[i].AID,"app")
@@ -56,7 +60,6 @@ class Question {
         checkStoredAnswers(answer,this.aID,label)
         answer.setAttribute("id",_aID ? "r-"+_aID : "r-"+this.aID)
         answer.onchange = (e)=> {
-            console.log(window.localStorage);
             let rButtons = document.getElementsByName(e.target.name)
             for(let i of rButtons){
                 if(i.checked){
@@ -90,5 +93,30 @@ function checkStoredAnswers(answer,_aID,label){
 }
 
 function submitAnswer(){
-    
+    const answersKeys = []
+    let data = {}
+    let answers = document.getElementsByClassName('Answers')
+    for(let i in window.localStorage) {
+        for(let k of answers) {
+            if(i == k.name && !answersKeys.includes(`${i}-${window.localStorage.getItem(i)}`)) {
+                answersKeys.push(`${i}-${window.localStorage.getItem(i)}`)
+            }
+        }
+    }
+    Object.assign(data,answersKeys)
+    Object.assign(data , {"qid":window.localStorage.getItem('qid')})
+    const xhr = new XMLHttpRequest()
+    xhr.open('post','./answers')
+    xhr.setRequestHeader("content-type","application/json")
+    xhr.send(JSON.stringify(data))
+    loadingSlider(xhr)
+    xhr.onreadystatechange = ()=>{
+        if(xhr.readyState === 4) {
+            loadingSlider(xhr)
+            responseMsg(xhr.responseText,xhr.status)
+            setTimeout(()=>{
+                window.location.href = window.location.origin+'/main'
+            },1500)
+        }
+    }
 }

@@ -2,8 +2,6 @@ import {loadingSlider , responseMsg} from './loader.mjs'
 const user = document.getElementById('user')
 const filterCookie = document.cookie.indexOf('user=');
 const current = document.cookie.substring(filterCookie+5,filterCookie+11)
-console.log(current);
-// console.log(current);
 user.innerHTML = `Staff ID: <span>${current}</span>`
 const lgout = document.getElementById('lgout')
 const quizDate = document.getElementById('quizDate')
@@ -19,6 +17,7 @@ function lgoutUser(){
         if(xhr.readyState === 4){
             loadingSlider(xhr)
             responseMsg(xhr.responseText)
+            window.localStorage.clear()
             document.cookie = "user=; Max-Age=0; Path=/;"
             checkUserStatus()
         }
