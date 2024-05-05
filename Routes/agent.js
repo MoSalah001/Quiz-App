@@ -19,7 +19,8 @@ router.get('/quizez',async(req,res)=>{
 })
 
 router.get('/quizlist',async(req,res)=>{
-    res.sendFile('./quizList.html',{root: path.join(__dirname,'../Client/branch')}) 
+    res.send(path.join(__dirname,'../Client/branch'))
+    // res.sendFile('./quizList.html',{root: path.join(__dirname,'../Client/branch')}) 
 })
 
 router.get('/getquizes',async (req,res)=>{
