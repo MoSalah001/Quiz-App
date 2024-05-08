@@ -13,7 +13,7 @@
 */
 #table-section {
     display: flex;
-    width: 100dvw;
+    width: 90dvw;
     flex-direction: column;
     place-items: center;
 }
@@ -24,15 +24,15 @@
     display: flex;
     flex-direction: column;
     place-items: center;
-    width: 42dvw;
+    width: 96dvw;
     border-radius: 5px;
     box-shadow: 0px 0px 10px 2px black;
 }
 
 .question-row textarea {
     border-radius: 5px;
-    min-width: 40dvw;
-    max-width: 40dvw;
+    min-width: 88dvw;
+    max-width: 88dvw;
     height: 15dvh;
     max-height: 100px;
     font-size: 24px;
@@ -40,7 +40,7 @@
 }
 
 .option-row input[type=text] {
-    width: 15dvw;
+    width: 65dvw;
     height: 30px;
     margin: 2px 5px;
 }
@@ -53,7 +53,7 @@
 }
 
 .saved-question {
-    width: 40dvw;
+    width: 96dvw;
     display: flex;
     flex-direction: column;
     border-radius: 5px;
@@ -65,6 +65,7 @@
 .saved-question #question-h3 {
     width: 100%;
     box-shadow: 0px 0px 5px 1px black;
+    font-size: 28px;
 }
 
 .saved-question h3 label {
@@ -86,4 +87,46 @@
     width: 100%;
     background-color: var(--btn-light-yellow);
 }
+#table-section div p {
+    margin: 5px 0;
+    font-size: 18px;
+    border-radius: 10px;
+    background-color: red;
+    text-align: center;
+    color: white;
+    font-weight: 700;
+    padding: 10px 5px;
+}
 
+@media only screen and (min-width: 700px) {
+    .saved-question {
+        width: 30dvw;
+    }
+
+    #table-section {
+        width: 30dvw;
+    }
+    .question-head {
+        width: 32dvw;
+    }
+
+    .question-head .question-row textarea {
+        min-width: 30dvw;
+    }
+
+    .question-row {
+        width: 30dvw;
+    }
+
+    .option-row input[type=text]{
+        width: 20dvw;
+    }
+
+    .option-row button {
+        font-size: 12px;
+    }
+    
+    #table-section div p {
+        font-size: 20px;
+    }
+}

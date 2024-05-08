@@ -44,7 +44,8 @@ router.get('/editq',async (req,res)=>{
 })
 
 router.post('/getQuizList',async (req,res)=>{
-    const user = req.headers.cookie.split('=')[2]
+    const filterCookie = req.headers.cookie.indexOf("user=")
+    const user = req.headers.cookie.substring(filterCookie+5,filterCookie+11)
     DBConnect.query("SELECT * FROM Quiz WHERE QCreator = ?",user,(err,rows)=>{
         if(err) {
             res.send(err)

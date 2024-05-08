@@ -1,6 +1,5 @@
 import {loadingSlider,responseMsg} from "./loader.mjs";
 window.onload = ()=>{
-    const saved = document.getElementById('saved')
     const xhr = new XMLHttpRequest();
     const data = {
         qid: window.localStorage.getItem('qid')
@@ -25,6 +24,7 @@ window.onload = ()=>{
         }
     }
 }
+
 
 class questionTemplate {
     // html question , array mapped for html , determine answer
@@ -61,7 +61,7 @@ class questionTemplate {
         table.append(questionHead,controlDiv)
         addOptions(controlOptions,questionHead)
     }
-
+    
 }
 function addOptions(control,questionHead) {
     const optionRow = document.createElement('div') // option div
@@ -114,16 +114,15 @@ function addQuestion(e){
             createQuestion.create()
         }
     }
-}
-
-function htmlRender(filteredData) {
-    const question = document.createElement("h3")
-    question.textContent = filteredData[0]
+    setTimeout(()=>{
+        window.location.reload()
+    },1000)
 }
 
 function getSaved(data) {
-    const filtered = Object.groupBy(data,({QValue})=>QValue)
+    const filtered = Object.groupBy(data,({QID})=>QID)
     for(let single in filtered) {
+        let iterate = 0;
         let deleteBtn = document.createElement('button')
         deleteBtn.classList.add('question-delete')
         deleteBtn.textContent="Delete Question"
@@ -131,7 +130,7 @@ function getSaved(data) {
         container.classList.add("saved-question")
         let question = document.createElement('h3')
         question.setAttribute('id','question-h3')
-        question.textContent = single+' ?'
+        question.textContent = filtered[single][iterate].QValue+' ?'
         for(let i=0; i<filtered[single].length; i++) { 
             deleteBtn.setAttribute("QID",filtered[single][i].QID)
             const answer = document.createElement('label')
@@ -162,4 +161,5 @@ function deleteQ(e){
             responseMsg(xhr.responseText,xhr.status)
         }
     }
+    window.location.reload()
 }

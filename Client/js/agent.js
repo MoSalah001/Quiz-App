@@ -20,7 +20,7 @@ function lgoutUser(){
             window.localStorage.clear()
             document.cookie = "user=; Max-Age=0; Path=/;"
             checkUserStatus()
-        }
+        }   
     }
 }
 import checkUserStatus from "./checkUser.mjs"
