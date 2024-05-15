@@ -20,3 +20,10 @@
     padding: 10px 5px;
     box-shadow: 0 0 1px 3px rgba(150,150,150,1);
 }
+
+@media only screen and (min-width: 700px) {
+    .card {
+        width: 30dvw;
+        font-size: 30px;
+    }
+}

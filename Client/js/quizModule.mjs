@@ -39,11 +39,27 @@ class QuizCard{
         const id = document.createElement('p')
         id.textContent = "Quiz ID: "+this.id
         div.append(id,date,status,creator,duration)
-        div.addEventListener('click',takeQuiz)
-        fragment.append(div)
-        if(new Date(date.textContent) < new Date()) {
+        const startTime = new Date(date.textContent)
+        const calculateDuration = startTime.getTime()+(this.duration*60*1000)
+        const endTime = new Date(calculateDuration)
+        const now = new Date()
+        if( Date.parse(startTime) < Date.parse(now) &&
+            Date.parse(now) < Date.parse(endTime)) {
+                div.addEventListener('click',takeQuiz)
+            } else {
+                console.log(Date.parse(now)-Date.parse(startTime))
+                console.log(Date.parse(now)-Date.parse(endTime))
+                console.log(endTime);
+                div.addEventListener('click',notYet)
+            }
+            fragment.append(div)
+        if(
+            Date.parse(startTime) < Date.parse(now) &&
+            Date.parse(now) < Date.parse(endTime)
+        ) {
             // update DB with quiz status
             // const xhr = new XMLHttpRequest()
+            console.log(Date.parse(startTime)-Date.parse(now));
             return null
         } else {
             return fragment
@@ -73,4 +89,8 @@ function takeQuiz(e){
             }
         }
     }
+}
+
+function notYet(e) {
+    window.alert("Please Wait for quiz time")
 }

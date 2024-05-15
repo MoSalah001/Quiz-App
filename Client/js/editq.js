@@ -69,23 +69,18 @@ function getQuizez(){
                 const div = document.createElement('div')
                 div.classList.add('quizCard')
                 const quizID = document.createElement('p')
-                quizID.textContent = `Quiz ID:${quizList[i].QuizID}`
+                quizID.innerHTML = `Quiz ID: <span class="quizListTemp">${quizList[i].QuizID}</span>`
                 const qDate = document.createElement('p')
-                const formatedDate = new Date(quizList[i].QDate)
-                qDate.textContent = `Quiz Date:
-                ${formatedDate.getDay()} /
-                ${formatedDate.getMonth()} / 
-                ${formatedDate.getFullYear()} - 
-                ${formatedDate.getHours()} :
-                ${formatedDate.getMinutes()}
-                ${formatedDate.getHours()>12 ? "PM" : "AM"}
-                `
+                const formatedDate = new Date(quizList[i].QDate).toLocaleString('en-CA').split(",")
+                qDate.innerHTML = `Quiz Date: <span class="quizListTemp">${formatedDate[0]}</span>`
+                const qTime = document.createElement('p')
+                qTime.innerHTML = `Quiz Time: <span class="quizListTemp">${formatedDate[1]}</span>`
                 const qStatus = document.createElement('p')
-                qStatus.textContent = `Quiz Status:${quizList[i].QStatus}`
+                qStatus.innerHTML = `Quiz Status: <span class="quizListTemp">${quizList[i].QStatus}</span>`
                 const qCreator = document.createElement('p')
-                qCreator.textContent = `Staff ID:${quizList[i].QCreator}`
+                qCreator.innerHTML = `Staff ID: <span class="quizListTemp">${quizList[i].QCreator}</span>`
                 const qDuration = document.createElement('p')
-                qDuration.textContent = `Quiz Duration:${quizList[i].Duration}`
+                qDuration.innerHTML = `Quiz Duration: <span class="quizListTemp">${quizList[i].Duration} Min</span>`
                 // buttons section
                 const btnSection = document.createElement('section')
                 btnSection.classList.add('buttons-section')
@@ -108,7 +103,7 @@ function getQuizez(){
                 // end of buttons section
                 div.setAttribute('status',quizList[i].QStatus)
                 div.setAttribute('ID',quizList[i].QuizID)
-                div.append(quizID,qDate,qStatus,qDuration,qCreator,btnSection)
+                div.append(quizID,qDate,qTime,qStatus,qDuration,qCreator,btnSection)
                 main.append(div)
             }
         }

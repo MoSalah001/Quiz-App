@@ -15,19 +15,20 @@ router.get('/newq',(req,res)=>{
 
 router.post('/newq/new',(req,res)=>{
     const cookies = req.headers.cookie.split('=')
+    const filterCookie = req.headers.cookie.indexOf("user=")
     const cleanCookie = {
         token: cookies[1].split(';')[0],
-        user: /^[^;]*/.exec(cookies[2])
+        user: req.headers.cookie.substring(filterCookie+5,filterCookie+11)
     }
     const quizData = {
-        quizID: `${new Date(req.body.date).getMonth()}-${cleanCookie.user}` ,
+        quizID: `${new Date(req.body.date).getDate()}${new Date(req.body.date).getMonth()}-${cleanCookie.user}` ,
         quizDate: new Date(req.body.date).toISOString().slice(0,19).replace('T',' '),
         quizCreator: cleanCookie.user,
         quizDuration: req.body.duration
     }
     DBConnect.query("INSERT INTO Quiz (QuizID,QDate,QCreator,Duration) VALUES (?,?,?,?)",[quizData.quizID,quizData.quizDate,quizData.quizCreator,quizData.quizDuration],(err,rows)=>{
         if(err) {
-            res.status(400).send({"msg":"You already set a quiz on the selected month"})
+            res.status(400).send({"msg":"You already set a quiz on the selected day"})
         } else {
             res.cookie("quizID",quizData.quizID)
             res.status(200).send({
@@ -56,7 +57,8 @@ router.post('/getQuizList',async (req,res)=>{
 })
 
 router.post('/deleteQuiz', async (req,res)=>{
-    const user = req.headers.cookie.split('=')[2]
+    const filterCookie = req.headers.cookie.indexOf("user=")
+    const user = req.headers.cookie.substring(filterCookie+5,filterCookie+11)
     const quizID = req.body.uid
     DBConnect.query("DELETE FROM Quiz WHERE QuizID =? AND QCreator=?",[quizID,user],(err,rows)=>{
         if(err) {
