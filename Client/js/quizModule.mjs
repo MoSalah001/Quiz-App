@@ -28,8 +28,14 @@ class QuizCard{
         const div = document.createElement('div')
         div.classList.add('card')
         div.setAttribute('id',this.id)
+        // fix for local summertime adjustments - this fix will generate wrong time calculation to any GMT+3 country
+        const timeZoneFix = new Date(this.date).getTimezoneOffset() == -180 ? 60 : new Date(this.date).getTimezoneOffset()
+        const filterDate = new Date(this.date).getTime() - timeZoneFix*60*1000
+        const shownDate = new Date(filterDate).toLocaleString('en-CA').split(',')
         const date = document.createElement('p')
-        date.textContent = "Quiz Date: "+ this.date
+        date.textContent = "Quiz Date: "+ shownDate[0]
+        const quizTime = document.createElement('p')
+        quizTime.innerHTML = `Quiz Time: ${shownDate[1]}`
         const status = document.createElement('p')
         status.textContent ="Quiz Status: "+ this.status
         const creator = document.createElement('p')
@@ -38,28 +44,23 @@ class QuizCard{
         duration.textContent = "Quiz Duration: "+ this.duration
         const id = document.createElement('p')
         id.textContent = "Quiz ID: "+this.id
-        div.append(id,date,status,creator,duration)
-        const startTime = new Date(date.textContent)
+        div.append(id,date,quizTime,status,creator,duration)
+        const startTime = new Date(filterDate)
         const calculateDuration = startTime.getTime()+(this.duration*60*1000)
         const endTime = new Date(calculateDuration)
         const now = new Date()
-        if( Date.parse(startTime) < Date.parse(now) &&
-            Date.parse(now) < Date.parse(endTime)) {
+        if( startTime.getTime() < now.getTime()  &&
+            now.getTime() < endTime.getTime() ) {
                 div.addEventListener('click',takeQuiz)
             } else {
-                console.log(Date.parse(now)-Date.parse(startTime))
-                console.log(Date.parse(now)-Date.parse(endTime))
-                console.log(endTime);
                 div.addEventListener('click',notYet)
             }
             fragment.append(div)
-        if(
-            Date.parse(startTime) < Date.parse(now) &&
-            Date.parse(now) < Date.parse(endTime)
+        if( startTime.getTime() < now.getTime()  &&
+            now.getTime() > endTime.getTime() 
         ) {
             // update DB with quiz status
             // const xhr = new XMLHttpRequest()
-            console.log(Date.parse(startTime)-Date.parse(now));
             return null
         } else {
             return fragment
