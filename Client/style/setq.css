@@ -40,7 +40,7 @@
 }
 
 .option-row input[type=text] {
-    width: 65dvw;
+    width: 50dvw;
     height: 30px;
     margin: 2px 5px;
 }
@@ -52,10 +52,37 @@
     border: 1px solid black;
 }
 
+.oLabels {
+    font-size: 16px;
+    margin: 0 5px;
+    box-shadow: 0px 0px 1px 2px white;
+    border: 2px ridge white;
+    border-radius: 2px;
+    background-color: white;
+    color: red;
+    padding: 2px 5px;
+    transition: 0.5s;
+
+}
+
+.oLabels[answer=true] {
+    background-color: green;
+    color: yellow;
+}
+
+.option-row input[type=radio] {
+    visibility: visible;
+    opacity: 0;
+    width: 1px;
+}
+
 .saved-question {
     width: 96dvw;
     display: flex;
     flex-direction: column;
+    place-content: center;
+    place-items: center;
+    border: 5px solid red;
     border-radius: 5px;
     box-shadow: 0px 0px 5px red;
     background-color: var(--clr-logo-red);
@@ -63,9 +90,15 @@
 }
 
 .saved-question #question-h3 {
-    width: 100%;
+    width: 98%;
     box-shadow: 0px 0px 5px 1px black;
     font-size: 28px;
+    margin: 2px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    background-color: var(--text-light-green);
+    color: var(--nav-light-yellow);
 }
 
 .saved-question h3 label {
@@ -73,18 +106,26 @@
     place-content: space-between;
     padding-left: 5px;
     align-items: center;
-    margin: 2px 0;
+    font-size: 18px;
+    background-color: aliceblue;
+    margin: 2px;
     box-shadow: 0px 0px 2px 1px var(--nav-light-yellow);
+    width: 98%;
+    color: black;
 }
 
 .saved-question h3 label[answer=true] {
     background-color: var(--text-light-green);
+    color: var(--nav-light-yellow);
+
 }
 
 .saved-question button {
     height: 30px;
     font-size: 20px;
     width: 100%;
+    margin-top: 5px;
+    box-shadow: 0px 0px 2px 1px var(--nav-light-yellow);
     background-color: var(--btn-light-yellow);
 }
 #table-section div p {

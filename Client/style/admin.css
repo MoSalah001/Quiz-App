@@ -24,13 +24,13 @@
 .nav-ul li::before {
     /* content: "\2020  "; */
     content: "\261B  ";
-    font-size: 48px;
+    font-size: 26px;
     color: var(--clr-logo-red);
     transition: 0.7s;
 }
 .nav-ul li::after {
     content: "  \261A";
-    font-size: 48px;
+    font-size: 26px;
     color: var(--clr-logo-red);
     transition: 0.7s;
 }
@@ -47,7 +47,7 @@
 }
 
 .nav-ul li a , .nav-ul li a:visited {
-    font-size: 48px;
+    font-size: 20px;
     text-decoration: none;
     color: var(--text-light-green);
 }
@@ -55,7 +55,7 @@
 #form-div {
     display: flex;
     flex-direction: column;
-    width: 50dvw;
+    width: 80dvw;
     margin: 0 auto;
     height: auto;
     place-content: center;
@@ -68,7 +68,8 @@
     width: 80%;
     text-align: center;
     height: 40px;
-    font-size: 28px;
+    /* font-size: 28px; */
+    font-size: 24px;
     cursor: pointer;
     border: 1px var(--clr-logo-red) solid;
     border-radius: 10px;
@@ -98,11 +99,14 @@
     flex-direction: column;
 }
 
-@media only screen and (max-width: 640px) {
+@media only screen and (min-width: 640px) {
     .nav-ul li a {
-        font-size: 20px;
+        font-size: 48px;
     }
     .nav-ul li::after , .nav-ul li::before {
-        font-size: 26px;
+        font-size: 48px;
+    }
+    #form-div {
+        width: 30dvw;
     }
 }

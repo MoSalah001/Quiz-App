@@ -64,11 +64,20 @@ class questionTemplate {
     
 }
 function addOptions(control,questionHead) {
+    const label = document.createElement("label")
+    label.setAttribute('for',`o-${control}`)
+    label.setAttribute('id',`o-${control}-l`)
+    label.textContent = "Set Answer"
+    label.classList.add('oLabels')
+    // label.addEventListener('click',checkAnswer)
     const optionRow = document.createElement('div') // option div
     optionRow.classList.add('option-row')
     const radioBtn = document.createElement('input')
     radioBtn.type = "radio"
     radioBtn.name = "option"
+    radioBtn.id = `o-${control}`
+    radioBtn.classList.add('radios')
+    radioBtn.addEventListener('change',checkAnswer)
     const option = document.createElement('input')
     option.type = "text"
     option.placeholder = `Option #${control}`
@@ -76,7 +85,7 @@ function addOptions(control,questionHead) {
     del.textContent = "Delete"
     del.setAttribute('order',control)
     optionRow.setAttribute('order',control)
-    optionRow.append(radioBtn,option,del) 
+    optionRow.append(label,radioBtn,option,del) 
     questionHead.append(optionRow)
 }
 
@@ -162,4 +171,17 @@ function deleteQ(e){
         }
     }
     window.location.reload()
+}
+
+function checkAnswer(e){
+    const getRadios = document.getElementsByClassName('radios') 
+    for(let radio of getRadios) {
+        if(radio.checked) {
+            const getLabel = document.getElementById(radio.id+'-l')
+            getLabel.setAttribute("answer",true)
+        } else {
+            const getLabel = document.getElementById(radio.id+'-l')
+            getLabel.removeAttribute('answer')
+        }
+    }
 }

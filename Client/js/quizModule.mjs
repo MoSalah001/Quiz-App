@@ -53,7 +53,8 @@ class QuizCard{
             now.getTime() < endTime.getTime() ) {
                 div.addEventListener('click',takeQuiz)
             } else {
-                div.addEventListener('click',notYet)
+                // div.addEventListener('click',notYet)
+                div.addEventListener('click',takeQuiz)
             }
             fragment.append(div)
         if( startTime.getTime() < now.getTime()  &&
