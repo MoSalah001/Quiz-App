@@ -3,21 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../style/general.css">
+    <link rel="stylesheet" href="../style/firstReg.css">
     <title>Quiz App</title>
 </head>
 <body>
-    <form action="/firstReg" method="post">
-        <label>StaffID</label>
-        <input type="number" name="staffID">
-        <label>Pass</label>
-        <input type="password" name="password">
-        <label>Store</label>
-        <input type="number" name="storeID">
-        <!-- <label>Email</label>
-        <input type="email" name="email"> -->
-        <label>UserLevel</label>
-        <input type="number" name="userType" min="0" max="1">
-        <button type="submit">send</button>
-    </form>
+    <div id="main">
+        <p id="regHeader">Request Access</p>
+        <form action="/firstReg" method="post" name="regForm">
+            <label>StaffID</label>
+            <input type="number" name="staffID" required>
+            <label>Pass</label>
+            <input type="password" name="password" required>
+            <label>Store</label>
+            <input type="number" name="storeID" required>
+            <!-- <label>Email</label>
+            <input type="email" name="email"> -->
+            <button type="submit" id="submit">send</button>
+            <script src="../js/firstReg.js"></script>
+        </form>
+    </div>
 </body>
 </html>

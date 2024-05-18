@@ -37,10 +37,10 @@ function getNextQuiz() {
             const rows = JSON.parse(xhr.responseText)
             for(let i of rows) {
                 if(new Date(i.QDate) > new Date()) {
-                    timer = new Date(i.QDate) - new Date()
+                    timer = new Date(i.QDate).getTime() - new Date().getTime()
                     quizDate.textContent = `
                     ${new Date(timer).getMonth()} M 
-                    ${new Date(timer).getDay()} D
+                    ${new Date(timer).getDate()} D
                     ${new Date(timer).getHours()} H: 
                     ${new Date(timer).getMinutes()} M: 
                     ${new Date(timer).getSeconds()} S
@@ -56,7 +56,7 @@ setInterval(()=>{
     timer-=1000
     quizDate.textContent = `
                     ${new Date(timer).getMonth()} M 
-                    ${new Date(timer).getDay()} D
+                    ${new Date(timer).getDate()} D
                     ${new Date(timer).getHours()} H: 
                     ${new Date(timer).getMinutes()} M:
                     ${new Date(timer).getSeconds()} S

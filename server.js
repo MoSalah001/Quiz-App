@@ -29,6 +29,7 @@ DBConnect.connect((err)=>{
 })
 app.use(express.static("Client"))
 app.use(express.json())
+app.use(express.text())
 app.use(express.urlencoded({
     extended: true
 }))
@@ -105,14 +106,17 @@ app.post('/firstReg',async (req,res)=>{ // first admin user
             admin = true
         }
 
-        let regQuery = `INSERT INTO Users (StaffID, PHashed, StoreID, Admin) 
-        VALUES (?,?,?,?)`
+        let regQuery = `INSERT INTO Users (StaffID, PHashed, StoreID) 
+        VALUES (?,?,?)`
 
-        DBConnect.query(regQuery,[req.body.staffID,hash,req.body.storeID,admin],(error, result, fields)=>{
+        DBConnect.query(regQuery,[req.body.staffID,hash,req.body.storeID],(error, result, fields)=>{
             if(error) {
+                console.log(error);
                 res.send("User Not Saved");
             }
-            res.send('User Saved')
+             else {
+                res.send('User Saved')
+             }
         })
     })
 })

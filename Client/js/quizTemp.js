@@ -1,4 +1,23 @@
 import {loadingSlider, responseMsg} from './loader.mjs'
+const timer = document.getElementById("timer")
+let counter;
+const xhr = new XMLHttpRequest()
+xhr.open('post','timer')
+console.log(window.localStorage.getItem("qid"));
+xhr.send(window.localStorage.getItem("qid"))
+xhr.onreadystatechange = ()=>{
+    if(xhr.readyState === 4) {
+        console.log(xhr.responseText);
+        let time = JSON.parse(xhr.responseText)[0].Duration
+        let start = JSON.parse(xhr.responseText)[0].QDate
+        counter = new Date((time*60*1000)-(new Date().getTime() - new Date(start).getTime()))
+        timer.textContent = `${counter.getMinutes()} : ${counter.getSeconds()}`
+    }
+}
+setInterval(() => {
+    counter-=1000
+    timer.textContent = `${new Date(counter).getMinutes()} : ${new Date(counter).getSeconds()}`
+}, 1000);
 
 window.onload = ()=>{
     const submitBtn = document.getElementById('submit')

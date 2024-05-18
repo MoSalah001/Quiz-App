@@ -81,6 +81,8 @@ function takeQuiz(e){
     xhr.onreadystatechange = ()=>{
         if(xhr.readyState === 4) {
             window.localStorage.setItem("json",xhr.responseText)
+            const qid = JSON.parse(xhr.responseText)[0].QuizID
+            window.localStorage.setItem("qid",qid)
             const subXhr = new XMLHttpRequest()
             subXhr.open('get',`./quiz/q${data.id}`)
             subXhr.send()

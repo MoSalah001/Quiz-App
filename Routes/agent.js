@@ -68,4 +68,11 @@ router.post('/quiz/answers',(req,res)=>{
     res.status(200).send({"msg":"Your answers have been saved Successfully"})
 })
 
+router.post('/quiz/timer',(req,res)=>{
+    const qid = req.body
+    DBConnect.query("SELECT Duration,QDate FROM Quiz WHERE QuizID = ?",qid,(err,rows)=>{
+        res.send(rows)
+    })
+})
+
 module.exports = router
