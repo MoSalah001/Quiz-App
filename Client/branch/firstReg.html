@@ -12,16 +12,17 @@
         <p id="regHeader">Request Access</p>
         <form name="regForm">
             <label>StaffID</label>
-            <input type="number" name="staffID" required>
+            <input type="number" name="staffID"  placeholder="Staff ID" required>
             <label>Pass</label>
-            <input type="password" name="password" required>
-            <label>Store</label>
-            <input type="number" name="storeID" required>
+            <input type="password" name="password" required  placeholder="Secret Password">
+            <label>Store ID</label>
+            <input type="number" name="storeID" required  placeholder="Store ID">
             <label>NT User</label>
-            <input type="text" name="NTUser">
-            <button type="submit" id="submit">send</button>
+            <input type="text" name="NTUser"  placeholder="Username" required>
+            <button type="submit" id="submit">Submit</button>
             <script src="../js/firstReg.js" type="module"></script>
         </form>
     </div>
+    <a id="back" href="./">back</a>
 </body>
 </html>

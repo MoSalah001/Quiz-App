@@ -12,6 +12,7 @@
 #regHeader {
     position: absolute;
     top: 10px;
+    color: var(--clr-logo-red);
 }
 #main {
     display: flex;
@@ -26,8 +27,34 @@ form {
     flex-direction: column;
     width: 80dvw;
     background-color: var(--clr-logo-red);
-    padding: 5px;
+    padding: 10px;
     border-radius: 5px;
     place-content: center;
     place-items: center;
+    /* box-shadow: 0px 0px 10px var(--marker-light-blue); */
+    box-shadow: 0px 0px 5px 2px var(--marker-light-blue);
+}
+
+label {
+    color: var(--text-light-yellow);
+    font-size: 24px;
+    margin-top: 15px;
+}
+
+input {
+    background-color: aliceblue;
+    height: 40px;
+    border-radius: 5px;
+    font-size: 28px;
+    width: 85%;
+    text-align: center;
+}
+
+button {
+    margin-top: 20px;
+    font-size: 32px;
+    color: var(--clr-logo-red);
+    padding: 5px;
+    background-color: white;
+    border-radius: 10px;
 }
