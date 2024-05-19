@@ -114,7 +114,7 @@ app.post('/firstReg',async (req,res)=>{ // first admin user
         DBConnect.query("SELECT NTUser, StaffID FROM Users WHERE NTUser = ? OR StaffID = ?",[req.body.NTUser.toUpperCase(),req.body.sfid],(err,resolve,fields)=>{
             if(err){
                 res.status(503).send({"msg":"Internal server outage - refer back to system admin error code mo-server-1"})
-            } else if(resolve.length > 1){
+            } else if(resolve.length > 0){
                 if(resolve[0].NTUser === req.body.NTUser.toUpperCase() || resolve[0].StaffID == req.body.sfid) {
                     res.status(409).send({"msg":"User already registered - please try logging in"})
                 }
