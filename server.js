@@ -53,7 +53,7 @@ app.post('/login',async (req,res)=>{
                     res.send("Wrong Credintals")
                 }
                 else {
-                    if(data.Status === "ACTIVE") {
+                    if(data.Status == "ACTIVE") {
                         jwt.sign(JSON.stringify(data.StaffID),process.env.JWTSecret,(err,token)=>{
                             if (err){
                                 res.send(err)
