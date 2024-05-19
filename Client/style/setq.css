@@ -71,8 +71,6 @@
 }
 
 .option-row input[type=radio] {
-    visibility: visible;
-    opacity: 0;
     width: 1px;
 }
 

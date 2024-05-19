@@ -35,8 +35,9 @@ function getNextQuiz() {
         if(xhr.readyState === 4) {
             loadingSlider(xhr)
             const rows = JSON.parse(xhr.responseText)
-            if(!rows.length === 0){
+            if(rows.length !== 0){
                 for(let i of rows) {
+                    console.log(i);
                     if(new Date(i.QDate) > new Date()) {
                         timer = new Date(i.QDate).getTime() - new Date().getTime()
                         quizDate.textContent = `

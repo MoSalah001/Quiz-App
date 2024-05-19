@@ -69,7 +69,7 @@ function addOptions(control,questionHead) {
     label.setAttribute('id',`o-${control}-l`)
     label.textContent = "Set Answer"
     label.classList.add('oLabels')
-    // label.addEventListener('click',checkAnswer)
+    label.addEventListener('click',checkAnswer)
     const optionRow = document.createElement('div') // option div
     optionRow.classList.add('option-row')
     const radioBtn = document.createElement('input')
@@ -97,8 +97,8 @@ function addQuestion(e){
     const values =[]
     const optionsValues = [...options].map(option =>{
         let data = {
-            isChecked: option.children[0].checked,
-            value: option.children[1].value
+            isChecked: option.children[1].checked,
+            value: option.children[2].value
         }
         values.push(data)
     })
@@ -107,7 +107,6 @@ function addQuestion(e){
         answers : values,
         qid: window.localStorage.getItem('qid')
     }
-
     const xhr = new XMLHttpRequest()
     xhr.open('post','save')
     xhr.setRequestHeader('content-type','application/json')
@@ -125,7 +124,7 @@ function addQuestion(e){
     }
     setTimeout(()=>{
         window.location.reload()
-    },1000)
+    },500)
 }
 
 function getSaved(data) {

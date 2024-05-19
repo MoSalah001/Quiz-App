@@ -49,7 +49,6 @@ router.post('/getQuizList',async (req,res)=>{
     const filterCookie = req.headers.cookie.indexOf("user=")
     const user = req.headers.cookie.substring(filterCookie+5,filterCookie+12)
     DBConnect.query("SELECT * FROM Quiz WHERE QCreator = ?",user,(err,rows)=>{
-        console.log(user);
         if(err) {
             res.send(err)
         } else {
@@ -106,7 +105,6 @@ router.post('/setQ/qid',async (req,res)=>{
 router.post('/setq/save',async (req,res)=>{
     const parsedData = req.body
     const qTable = [parsedData.qid,parsedData.qValue]
-    console.log(qTable);
     DBConnect.query("INSERT INTO Questions(QuizID,QValue) Values(?)",[qTable],(err,rows)=>{
         if(err) {
             res.status(400).send(err)
