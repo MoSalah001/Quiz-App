@@ -111,14 +111,23 @@ app.post('/firstReg',async (req,res)=>{ // first admin user
         }
         let regQuery = `INSERT INTO Users (StaffID, PHashed, StoreID, Status, NTUser) 
         VALUES (?,?,?,?,?)`
-        DBConnect.query(regQuery,[req.body.sfid,hash,req.body.storeID,"pending",req.body.NTUser.toUpperCase()],(error, result, fields)=>{
-            if(error) {
-                res.send({"msg":"User Not Saved"});
+        DBConnect.query("SELECT NTUser, StaffID FROM Users WHERE NTUser = ? OR StaffID = ?",[req.body.NTUser.toUpperCase(),req.body.sfid],(err,resolve,fields)=>{
+            if(err){
+                res.status(503).send({"msg":"Internal server outage - refer back to system admin error code mo-server-1"})
+            } else if (resolve[0].NTUser === req.body.NTUser.toUpperCase() || resolve[0].StaffID == req.body.sfid) {
+                res.status(409).send({"msg":"User already registered - please try logging in"})
+            } else {
+                DBConnect.query(regQuery,[req.body.sfid,hash,req.body.storeID,"PENDING",req.body.NTUser.toUpperCase()],(error, result, fields)=>{
+                    if(error) {
+                        res.status(400).send({"msg":"User Not Saved"});
+                    }
+                     else {
+                        res.send({"msg":"User Saved"})
+                     }
+                })
             }
-             else {
-                res.send({"msg":"User Saved"})
-             }
         })
+        
     })
 })
 

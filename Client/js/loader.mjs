@@ -23,8 +23,8 @@ export function responseMsg(msg,status){
     box.classList.add('dialog')
     const filterMsg = JSON.parse(msg)
     box.textContent = filterMsg.msg
-    if(status == 400){box.classList.add('error')}
-    else {box.classList.add('respond')}
+    if(status == 200 || status == 304){box.classList.add('respond')}
+    else {box.classList.add('error')}
     document.body.append(box)
     setTimeout(()=>{
         document.body.removeChild(box)
