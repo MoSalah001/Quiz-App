@@ -42,37 +42,42 @@ app.listen(port,()=>{
 })
 
 app.post('/login',async (req,res)=>{
-    DBConnect.query("SELECT StaffID , PHashed, Admin FROM Users WHERE StaffID =?",parseInt(req.body.ID),(error,result,fields)=>{
+    DBConnect.query("SELECT StaffID , PHashed, Admin, Status, NTUser FROM Users WHERE NTUser =?",String(req.body.ID).toUpperCase(),(error,result,fields)=>{
         if(error) {
-            console.log(error);
             res.status(404).send('Wrong User or Password')
         }
         let data = result[0]
         if(data){
             bcrypt.compare(req.body.pass,data.PHashed,(err,result)=>{
                 if(err){
-                    console.log(err);
                     res.send("Wrong Credintals")
                 }
                 else {
-                    jwt.sign(JSON.stringify(data.StaffID),process.env.JWTSecret,(err,token)=>{
-                        if (err) res.send(err)
-                        else {
-                            if(data.Admin === 1) {
-                                res.cookie("token",token,{
-                                    httpOnly: true
-                                })
-                                res.cookie('user',data.StaffID)
-                                res.redirect('../admin')
+                    if(data.NTUser === "ACTIVE") {
+                        jwt.sign(JSON.stringify(data.StaffID),process.env.JWTSecret,(err,token)=>{
+                            if (err){
+                                res.send(err)
                             } else {
-                                res.cookie("token",token)
-                                res.cookie('user',data.StaffID)
-                                res.redirect('../main')
+                                if(data.Admin === 1) {
+                                    res.cookie("token",token,{
+                                        httpOnly: true
+                                    })
+                                    res.cookie('user',data.StaffID)
+                                    res.redirect('../admin')
+                                } else {
+                                    res.cookie("token",token)
+                                    res.cookie('user',data.StaffID)
+                                    res.redirect('../main')
+                                }
                             }
-                        }
-                    })
+                        })
+                    } else {
+                        res.cookie('user',data.StaffID)
+                        res.redirect('../temp')
+                    }
                 }
-            })
+                })
+                    
         } else {
             res.append('message',"Wrong Credintals")
             res.redirect('..')
@@ -89,6 +94,10 @@ app.get('/main',(req,res)=>{
     res.sendFile('./branch/agent.html',{root: path.join(__dirname,"./Client")})
 })
 
+app.get('/temp',(req,res)=>{
+    res.sendFile('./branch/temp.html',{root: path.join(__dirname,"./Client")})
+})
+
 app.get('/request',(req,res)=>{
     res.sendFile("./branch/firstReg.html",{root: path.join(__dirname,"./Client")})
 })
@@ -98,24 +107,16 @@ app.post('/firstReg',async (req,res)=>{ // first admin user
     const salt = await bcrypt.genSalt(saltRounds)
     bcrypt.hash(req.body.password,salt,(err,hash)=>{
         if (err) {
-            console.log(err);
             return err
         }
-        let admin = false
-        if(req.body.userType === "1"){
-            admin = true
-        }
-
-        let regQuery = `INSERT INTO Users (StaffID, PHashed, StoreID) 
-        VALUES (?,?,?)`
-
-        DBConnect.query(regQuery,[req.body.staffID,hash,req.body.storeID],(error, result, fields)=>{
+        let regQuery = `INSERT INTO Users (StaffID, PHashed, StoreID, Status, NTUser) 
+        VALUES (?,?,?,?,?)`
+        DBConnect.query(regQuery,[req.body.sfid,hash,req.body.storeID,"pending",req.body.NTUser.toUpperCase()],(error, result, fields)=>{
             if(error) {
-                console.log(error);
-                res.send("User Not Saved");
+                res.send({"msg":"User Not Saved"});
             }
              else {
-                res.send('User Saved')
+                res.send({"msg":"User Saved"})
              }
         })
     })
@@ -127,5 +128,3 @@ app.get('/lgout',(req,res)=>{
     res.send({"msg":"Logged out"})
 })
 
-
-// test server deployment

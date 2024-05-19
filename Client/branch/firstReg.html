@@ -10,17 +10,17 @@
 <body>
     <div id="main">
         <p id="regHeader">Request Access</p>
-        <form action="/firstReg" method="post" name="regForm">
+        <form name="regForm">
             <label>StaffID</label>
             <input type="number" name="staffID" required>
             <label>Pass</label>
             <input type="password" name="password" required>
             <label>Store</label>
             <input type="number" name="storeID" required>
-            <!-- <label>Email</label>
-            <input type="email" name="email"> -->
+            <label>NT User</label>
+            <input type="text" name="NTUser">
             <button type="submit" id="submit">send</button>
-            <script src="../js/firstReg.js"></script>
+            <script src="../js/firstReg.js" type="module"></script>
         </form>
     </div>
 </body>
