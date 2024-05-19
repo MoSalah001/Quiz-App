@@ -18,7 +18,7 @@ router.post('/newq/new',(req,res)=>{
     const filterCookie = req.headers.cookie.indexOf("user=")
     const cleanCookie = {
         token: cookies[1].split(';')[0],
-        user: req.headers.cookie.substring(filterCookie+5,filterCookie+11)
+        user: req.headers.cookie.substring(filterCookie+5,filterCookie+12)
     }
     const testDate = new Date(req.body.date).toUTCString()
     console.log(testDate);
@@ -48,7 +48,7 @@ router.get('/editq',async (req,res)=>{
 
 router.post('/getQuizList',async (req,res)=>{
     const filterCookie = req.headers.cookie.indexOf("user=")
-    const user = req.headers.cookie.substring(filterCookie+5,filterCookie+11)
+    const user = req.headers.cookie.substring(filterCookie+5,filterCookie+12)
     DBConnect.query("SELECT * FROM Quiz WHERE QCreator = ?",user,(err,rows)=>{
         if(err) {
             res.send(err)
@@ -60,7 +60,7 @@ router.post('/getQuizList',async (req,res)=>{
 
 router.post('/deleteQuiz', async (req,res)=>{
     const filterCookie = req.headers.cookie.indexOf("user=")
-    const user = req.headers.cookie.substring(filterCookie+5,filterCookie+11)
+    const user = req.headers.cookie.substring(filterCookie+5,filterCookie+12)
     const quizID = req.body.uid
     DBConnect.query("DELETE FROM Quiz WHERE QuizID =? AND QCreator=?",[quizID,user],(err,rows)=>{
         if(err) {

@@ -1,6 +1,6 @@
 const user = document.getElementById('user')
 const filterCookie = document.cookie.indexOf('user=');
-const current = document.cookie.substring(filterCookie+5,filterCookie+11)
+const current = document.cookie.substring(filterCookie+5,filterCookie+12)
 const lgout = document.getElementById('lgout')
 user.innerHTML = `Staff ID: <span>${current}</span>`
 const btn = document.getElementById('quizBtn')
