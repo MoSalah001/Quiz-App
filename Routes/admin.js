@@ -21,7 +21,6 @@ router.post('/newq/new',(req,res)=>{
         user: req.headers.cookie.substring(filterCookie+5,filterCookie+12)
     }
     const testDate = new Date(req.body.date).toUTCString()
-    console.log(testDate);
     const quizData = {
         quizID: `${new Date(req.body.date).getDate()}${new Date(req.body.date).getMonth()}-${cleanCookie.user}` ,
         quizDate: new Date(req.body.date).toISOString(),
@@ -50,6 +49,7 @@ router.post('/getQuizList',async (req,res)=>{
     const filterCookie = req.headers.cookie.indexOf("user=")
     const user = req.headers.cookie.substring(filterCookie+5,filterCookie+12)
     DBConnect.query("SELECT * FROM Quiz WHERE QCreator = ?",user,(err,rows)=>{
+        console.log(user);
         if(err) {
             res.send(err)
         } else {
