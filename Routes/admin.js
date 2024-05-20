@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const path = require('path')
-const mysql = require('mysql')
+const mysql = require('mysql');
+const { error } = require('console');
 
 const DBConnect = mysql.createConnection({
     host : process.env.DBHost,
@@ -130,6 +131,20 @@ router.post('/setq/delete',async (req,res)=>{
             res.send(err)
         } else {
             res.status(200).send({"msg":"Question Removed"})
+        }
+    })
+})
+
+router.get('/approve',async (req,res)=>{
+    res.sendFile('approve.html',{root: path.join(__dirname,"../Client/branch")})
+})
+
+router.get('/getPendingUsers', async (req,res)=>{
+    DBConnect.query('SELECT StaffID, NTUser, StoreID, CreationDate FROM Users WHERE Status = "PENDING"',(err,resolve,fields)=>{
+        if(err) {
+            res.send({"msg":"internal server Error"})
+        } else {
+            res.send(resolve)
         }
     })
 })
