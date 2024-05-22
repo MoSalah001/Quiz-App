@@ -42,17 +42,15 @@ app.listen(port,()=>{
 })
 
 app.post('/login',async (req,res)=>{
-    let parsedData = req.body
-    let stringifyUserInput = String(parsedData.user).toUpperCase()
-    DBConnect.query("SELECT StaffID , PHashed, Admin, Status, NTUser FROM Users WHERE NTUser =?",stringifyUserInput,(error,result,fields)=>{
+    DBConnect.query("SELECT StaffID , PHashed, Admin, Status, NTUser FROM Users WHERE NTUser =?",String(req.body.user).toUpperCase(),(error,result,fields)=>{
         if(error) {
             res.status(404).send('Wrong User or Password')
         }
         let data = result[0]
         if(data){
-            bcrypt.compare(parsedData.pass,data.PHashed,(err,result)=>{
+            bcrypt.compare(req.body.pass,data.PHashed,(err,result)=>{
                 if(err){
-                    res.status(400).send({"msg":"Wrong Credintals"})
+                    res.status(400).send({"msg":"Report to SAdmin"})
                 } else if(result) {
                     if(data.Status == "ACTIVE") {
                         jwt.sign(JSON.stringify(data.StaffID),process.env.JWTSecret,(err,token)=>{
@@ -82,7 +80,7 @@ app.post('/login',async (req,res)=>{
                 })
                     
         } else {
-            res.status(400).send({"msg":"Wrong Credintals"})
+            res.status(400).send({"msg":"User not found"})
         }
     })
 

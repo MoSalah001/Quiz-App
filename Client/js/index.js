@@ -11,10 +11,14 @@ function login(e) {
         pass: form.pass.value
     }
     xhr.open('post','/login')
+    xhr.setRequestHeader('Content-Type',"application/json")
     xhr.send(JSON.stringify(data))
     loadingSlider(xhr)
     xhr.onreadystatechange=()=>{
-        if(xhr.readyState===4) {
+        if(xhr.readyState===4 && xhr.status == 200) {
+            loadingSlider(xhr)
+            window.location.assign(xhr.responseURL)
+        } else if(xhr.readyState === 4) {
             loadingSlider(xhr)
             responseMsg(xhr.responseText,xhr.status)
         }

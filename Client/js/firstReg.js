@@ -7,7 +7,7 @@ async function submitUser(e){
     e.preventDefault()
     const formData = {
         sfid: form.staffID.value,
-        password: form.staffID.value,
+        password: form.password.value,
         storeID: form.storeID.value,
         NTUser: form.NTUser.value
     }
