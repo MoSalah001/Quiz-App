@@ -51,8 +51,7 @@ app.post('/login',async (req,res)=>{
             bcrypt.compare(req.body.pass,data.PHashed,(err,result)=>{
                 if(err){
                     res.send("Wrong Credintals")
-                }
-                else {
+                } else if(result) {
                     if(data.Status == "ACTIVE") {
                         jwt.sign(JSON.stringify(data.StaffID),process.env.JWTSecret,(err,token)=>{
                             if (err){
@@ -75,6 +74,9 @@ app.post('/login',async (req,res)=>{
                         res.cookie('user',data.StaffID)
                         res.redirect('../temp')
                     }
+                } else {
+                    res.append('message',"Wrong Credintals")
+                    res.redirect('..')
                 }
                 })
                     
