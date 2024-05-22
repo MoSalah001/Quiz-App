@@ -72,7 +72,7 @@ app.post('/login',async (req,res)=>{
                         })
                     } else {
                         res.cookie('user',data.StaffID)
-                        res.redirect('../temp')
+                        res.redirect('./temp')
                     }
                 } else {
                     res.status(400).send({"msg":"Wrong Credintals"})
