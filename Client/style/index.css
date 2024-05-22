@@ -84,6 +84,80 @@ body {
 }
 
 
+.loadPage {
+    position: absolute;
+    display: flex;
+    place-content: center;
+    place-items: center;
+    top: 0;
+    right: 0;
+    z-index: 1;
+    background-color: rgba(0,0,0,0.7);
+    width: 100dvw;
+    height: 100dvb;
+}
+
+.box {
+    width: 40dvw;
+    height: 5dvh;
+    background-color: black;
+    border-radius: 25px;
+}
+
+.eye {
+    position: relative;
+    background-color: red;
+    width: 100px;
+    height: 50px;
+    border-radius: 25px;
+    z-index: 2;
+    animation: loader linear 1.5s infinite;
+}
+
+.dialog {
+    transition-duration: 2s;
+    max-width: 280px;
+    height: auto;
+    position: absolute;
+    bottom: 2dvh;
+    right: 1dvw;
+    border-radius: 5px;
+    color: White;
+}
+
+.error {
+    background-color: red;
+}
+
+.respond {
+    background-color: green;
+}
+
+
+@keyframes loader {
+    0% {
+        width: 50px;
+        left: 0;
+    }
+    5% {
+        width: 50px;
+        left: 5%;
+    }
+    15%{
+        width: 100px;
+    }
+    85%{
+        width: 100px;
+    }
+    95% {
+        width: 50px;
+        left: 95%;
+    }
+    100% {
+        width: 5px;
+        left: 100%;
+    }
+}
 @media screen and (max-width: 640px) {
     body{
         width: 96.5dvw;
