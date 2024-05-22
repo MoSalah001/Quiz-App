@@ -17,8 +17,8 @@ function login(e) {
     xhr.onreadystatechange=()=>{
         if(xhr.readyState===4 && xhr.status == 200) {
             loadingSlider(xhr)
-            console.log(xhr.responseURL);
-            window.location.href = xhr.responseURL
+            console.log(xhr);
+            // window.location.href = xhr.responseURL
         } else if(xhr.readyState === 4) {
             loadingSlider(xhr)
             responseMsg(xhr.responseText,xhr.status)
