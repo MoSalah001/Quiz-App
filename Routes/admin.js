@@ -149,4 +149,26 @@ router.get('/getPendingUsers', async (req,res)=>{
     })
 })
 
+router.post('/approveUser', async(req,res)=>{
+    let parsedData = req.body
+    DBConnect.query("UPDATE Users SET Status = 'ACTIVE' WHERE StaffID =?",parsedData.user,(err,result)=>{
+        if(err){
+            res.status(500).send({"msg":"Refer back to SAdmin - Error mo-app-1"})
+        } else {
+            res.send({"msg":"User Approved"})
+        }
+    })
+})
+
+router.post('/deleteUser', async(req,res)=>{
+    let parsedData = req.body
+    DBConnect.query("DELETE FROM Users WHERE StaffID =?",parsedData.user,(err,result)=>{
+        if(err){
+            res.status(500).send({"msg":"Refer back to SAdmin - Error mo-del-1"})
+        } else {
+            res.send({"msg":"User Deleted"})
+        }
+    })
+})
+
 module.exports = router;

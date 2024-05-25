@@ -1,0 +1,51 @@
+#table {
+    width: 98dvw;
+    font-size: 12px;
+    vertical-align: middle;
+}
+
+.table-header {
+    border: 2px ridge red;
+    padding: 2px 5px;
+}
+
+.table-row {
+    background-color: aliceblue;
+}
+
+.table-cell {
+    border: 1px solid red;
+    text-align: center;
+    height: 20px;
+    padding: 0;
+}
+
+.approve {
+    border: none;
+    background-color: var(--btn-light-green);
+    border-radius: 10px;
+}
+
+.approve::after {
+    position: relative;
+    font-size: 18px;
+    padding: 1px 4px;
+    content: '\2714';
+    color: white;
+
+}
+
+.reject {
+    border: none;
+    background-color: var(--btn-light-red);
+    border-radius: 5px;
+
+}
+
+.reject::after {
+    position: relative;
+    padding: 1px 4px;
+    font-size: 18px;
+    color: white;
+    content: '\2716';
+}
