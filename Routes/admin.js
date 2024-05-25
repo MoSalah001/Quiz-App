@@ -1,7 +1,6 @@
 const router = require('express').Router();
 const path = require('path')
 const mysql = require('mysql');
-const { error } = require('console');
 
 const DBConnect = mysql.createConnection({
     host : process.env.DBHost,
@@ -21,7 +20,6 @@ router.post('/newq/new',(req,res)=>{
         token: cookies[1].split(';')[0],
         user: req.headers.cookie.substring(filterCookie+5,filterCookie+12)
     }
-    const testDate = new Date(req.body.date).toUTCString()
     const quizData = {
         quizID: `${new Date(req.body.date).getDate()}${new Date(req.body.date).getMonth()}-${cleanCookie.user}` ,
         quizDate: new Date(req.body.date).toISOString(),

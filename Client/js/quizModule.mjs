@@ -28,9 +28,7 @@ class QuizCard{
         const div = document.createElement('div')
         div.classList.add('card')
         div.setAttribute('id',this.id)
-        // fix for local summertime adjustments - this fix will generate wrong time calculation to any GMT+3 country
-        const timeZoneFix = new Date(this.date).getTimezoneOffset() == -180 ? 60 : new Date(this.date).getTimezoneOffset()
-        const filterDate = new Date(this.date).getTime() - timeZoneFix*60*1000
+        const filterDate = new Date(this.date).getTime()
         const shownDate = new Date(filterDate).toLocaleString('en-CA').split(',')
         const date = document.createElement('p')
         date.textContent = "Quiz Date: "+ shownDate[0]

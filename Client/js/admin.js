@@ -35,7 +35,7 @@ window.onload = ()=>{
 function saveQuiz(e){
     // e.preventDefault()
     const data = {
-        date: document.getElementById("date").value,
+        date: new Date(document.getElementById("date").value).toISOString(),
         duration: document.getElementById("duration").value
     }
     const xhr = new XMLHttpRequest()

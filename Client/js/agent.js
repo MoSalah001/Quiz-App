@@ -5,7 +5,6 @@ const current = document.cookie.substring(filterCookie+5,filterCookie+11)
 user.innerHTML = `Staff ID: <span>${current}</span>`
 const lgout = document.getElementById('lgout')
 const quizDate = document.getElementById('quizDate')
-let timer
 lgout.addEventListener('click',lgoutUser)
 
 function lgoutUser(){
@@ -37,25 +36,27 @@ function getNextQuiz() {
             const rows = JSON.parse(xhr.responseText)
             if(rows.length !== 0){
                 for(let i of rows) {
-                    console.log(i);
                     if(new Date(i.QDate) > new Date()) {
-                        timer = new Date(i.QDate).getTime() - new Date().getTime()
+                        const quizDateObj = new Date(i.QDate)
+                        let variance = quizDateObj.getTime() - new Date().getTime()
+                        let dateVariance = new Date(quizDateObj.getTime()-variance)
                         quizDate.textContent = `
-                        ${new Date(timer).getMonth()} M 
-                        ${new Date(timer).getDate()} D
-                        ${new Date(timer).getHours()} H: 
-                        ${new Date(timer).getMinutes()} M: 
-                        ${new Date(timer).getSeconds()} S
+                        ${quizDateObj.getMonth() - dateVariance.getMonth()} M 
+                        ${quizDateObj.getDate() - dateVariance.getDate()} D
+                        ${quizDateObj.getHours() - dateVariance.getHours()} H: 
+                        ${quizDateObj.getMinutes() - dateVariance.getMinutes() - 1} M: 
+                        ${59 - dateVariance.getSeconds() - quizDateObj.getSeconds()} S
                         `
                         setInterval(()=>{
-                            timer-=1000
+                            variance-=1000
+                            dateVariance = new Date(quizDateObj.getTime()-variance)
                             quizDate.textContent = `
-                                            ${new Date(timer).getMonth()} M 
-                                            ${new Date(timer).getDate()} D
-                                            ${new Date(timer).getHours()} H: 
-                                            ${new Date(timer).getMinutes()} M:
-                                            ${new Date(timer).getSeconds()} S
-                        `
+                                ${quizDateObj.getMonth() - dateVariance.getMonth()} M 
+                                ${quizDateObj.getDate() - dateVariance.getDate()} D
+                                ${quizDateObj.getHours() - dateVariance.getHours()} H: 
+                                ${quizDateObj.getMinutes() - dateVariance.getMinutes()-1} M: 
+                                ${59 - dateVariance.getSeconds() - quizDateObj.getSeconds()} S
+                                `
                         },1000)
                     } else {
                         quizDate.textContent = `No new quiz assigned`
