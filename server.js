@@ -28,11 +28,11 @@ DBConnect.connect((err)=>{
     }
 })
 app.use(express.static("Client"))
-app.use(express.json())
 app.use(express.text())
 app.use(express.urlencoded({
     extended: true
 }))
+app.use(express.json())
 app.use('/admin',admin)
 app.use('/agent',agent)
 
@@ -48,36 +48,41 @@ app.post('/login',async (req,res)=>{
         }
         let data = result[0]
         if(data){
-            bcrypt.compare(req.body.pass,data.PHashed,(err,result)=>{
-                if(err){
-                    res.status(400).send({"msg":"Report to SAdmin"})
-                } else if(result) {
-                    if(data.Status == "ACTIVE") {
-                        jwt.sign(JSON.stringify(data.StaffID),process.env.JWTSecret,(err,token)=>{
-                            if (err){
-                                res.send(err)
-                            } else {
-                                if(data.Admin === 1) {
-                                    res.cookie("token",token,{
-                                        httpOnly: true
-                                    })
-                                    res.cookie('user',data.StaffID)
-                                    res.redirect('../admin')
+            if(data.PHashed == 0) {
+                res.status(500).send(data.NTUser)
+            } else {
+                bcrypt.compare(req.body.pass,data.PHashed,(err,result)=>{
+                    if(err){
+                        res.status(400).send({"msg":"Report to SAdmin"})
+                    } else if(result) {
+                        if(data.Status == "ACTIVE") {
+                            jwt.sign(JSON.stringify(data.StaffID),process.env.JWTSecret,(err,token)=>{
+                                if (err){
+                                    res.send(err)
                                 } else {
-                                    res.cookie("token",token)
-                                    res.cookie('user',data.StaffID)
-                                    res.redirect('../main')
+                                    if(data.Admin === 1) {
+                                        res.cookie("token",token,{
+                                            httpOnly: true
+                                        })
+                                        res.cookie('user',data.StaffID)
+                                        res.redirect('../admin')
+                                    } else {
+                                        res.cookie("token",token)
+                                        res.cookie('user',data.StaffID)
+                                        res.redirect('../main')
+                                    }
                                 }
-                            }
-                        })
+                            })
+                        } else {
+                            res.cookie('user',data.StaffID)
+                            res.redirect('./temp')
+                        }
                     } else {
-                        res.cookie('user',data.StaffID)
-                        res.redirect('./temp')
+                        res.status(400).send({"msg":"Wrong Credintals"})
                     }
-                } else {
-                    res.status(400).send({"msg":"Wrong Credintals"})
-                }
-                })
+                    })
+            }
+            
                     
         } else {
             res.status(400).send({"msg":"User not found"})
@@ -139,3 +144,45 @@ app.get('/lgout',(req,res)=>{
     res.send({"msg":"Logged out"})
 })
 
+
+app.post('/resetPass',(req,res)=>{
+    const saltRounds = 15;
+    let parsedData = JSON.parse(req.body)
+    bcrypt.hash(parsedData.pass,saltRounds,(err,hash)=>{
+        if(err) {
+            res.status(500).send({"msg":"Refer back to SAdmin - Error mo-res-hash 1"})
+        } else {
+            DBConnect.query("UPDATE Users SET PHashed=? WHERE NTUser=?",[hash,String(parsedData.user).toUpperCase()],(err,result)=>{
+                if(err) {
+                    res.status(500).send({"msg":"Refer back to SAdmin - Error mo-res-db 1"})
+                } else {
+                    DBConnect.query("SELECT StaffID, Admin, Status, NTUser FROM Users WHERE NTUser =?",String(parsedData.user).toUpperCase(),(err,result)=>{
+                        let data = result[0]
+                        if(data.Status == "ACTIVE"){
+                            jwt.sign(JSON.stringify(data.StaffID),process.env.JWTSecret,(err,token)=>{
+                                if (err){
+                                    res.send(err)
+                                } else {
+                                    if(data.Admin === 1) {
+                                        res.cookie("token",token,{
+                                            httpOnly: true
+                                        })
+                                        res.cookie('user',data.StaffID)
+                                        res.redirect('../admin')
+                                    } else {
+                                        res.cookie("token",token)
+                                        res.cookie('user',data.StaffID)
+                                        res.redirect('../main')
+                                    }
+                                }
+                            })
+                        } else {
+                            res.cookie('user',data.StaffID)
+                            res.redirect('./temp')
+                        }
+                    })
+                }        
+            })
+        }
+    })
+})
