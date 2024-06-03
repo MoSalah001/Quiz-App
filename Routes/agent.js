@@ -10,7 +10,7 @@ const DBConnect = mysql.createConnection({
 }) 
 
 router.get('/quizez',async(req,res)=>{
-    DBConnect.query("SELECT * FROM Quiz ORDER BY QDate LIMIT 1",(err,rows)=>{
+    DBConnect.query("SELECT * FROM Quiz WHERE QDate >= CURRENT_DATE() ORDER BY QDate ASC lIMIT 1",(err,rows)=>{
         if(err) throw err
         else {
             res.send(rows)

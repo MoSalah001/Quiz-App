@@ -36,30 +36,31 @@ function getNextQuiz() {
             const rows = JSON.parse(xhr.responseText)
             if(rows.length !== 0){
                 for(let i of rows) {
-                    if(new Date(i.QDate) > new Date()) {
+                    let now = new Date().getTime()
+                    let qDate = new Date(i.QDate).getTime()
+                    if(qDate > now) {
                         const quizDateObj = new Date(i.QDate)
-                        let variance = quizDateObj.getTime() - new Date().getTime()
-                        let dateVariance = new Date(quizDateObj.getTime()-variance)
+                        let tzCalc = quizDateObj.getTimezoneOffset() + 60
+                        const day = 60 * 60 * 24 * 1000
+                        let variance = quizDateObj.getTime() - now + (tzCalc*60*1000)
+                        let dayVar = variance/day
+                        let dateVariance = new Date(variance)
                         quizDate.textContent = `
-                        ${quizDateObj.getMonth() - dateVariance.getMonth()} M 
-                        ${quizDateObj.getDate() - dateVariance.getDate()} D
-                        ${quizDateObj.getHours() - dateVariance.getHours()} H: 
-                        ${quizDateObj.getMinutes() - dateVariance.getMinutes() - 1} M: 
-                        ${59 - dateVariance.getSeconds() - quizDateObj.getSeconds()} S
+                            ${dateVariance.getMonth()} M 
+                            ${Math.floor(dayVar)} D
+                            ${dateVariance.getHours()} H: 
+                            ${dateVariance.getMinutes()} M: 
+                            ${dateVariance.getSeconds()} S
                         `
-                        setInterval(()=>{
-                            variance-=1000
-                            dateVariance = new Date(quizDateObj.getTime()-variance)
-                            quizDate.textContent = `
-                                ${quizDateObj.getMonth() - dateVariance.getMonth()} M 
-                                ${quizDateObj.getDate() - dateVariance.getDate()} D
-                                ${quizDateObj.getHours() - dateVariance.getHours()} H: 
-                                ${quizDateObj.getMinutes() - dateVariance.getMinutes()-1} M: 
-                                ${59 - dateVariance.getSeconds() - quizDateObj.getSeconds()} S
-                                `
-                        },1000)
+                        countDown(variance,dateVariance,day,0)
+                    } else if(
+                        (qDate <= now) &&
+                        (now < qDate+(i.Duration*60*1000))) {
+                            quizDate.textContent = `Take the quiz now!!`
+                            countDown(0,0,0,1)
+                            break
                     } else {
-                        quizDate.textContent = `No new quiz assigned`
+                        continue
                     }
                 }
             } else {
@@ -70,3 +71,23 @@ function getNextQuiz() {
     }
 }
 getNextQuiz()
+
+function countDown(variance,dateVariance,day,clear){
+    if(clear === 0) {
+        setInterval(()=>{
+            variance-=1000
+            dateVariance = new Date(variance)
+            let dayVar = variance/day
+            quizDate.textContent = `
+                ${dateVariance.getMonth()} M 
+                ${Math.floor(dayVar)} D
+                ${dateVariance.getHours()} H: 
+                ${dateVariance.getMinutes()} M: 
+                ${dateVariance.getSeconds()} S
+                `
+        },1000)
+    } else {
+        return true
+    }
+    
+}
