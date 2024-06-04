@@ -32,14 +32,31 @@ router.get('/getquizes',async (req,res)=>{
 })
 
 router.post('/quiz:id',(req,res)=>{
-    DBConnect.query(`
-    SELECT * FROM Questions Left JOIN Answers ON Questions.QID = Answers.QID WHERE Questions.QuizID =?
-    `,String(req.params.id),(err,rows)=>{
+    let filterCookie = req.headers.cookie.indexOf('user=');
+    const user = req.headers.cookie.substring(filterCookie+5,filterCookie+11)
+    DBConnect.query('SELECT * FROM userAnswers WHERE StaffID = ?',String(user),(err,rows)=>{
         if(err) {
-            res.send(err)
-        }
-        else{
-            res.send(rows);
+            res.status(500).send({"msg":"Refer back to system admin - Error mo-sel-1"})
+        } else {
+            if(rows.length > 0) {
+                res.status(400).send({"msg":"Your answers for the selected quiz are already submitted"})
+            } else {
+                DBConnect.query(
+                    `
+                    SELECT * FROM Questions 
+                    Left JOIN Answers 
+                    ON Questions.QID = Answers.QID 
+                    WHERE Questions.QuizID =?
+                    `
+                ,String(req.params.id),(err,rows)=>{
+                    if(err) {
+                        res.send(err)
+                    }
+                    else{
+                        res.send(rows);
+                    }
+                })
+            }
         }
     })
 })
@@ -72,6 +89,26 @@ router.post('/quiz/timer',(req,res)=>{
     const qid = req.body
     DBConnect.query("SELECT Duration,QDate FROM Quiz WHERE QuizID = ?",qid,(err,rows)=>{
         res.send(rows)
+    })
+})
+
+router.get('/result',(req,res)=>{
+    res.sendFile('result.html',{root:path.join(__dirname,"../Client/agent")})
+})
+
+router.post('/result',(req,res)=>{
+    let filterCookie = req.headers.cookie.indexOf('user=');
+    const user = req.headers.cookie.substring(filterCookie+5,filterCookie+11)
+    DBConnect.query(`
+    SELECT * FROM Quiz INNER JOIN userAnswers
+    WHERE Quiz.QuizID = userAnswers.QuizID
+    AND userAnswers.StaffID = ?  
+    `,String(user),(err,rows)=>{
+        if(err){
+            res.status(500).send("Refer back to system admin - Error mo-res-1")
+        } else {
+            res.send(rows)
+        }
     })
 })
 

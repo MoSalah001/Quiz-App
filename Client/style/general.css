@@ -167,6 +167,10 @@ a#back:hover {
         height: 5dvh;
     }
 
+    .dialog {
+        font-size: 22px;
+    }
+
 }
 /*
 End of general styling

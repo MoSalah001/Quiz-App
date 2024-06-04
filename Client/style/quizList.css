@@ -19,7 +19,17 @@
     margin: 10px 20px;
     padding: 10px 5px;
     box-shadow: 0 0 1px 3px rgba(150,150,150,1);
+    width: 80dvw;
 }
+
+.card[type=result] {
+    background-color: var(--text-light-green);
+}
+
+.card[type=pending] {
+    background-color: goldenrod;
+}
+
 
 @media only screen and (min-width: 700px) {
     .card {
