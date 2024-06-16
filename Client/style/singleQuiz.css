@@ -8,11 +8,16 @@
 }
 
 
-.true , #true {
+.true {
+    color: yellow;
     background-color: var(--text-light-green);
+}
+#true {
+    background-image: repeating-linear-gradient(30deg,rgba(0, 128, 0,0.2) 0%,rgba(0, 128, 0,0.2) 10%,rgba(171, 255, 46,0.2) 10%, rgba(171, 255, 46,0.2)  20%);
 }
 
 #mark {
+    color: yellow;
     background-color: rgba(255,0,0,0.8)
 }
 h3 {
