@@ -208,6 +208,13 @@ export function resultCheck(rows){
     }
 }
 
+export function userAnswer(rows) {
+    for(let row in rows) {
+        let qHead = new ResultCheck(rows[row],'app')
+        qHead.createUserAnswer()
+    }
+}
+
 class ResultCheck {
     constructor(rows,_link) {
         this.qHead = rows.QValue
@@ -248,5 +255,11 @@ class ResultCheck {
     createUserAnswer(){
         let question = document.getElementById(this.qID)
         let selectedAnswer = document.getElementById(this.aID)
+        let check = this.qIsTrue == 1 ? true : false
+        if(check) {
+            selectedAnswer.setAttribute('id',"true")
+        } else {
+            selectedAnswer.setAttribute('id',"mark")
+        }
     }
 }

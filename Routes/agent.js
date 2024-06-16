@@ -141,11 +141,11 @@ router.post('/result/:id/getAnswers',(req,res)=>{
     const user = req.headers.cookie.substring(filterCookie+5,filterCookie+11)
     let data = req.body.id
     DBConnect.query(`
-        SELECT Answers.AID,Answers.QID,Questions.QuizID,Questions.QValue, Answers.AValue,Answers.isTrue
-        FROM Answers
-        INNER JOIN Questions ON Answers.QID = Questions.QID
-        WHERE Questions.QuizID =? 
-        `,[data,user,data],(err,rows)=>{
+        SELECT userAnswers.AID,userAnswers.QID,userAnswers.QuizID,Answers.AValue,Answers.isTrue
+        FROM userAnswers
+        INNER JOIN Answers ON userAnswers.AID = Answers.AID
+        WHERE userAnswers.QuizID =? AND userAnswers.StaffID = ? 
+        `,[data,user],(err,rows)=>{
         if(err) {
             console.log(err);
             res.status(400).send({"msg":"Bad Request - mo-getRes-01"})

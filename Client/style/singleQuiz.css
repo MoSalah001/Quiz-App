@@ -8,10 +8,13 @@
 }
 
 
-.true {
+.true , #true {
     background-color: var(--text-light-green);
 }
 
+#mark {
+    background-color: rgba(255,0,0,0.8)
+}
 h3 {
     font-size: 20px;
     margin-bottom: 10px;

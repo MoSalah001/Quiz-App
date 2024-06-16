@@ -1,5 +1,5 @@
 import { loadingSlider } from "./loader.mjs"
-import { resultCheck } from "./quizModule.mjs"
+import { resultCheck, userAnswer } from "./quizModule.mjs"
 const user = document.getElementById('user')
 const filterCookie = document.cookie.indexOf('user=');
 const current = document.cookie.substring(filterCookie+5,filterCookie+11)
@@ -16,8 +16,17 @@ window.onload = ()=>{
     loadingSlider(xhr)
     xhr.onreadystatechange = ()=>{
         if(xhr.readyState === 4) {
-            loadingSlider(xhr)
             resultCheck(JSON.parse(xhr.responseText))
+            const subXhr = new XMLHttpRequest()
+            subXhr.open('post',`./${quizID.id}/getAnswers`)
+            subXhr.setRequestHeader('content-type','application/json')
+            subXhr.send(JSON.stringify(quizID))
+            subXhr.onreadystatechange = ()=>{
+                if(subXhr.readyState === 4) {
+                    loadingSlider(subXhr)
+                    userAnswer(JSON.parse(subXhr.responseText))
+                }
+            }
         }
     }
 
