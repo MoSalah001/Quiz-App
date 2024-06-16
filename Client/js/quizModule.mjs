@@ -122,15 +122,7 @@ class ResultCard {
                 div.addEventListener('click',quizRes)
             }
             fragment.append(div)
-        if( startTime.getTime() < now.getTime()  &&
-            now.getTime() > endTime.getTime() 
-        ) {
-            // update DB with quiz status
-            // const xhr = new XMLHttpRequest()
-            return null
-        } else {
             return fragment
-        }
     }
 }
 
@@ -170,6 +162,91 @@ function notYetRes(){
     window.alert("Please wait for quiz to finish")
 }
 
-function quizRes() {
-    window.alert("not yet")
+function quizRes(e) {
+    let data = {
+        id : e.target.parentElement.id
+    }
+    const xhr = new XMLHttpRequest()
+    xhr.open('post',`result/${data.id}`)
+    xhr.setRequestHeader('content-type','application/json')
+    xhr.send(JSON.stringify(data))
+    loadingSlider(xhr)
+    xhr.onreadystatechange = ()=>{
+        if(xhr.readyState === 4) {
+            console.log(JSON.parse(xhr.responseText));
+            window.localStorage.setItem('QuizID',JSON.stringify(JSON.parse(xhr.responseText)[0].QuizID))
+            const subXhr = new XMLHttpRequest()
+            subXhr.open('get',`result/${data.id}`)
+            subXhr.send()
+            subXhr.onreadystatechange = ()=>{
+                if(subXhr.readyState === 4) {
+                    window.location.assign(subXhr.responseURL)
+                }
+            }
+        }
+    }
+}
+
+
+
+export function resultCheck(rows){
+    for(let row in rows) {
+        let qHead = new ResultCheck(rows[row],'app')
+        if(row == 0) {
+            qHead.createQuestionHead()
+            qHead.createAnswer()
+        } else {
+            let k = row -1
+            if(rows[row].QID === rows[k].QID){
+                qHead.createAnswer()
+            } else {
+                qHead.createQuestionHead()
+                qHead.createAnswer()
+            }
+        }
+
+    }
+}
+
+class ResultCheck {
+    constructor(rows,_link) {
+        this.qHead = rows.QValue
+        this.qIsTrue = rows.isTrue
+        this.qID = rows.QID
+        this.aID = rows.AID
+        this.aValue = rows.AValue
+        this.parent = _link
+    }
+
+    createQuestionHead() {
+        const fragment = document.createDocumentFragment()
+        const div = document.createElement('div')
+        const qHead = document.createElement('h3')
+        div.setAttribute('id',this.qID)
+        qHead.textContent = "Q: "+this.qHead 
+        qHead.classList.add('question-head')
+        const parent = document.getElementById(this.parent)
+        div.append(qHead)
+        div.classList.add('question-card')
+        fragment.append(div),
+        parent.append(fragment)
+    }
+
+    createAnswer() {
+        const p = document.createElement('p')
+        p.textContent = this.aValue
+        let check = this.qIsTrue == 1 ? true : false
+        if(check){
+            p.classList.add('true')
+        } else {
+            p.classList.remove('true')
+        }
+        p.setAttribute('id',this.aID)
+        const qHead = document.getElementById(this.qID)
+        qHead.append(p)
+    }
+    createUserAnswer(){
+        let question = document.getElementById(this.qID)
+        let selectedAnswer = document.getElementById(this.aID)
+    }
 }

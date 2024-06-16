@@ -1,0 +1,28 @@
+.question-card {
+    background-color: wheat;
+    border: 2px solid var(--clr-logo-red);
+    margin: 2px;
+    border-radius: 10px;
+    width: 90dvw;
+    text-align: center;
+}
+
+
+.true {
+    background-color: var(--text-light-green);
+}
+
+h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    border-bottom: 2px solid var(--clr-logo-red);
+    border-radius: 25px;
+    background-color: aliceblue;
+}
+
+p {
+    font-size: 14px;
+    padding: 2px;
+    margin: 2px;
+    border-radius: 10px;
+}

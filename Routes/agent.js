@@ -34,7 +34,7 @@ router.get('/getquizes',async (req,res)=>{
 router.post('/quiz:id',(req,res)=>{
     let filterCookie = req.headers.cookie.indexOf('user=');
     const user = req.headers.cookie.substring(filterCookie+5,filterCookie+11)
-    DBConnect.query('SELECT * FROM userAnswers WHERE StaffID = ?',String(user),(err,rows)=>{
+    DBConnect.query('SELECT * FROM userAnswers WHERE StaffID = ? AND userAnswers.QuizID = ?',[String(user),req.params.id],(err,rows)=>{
         if(err) {
             res.status(500).send({"msg":"Refer back to system admin - Error mo-sel-1"})
         } else {
@@ -101,11 +101,54 @@ router.post('/result',(req,res)=>{
     const user = req.headers.cookie.substring(filterCookie+5,filterCookie+11)
     DBConnect.query(`
     SELECT * FROM Quiz INNER JOIN userAnswers
-    WHERE Quiz.QuizID = userAnswers.QuizID
-    AND userAnswers.StaffID = ?  
+    ON Quiz.QuizID = userAnswers.QuizID
+    AND userAnswers.StaffID = ?
+    GROUP BY Quiz.QuizID  
     `,String(user),(err,rows)=>{
         if(err){
             res.status(500).send("Refer back to system admin - Error mo-res-1")
+        } else {
+            res.send(rows)
+        }
+    })
+})
+
+router.post('/result/:id',(req,res)=>{
+    let filterCookie = req.headers.cookie.indexOf('user=');
+    const user = req.headers.cookie.substring(filterCookie+5,filterCookie+11)
+    let data = req.body.id
+    DBConnect.query(`
+        SELECT Answers.AID,Answers.QID,Questions.QuizID,Questions.QValue, Answers.AValue,Answers.isTrue
+        FROM Answers
+        INNER JOIN Questions ON Answers.QID = Questions.QID
+        WHERE Questions.QuizID =? 
+        `,[data,user,data],(err,rows)=>{
+        if(err) {
+            console.log(err);
+            res.status(400).send({"msg":"Bad Request - mo-getRes-01"})
+        } else {
+            res.send(rows)
+        }
+    })
+})
+
+router.get('/result/:id',(req,res)=>{
+    res.sendFile('singleQuiz.html',{root: path.join(__dirname,'../Client/agent')})
+})
+
+router.post('/result/:id/getAnswers',(req,res)=>{
+    let filterCookie = req.headers.cookie.indexOf('user=');
+    const user = req.headers.cookie.substring(filterCookie+5,filterCookie+11)
+    let data = req.body.id
+    DBConnect.query(`
+        SELECT Answers.AID,Answers.QID,Questions.QuizID,Questions.QValue, Answers.AValue,Answers.isTrue
+        FROM Answers
+        INNER JOIN Questions ON Answers.QID = Questions.QID
+        WHERE Questions.QuizID =? 
+        `,[data,user,data],(err,rows)=>{
+        if(err) {
+            console.log(err);
+            res.status(400).send({"msg":"Bad Request - mo-getRes-01"})
         } else {
             res.send(rows)
         }
