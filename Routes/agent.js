@@ -125,7 +125,7 @@ router.post('/result/:id',(req,res)=>{
         `,[data,user,data],(err,rows)=>{
         if(err) {
             console.log(err);
-            res.status(400).send({"msg":"Bad Request - mo-getRes-01"})
+            res.status(400).send({"msg":"Bad Request - mo-postRes-01"})
         } else {
             res.send(rows)
         }
@@ -148,11 +148,46 @@ router.post('/result/:id/getAnswers',(req,res)=>{
         `,[data,user],(err,rows)=>{
         if(err) {
             console.log(err);
-            res.status(400).send({"msg":"Bad Request - mo-getRes-01"})
+            res.status(400).send({"msg":"Bad Request - mo-postRes-02"})
         } else {
             res.send(rows)
         }
     })
+})
+
+router.post('/result/:id/getAnswersCount',(req,res)=>{
+    let filterCookie = req.headers.cookie.indexOf('user=');
+    const user = req.headers.cookie.substring(filterCookie+5,filterCookie+11)
+    const data = req.body.id
+    let dbData = {}
+    DBConnect.query(`
+        SELECT COUNT(*) AS QuizCount
+        FROM Answers
+        INNER JOIN Questions
+        ON Answers.QID = Questions.QID
+        WHERE Questions.QuizID =? AND Answers.IsTrue = 1
+        `,[data],(err,rows,fields)=>{
+        if(err) {
+            res.status(400).send({"msg":"Bad Request - mo-postRes-03"})
+        } else {
+            dbData.quizCount = rows[0].QuizCount
+        }
+    })
+    DBConnect.query(`
+        SELECT COUNT(*) AS UserCount
+        FROM Answers
+        INNER JOIN userAnswers
+        ON Answers.AID = userAnswers.AID
+        WHERE userAnswers.QuizID = ? AND userAnswers.StaffID = ? AND Answers.IsTrue = 1
+        `,[data,user],(err,rows)=>{
+            if(err) {
+                console.log(err);
+                res.status(400).send({"msg":"Bad Request - mo-postRes-04"})
+            } else {
+                dbData.userCount = rows[0].UserCount
+                res.send(dbData)
+            }
+        })
 })
 
 module.exports = router

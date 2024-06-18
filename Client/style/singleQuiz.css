@@ -34,3 +34,14 @@ p {
     margin: 2px;
     border-radius: 10px;
 }
+
+#result-div {
+    position: fixed;
+    top: 2%;
+    right: 1%;
+    font-size: 20px;
+    background-color: rgba(255,255,0,0.7);
+    border-radius: 100%;
+    padding: 15px;
+
+}

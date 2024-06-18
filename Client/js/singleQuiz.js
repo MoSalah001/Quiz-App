@@ -23,12 +23,31 @@ window.onload = ()=>{
             subXhr.send(JSON.stringify(quizID))
             subXhr.onreadystatechange = ()=>{
                 if(subXhr.readyState === 4) {
-                    loadingSlider(subXhr)
+                    }
                     userAnswer(JSON.parse(subXhr.responseText))
                 }
             }
         }
+        const secondXhr = new XMLHttpRequest()
+        secondXhr.open('post',`./${quizID.id}/getAnswersCount`)
+        secondXhr.setRequestHeader('content-type','application/json')
+        secondXhr.send(JSON.stringify(quizID))
+        secondXhr.onreadystatechange = ()=>{
+            if(secondXhr.readyState === 4) {
+                loadingSlider(secondXhr)
+                markDiv(secondXhr.responseText)
+            }
     }
 
 }
 
+function markDiv(responseText) {
+    let parsedData = JSON.parse(responseText)
+    let quizMark = parsedData.quizCount
+    let userMark = parsedData.userCount
+    let div = document.createElement('div')
+    div.setAttribute("id",'result-div')
+    div.textContent = ((userMark/quizMark)*100).toFixed(2) +"%"
+    let app = document.getElementById('app')
+    app.append(div)
+}
