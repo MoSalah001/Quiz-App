@@ -26,7 +26,7 @@ router.post('/newq/new',(req,res)=>{
         quizCreator: cleanCookie.user,
         quizDuration: req.body.duration
     }
-    DBConnect.query("INSERT INTO Quiz (QuizID,QDate,QCreator,Duration) VALUES (?,?,?,?)",[quizData.quizID,quizData.quizDate,quizData.quizCreator,quizData.quizDuration],(err,rows)=>{
+    DBConnect.query("INSERT INTO Quiz (QuizID,QDate,QCreator,Duration) VALUES (?,TIMESTAMP(?),?,?)",[quizData.quizID,quizData.quizDate,quizData.quizCreator,quizData.quizDuration],(err,rows)=>{
         if(err) {
             res.status(400).send({"msg":"You already set a quiz on the selected day"})
         } else {
@@ -47,8 +47,9 @@ router.get('/editq',async (req,res)=>{
 router.post('/getQuizList',async (req,res)=>{
     const filterCookie = req.headers.cookie.indexOf("user=")
     const user = req.headers.cookie.substring(filterCookie+5,filterCookie+12)
-    DBConnect.query("SELECT * FROM Quiz WHERE QCreator = ?",user,(err,rows)=>{
+    DBConnect.query("SELECT * FROM Quiz WHERE QCreator = ? AND DATE(QDate) > NOW()",user,(err,rows)=>{
         if(err) {
+            console.log(err);
             res.send(err)
         } else {
             res.send(rows)
@@ -129,6 +130,17 @@ router.post('/setq/delete',async (req,res)=>{
             res.send(err)
         } else {
             res.status(200).send({"msg":"Question Removed"})
+        }
+    })
+})
+
+router.post('/setq/CountQ',async (req,res)=>{
+    const parsedData = req.body
+    DBConnect.query("SELECT COUNT(*) AS Counter FROM Questions WHERE QuizID =?",parsedData.qid,(err,count)=>{
+        if(err){
+            res.send("NA")
+        } else {
+            res.send(count)
         }
     })
 })

@@ -38,11 +38,12 @@ function getNextQuiz() {
                 for(let i of rows) {
                     let now = new Date().getTime()
                     let qDate = new Date(i.QDate).getTime()
-                    if(qDate > now) {
-                        const quizDateObj = new Date(i.QDate)
-                        let tzCalc = quizDateObj.getTimezoneOffset() + 60
+                    let zone = Math.abs(new Date(i.QDate).getTimezoneOffset()*60*1000)
+                    let zonedDate = new Date(qDate+zone).getTime()
+                    if(zonedDate > now) {
+                        const quizDateObj = new Date(zonedDate)
                         const day = 60 * 60 * 24 * 1000
-                        let variance = quizDateObj.getTime() - now + (tzCalc*60*1000)
+                        let variance = quizDateObj.getTime() - now
                         let dayVar = variance/day
                         let dateVariance = new Date(variance)
                         quizDate.textContent = `
@@ -54,13 +55,13 @@ function getNextQuiz() {
                         `
                         countDown(variance,dateVariance,day,0)
                     } else if(
-                        (qDate <= now) &&
-                        (now < qDate+(i.Duration*60*1000))) {
+                        (zonedDate <= now) &&
+                        (now < zonedDate+(i.Duration*60*1000))) {
                             quizDate.textContent = `Take the quiz now!!`
-                            countDown(0,0,0,1)
                             break
                     } else {
-                        continue
+                        
+                        quizDate.textContent = `No new quiz assigned`
                     }
                 }
             } else {
@@ -78,6 +79,7 @@ function countDown(variance,dateVariance,day,clear){
             variance-=1000
             dateVariance = new Date(variance)
             let dayVar = variance/day
+            console.log(dayVar);
             quizDate.textContent = `
                 ${dateVariance.getMonth()} M 
                 ${Math.floor(dayVar)} D

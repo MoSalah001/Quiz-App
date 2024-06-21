@@ -40,7 +40,9 @@ class QuizCard{
         div.classList.add('card')
         div.setAttribute('id',this.id)
         const filterDate = new Date(this.date).getTime()
-        const shownDate = new Date(filterDate).toLocaleString('en-CA').split(',')
+        const zone = Math.abs(new Date(this.date).getTimezoneOffset()*60*1000)
+        const zonedDate = filterDate+zone
+        const shownDate = new Date(zonedDate).toLocaleString('en-CA').split(',')
         const date = document.createElement('p')
         date.textContent = "Quiz Date: "+ shownDate[0]
         const quizTime = document.createElement('p')
@@ -54,7 +56,7 @@ class QuizCard{
         const id = document.createElement('p')
         id.textContent = "Quiz ID: "+this.id
         div.append(id,date,quizTime,status,creator,duration)
-        const startTime = new Date(filterDate)
+        const startTime = new Date(zonedDate)
         const calculateDuration = startTime.getTime()+(this.duration*60*1000)
         const endTime = new Date(calculateDuration)
         const now = new Date()
@@ -253,7 +255,6 @@ class ResultCheck {
         qHead.append(p)
     }
     createUserAnswer(){
-        let question = document.getElementById(this.qID)
         let selectedAnswer = document.getElementById(this.aID)
         let check = this.qIsTrue == 1 ? true : false
         if(check) {

@@ -4,6 +4,7 @@ window.onload = ()=>{
     const data = {
         qid: window.localStorage.getItem('qid')
     }
+    getCount(data)
     xhr.open('post','../setQ/qid')
     xhr.setRequestHeader('content-type','application/json')
     xhr.send(JSON.stringify(data))
@@ -49,10 +50,13 @@ class questionTemplate {
             return null;
         }
         const controlDiv = document.createElement('div')
-        const pQuestion = document.createElement('p')
-        pQuestion.textContent = "Add Question"
-        const pOption = document.createElement('p')
+        controlDiv.classList.add("control-div")
+        const pQuestion = document.createElement('button')
+        pQuestion.textContent = "Next Question"
+        pQuestion.classList.add('control-btn')
+        const pOption = document.createElement('button')
         pOption.textContent = "Add Option"
+        pOption.classList.add('control-btn')
         pOption.addEventListener('click',changeControlOptions)
         pQuestion.addEventListener('click',addQuestion)
         controlDiv.append(pOption,pQuestion)
@@ -75,6 +79,7 @@ function addOptions(control,questionHead) {
     const radioBtn = document.createElement('input')
     radioBtn.type = "radio"
     radioBtn.name = "option"
+    radioBtn.tabIndex = -1
     radioBtn.id = `o-${control}`
     radioBtn.classList.add('radios')
     radioBtn.addEventListener('change',checkAnswer)
@@ -154,22 +159,27 @@ function getSaved(data) {
 }
 
 function deleteQ(e){
-    const data = {
-        questionID:e.target.getAttribute("QID"),
-        quizID: window.localStorage.getItem('qid')
-    }
-    const xhr = new XMLHttpRequest()
-    xhr.open('post',"delete")
-    xhr.setRequestHeader('content-type','application/json')
-    xhr.send(JSON.stringify(data))
-    loadingSlider(xhr)
-    xhr.onreadystatechange = ()=>{
-        if(xhr.readyState === 4) {
-            loadingSlider(xhr)
-            responseMsg(xhr.responseText,xhr.status)
+    let confirm = window.alert("Are you sure you want to delete this question/n this action can't be undone")
+    if(confirm){
+        const data = {
+            questionID:e.target.getAttribute("QID"),
+            quizID: window.localStorage.getItem('qid')
         }
+        const xhr = new XMLHttpRequest()
+        xhr.open('post',"delete")
+        xhr.setRequestHeader('content-type','application/json')
+        xhr.send(JSON.stringify(data))
+        loadingSlider(xhr)
+        xhr.onreadystatechange = ()=>{
+            if(xhr.readyState === 4) {
+                loadingSlider(xhr)
+                responseMsg(xhr.responseText,xhr.status)
+            }
+        }
+        window.location.reload()
+    } else {
+        return null;
     }
-    window.location.reload()
 }
 
 function checkAnswer(e){
@@ -181,6 +191,18 @@ function checkAnswer(e){
         } else {
             const getLabel = document.getElementById(radio.id+'-l')
             getLabel.removeAttribute('answer')
+        }
+    }
+}
+
+function getCount(QID){
+    const xhr = new XMLHttpRequest()
+    xhr.open('post',"CountQ")
+    xhr.setRequestHeader('content-type','application/json')
+    xhr.send(JSON.stringify(QID))
+    xhr.onreadystatechange = ()=>{
+        if(xhr.readyState === 4){
+            document.getElementById('counter').textContent = `Questions: ${JSON.parse(xhr.responseText)[0].Counter}`
         }
     }
 }
