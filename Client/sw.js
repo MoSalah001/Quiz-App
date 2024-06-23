@@ -1,7 +1,7 @@
-self.addEventListener('install',()=>{
+self.addEventListener('install',async ()=>{
     console.log("sw installed");
-    caches.open('static')
-    .then((cache)=>{
+    await caches.open('static')
+    .then(cache=>{
         cache.addAll([
             '/',
             '/index.html',
@@ -19,7 +19,7 @@ self.addEventListener('activate',()=>{
 })
 
 self.addEventListener('fetch',(event)=>{
-    event.respondWith(caches.match(event.request).then((res)=>{
+    event.respondWith(caches.match(event.request).then(res=>{
         if(res){
             return res
         } else {
