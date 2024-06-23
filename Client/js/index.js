@@ -3,6 +3,12 @@ const form = document.forms.logForm
 const btn = document.getElementById('btn')
 btn.addEventListener('click',login)
 
+if('serviceWorker' in navigator) {
+    navigator.serviceWorker.register("../sw.js").then(()=>{
+        console.log("sw registered");
+    })
+}
+
 function login(e) {
     e.preventDefault();
     const xhr = new XMLHttpRequest()

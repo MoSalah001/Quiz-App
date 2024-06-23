@@ -4,7 +4,6 @@ const user = document.getElementById('user')
 const filterCookie = document.cookie.indexOf('user=');
 const current = document.cookie.substring(filterCookie+5,filterCookie+11)
 user.innerHTML = `Staff ID: <span>${current}</span>`
-const app = document.getElementById('app')
 const quizID = {
     id : window.localStorage.getItem('QuizID').replace(/"/g,"")
 }

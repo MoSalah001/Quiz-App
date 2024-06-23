@@ -17,6 +17,9 @@ xhr.onreadystatechange = ()=>{
 setInterval(() => {
     counter-=1000
     timer.textContent = `${new Date(counter).getMinutes()} : ${new Date(counter).getSeconds()}`
+    if(counter <= 0) {
+        submitAnswer()
+    }
 }, 1000);
 
 window.onload = ()=>{
