@@ -7,9 +7,9 @@ self.addEventListener('install',async ()=>{
             '/index.html',
             '/js/index.js',
             '/style/index.css',
-            '/icons/icon-main.svg',
-            '/icons/icon-128x261.svg',
-            '/icons/icon-256x521.svg'
+            '/icons/icon-32x32.png',
+            '/icons/icon-64x64.png',
+            '/icons/icon-144x144.png'
         ])
     })
 })
