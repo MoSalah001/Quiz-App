@@ -2,7 +2,8 @@ import { loadingSlider, responseMsg } from "./loader.mjs";
 const form = document.forms.logForm
 const btn = document.getElementById('btn')
 btn.addEventListener('click',login)
-window.onload = ()=>{
+
+function loggedUser(){
     let cookieParser = document.cookie
     if(cookieParser.includes('user') && cookieParser.includes('status=0')){
         window.location.assign('./main')
@@ -10,6 +11,8 @@ window.onload = ()=>{
         window.location.assign('./admin')
     }
 }
+
+loggedUser()
 
 function login(e) {
     e.preventDefault();
