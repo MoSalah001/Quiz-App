@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const path = require('path')
 const mysql = require('mysql');
+const jwt = require('jsonwebtoken')
 
 const DBConnect = mysql.createConnection({
     host : process.env.DBHost,
@@ -8,6 +9,23 @@ const DBConnect = mysql.createConnection({
     password : process.env.DBPass,
     database : process.env.DBName
 }) 
+router.use(async (req,res,next)=>{
+    let token = req.cookies.token ? req.cookies.token : "wrong token" 
+    let user = req.cookies.user
+    let check = await jwt.verify(token,process.env.JWTSecret,(err,decoded)=>{
+        if(err) {
+            res.clearCookie("token")
+        } else {
+            return decoded
+        }
+    })
+    if(check.staffID == user) {
+        next()
+    } else {
+        res.redirect('/')
+    }
+    
+})
 
 router.get('/newq',(req,res)=>{
     res.sendFile('./newForm.html',{root: path.join(__dirname,"../Client/branch")})
@@ -177,6 +195,20 @@ router.post('/deleteUser', async(req,res)=>{
             res.status(500).send({"msg":"Refer back to SAdmin - Error mo-del-1"})
         } else {
             res.send({"msg":"User Deleted"})
+        }
+    })
+})
+
+router.get('/agents',async (req,res)=>{
+    res.sendFile('showAgents.html',{root: path.join(__dirname,"../Client/branch")})
+})
+
+router.get('/showAgents',async (req,res)=>{
+    DBConnect.query('SELECT StaffID, NTUser, StoreID, CreationDate FROM Users WHERE Status = "ACTIVE" AND Admin =0',(err,resolve,fields)=>{
+        if(err) {
+            res.send({"msg":"internal server Error"})
+        } else {
+            res.send(resolve)
         }
     })
 })

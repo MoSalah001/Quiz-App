@@ -19,7 +19,6 @@ self.addEventListener('activate',async ()=>{
         userVisibleOnly: true,
         applicationServerKey: "BGRa7VZ1GpJjfeLQn6UIs2TF2A8JF3GtXURVlvnprd8PBC27gO2KiCdmSt4ozQRoJIkG7ITVehIdc-2Z01e575c"
     })
-    console.log(subscription);
 })
 
 self.addEventListener('fetch',(event)=>{
