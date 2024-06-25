@@ -2,7 +2,6 @@ self.addEventListener('install',async ()=>{
     await caches.open('static')
     .then(cache=>{
         cache.addAll([
-            '/',
             '/style/admin.css',
             '/style/agent.css',
             '/style/general.css',
