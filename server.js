@@ -4,7 +4,23 @@ const bcrypt = require("bcryptjs")
 const jwt = require('jsonwebtoken')
 const app = express()
 const mysql = require('mysql')
+const webpush = require('web-push')
+const cookieParser = require('cookie-parser')
+
 require('dotenv').config()
+
+
+const vapidKeys = {
+    publicKey: "BGRa7VZ1GpJjfeLQn6UIs2TF2A8JF3GtXURVlvnprd8PBC27gO2KiCdmSt4ozQRoJIkG7ITVehIdc-2Z01e575c",
+    privateKey: process.env.vapidKeyPrivate
+}
+
+webpush.setVapidDetails('mailto:contact@devmosalah.com',
+    vapidKeys.publicKey,
+    vapidKeys.privateKey
+)
+
+
 
 let DBConnect = mysql.createConnection({
     host : process.env.DBHost,
@@ -27,10 +43,12 @@ DBConnect.connect((err)=>{
         console.log(`Connected as id `,DBConnect.threadId);
     }
 })
+
+app.use(cookieParser())
 app.use(express.static("Client"))
 app.use(express.text())
 app.use(express.urlencoded({
-    extended: true
+    extended: false
 }))
 app.use(express.json())
 app.use('/admin',admin)
@@ -56,7 +74,11 @@ app.post('/login',async (req,res)=>{
                         res.status(400).send({"msg":"Report to SAdmin"})
                     } else if(result) {
                         if(data.Status == "ACTIVE") {
-                            jwt.sign(JSON.stringify(data.StaffID),process.env.JWTSecret,(err,token)=>{
+                            let tokenData = {
+                                staffID : data.StaffID,
+                                Admin : data.Admin
+                            }
+                            jwt.sign(JSON.stringify(tokenData),process.env.JWTSecret,(err,token)=>{
                                 if (err){
                                     res.send(err)
                                 } else {
@@ -65,9 +87,13 @@ app.post('/login',async (req,res)=>{
                                             httpOnly: true
                                         })
                                         res.cookie('user',data.StaffID)
+                                        res.cookie('status',data.Admin)
                                         res.redirect('../admin')
                                     } else {
-                                        res.cookie("token",token)
+                                        res.cookie("token",token,{
+                                            httpOnly: true
+                                        })
+                                        res.cookie('status',data.Admin)
                                         res.cookie('user',data.StaffID)
                                         res.redirect('../main')
                                     }
@@ -187,6 +213,17 @@ app.post('/resetPass',(req,res)=>{
     })
 })
 
+app.post('/subscribe', (req,res)=>{
+    const subscribe = req.body
+    res.status(201).json({})
+    const payload = JSON.stringify({title:"Push Test"})
+
+    webpush.sendNotification(subscribe,payload).catch(err =>{
+        if(err) {
+            console.log(err);
+        }
+    })
+})
 
 setInterval(checkQuizStatus,1800000)
 

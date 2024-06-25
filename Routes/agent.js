@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const path = require('path');
 const mysql = require('mysql');
+const jwt = require('jsonwebtoken')
 
 const DBConnect = mysql.createConnection({
     host : process.env.DBHost,
@@ -8,6 +9,24 @@ const DBConnect = mysql.createConnection({
     password : process.env.DBPass,
     database : process.env.DBName
 }) 
+
+router.use(async (req,res,next)=>{
+    let token = req.cookies.token ? req.cookies.token : "wrong token" 
+    let user = req.cookies.user
+    let check = await jwt.verify(token,process.env.JWTSecret,(err,decoded)=>{
+        if(err) {
+            res.clearCookie("token")
+        } else {
+            return decoded
+        }
+    })
+    if(check.staffID == user) {
+        next()
+    } else {
+        res.redirect('/')
+    }
+    
+})
 
 router.get('/quizez',async(req,res)=>{
     DBConnect.query("SELECT * FROM Quiz WHERE QDate >= CURRENT_DATE() ORDER BY QDate ASC",(err,rows)=>{

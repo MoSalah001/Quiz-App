@@ -2,11 +2,13 @@ import { loadingSlider, responseMsg } from "./loader.mjs";
 const form = document.forms.logForm
 const btn = document.getElementById('btn')
 btn.addEventListener('click',login)
-
-if('serviceWorker' in navigator) {
-    navigator.serviceWorker.register("../sw.js").then(()=>{
-        console.log("sw registered");
-    })
+window.onload = ()=>{
+    let cookieParser = document.cookie
+    if(cookieParser.includes('user') && cookieParser.includes('status=0')){
+        window.location.assign('./main')
+    } else if(cookieParser.includes('user') && cookieParser.includes('status=1')) {
+        window.location.assign('./admin')
+    }
 }
 
 function login(e) {
