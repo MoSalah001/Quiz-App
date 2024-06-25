@@ -36,21 +36,21 @@ if('serviceWorker' in navigator) {
     
 async function send(){
     const register = await navigator.serviceWorker.register("../sw.js")
-    if(Notification.permission == 'granted') {
-        const subscription =  await register.pushManager.subscribe({
-            userVisibleOnly : true,
-            applicationServerKey : "BGRa7VZ1GpJjfeLQn6UIs2TF2A8JF3GtXURVlvnprd8PBC27gO2KiCdmSt4ozQRoJIkG7ITVehIdc-2Z01e575c"
-        })
-        await fetch('subscribe',{
-            method: "post",
-            headers: {"Content-type":"application/json"},
-            body: JSON.stringify(subscription)
-        })
-    } else {
-        Notification.requestPermission().then(permission=>{
-            console.log(permission);
-        })
-    }
+    // if(Notification.permission == 'granted') {
+    //     const subscription =  await register.pushManager.subscribe({
+    //         userVisibleOnly : true,
+    //         applicationServerKey : "BGRa7VZ1GpJjfeLQn6UIs2TF2A8JF3GtXURVlvnprd8PBC27gO2KiCdmSt4ozQRoJIkG7ITVehIdc-2Z01e575c"
+    //     })
+    //     await fetch('subscribe',{
+    //         method: "post",
+    //         headers: {"Content-type":"application/json"},
+    //         body: JSON.stringify(subscription)
+    //     })
+    // } else {
+    //     Notification.requestPermission().then(permission=>{
+    //         console.log(permission);
+    //     })
+    // }
 }
 
 function getNextQuiz() {
