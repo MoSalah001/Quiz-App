@@ -111,7 +111,10 @@ function checkStoredAnswers(answer,_aID,label){
     }
 }
 
-function submitAnswer(){
+function submitAnswer(e){
+    const submitBtn = document.getElementById('submit')
+    submitBtn.removeEventListener('click',submitAnswer)
+    submitBtn.style = "display:none"
     const answersKeys = []
     let data = {}
     let answers = document.getElementsByClassName('Answers')
@@ -129,6 +132,7 @@ function submitAnswer(){
     xhr.open('post','./answers')
     xhr.setRequestHeader("content-type","application/json")
     xhr.send(JSON.stringify(data))
+
     loadingSlider(xhr)
     xhr.onreadystatechange = ()=>{
         if(xhr.readyState === 4) {

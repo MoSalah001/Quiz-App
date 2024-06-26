@@ -65,14 +65,13 @@ class QuizCard{
                 div.setAttribute('type','pending')
                 div.addEventListener('click',takeQuiz)
             } else {
-                div.addEventListener('click',takeQuiz)
+                div.addEventListener('click',notYet)
             }
             fragment.append(div)
         if( startTime.getTime() < now.getTime()  &&
             now.getTime() > endTime.getTime() 
         ) {
-            // update DB with quiz status
-            // const xhr = new XMLHttpRequest()
+
             return null
         } else {
             return fragment
@@ -117,11 +116,11 @@ class ResultCard {
         const endTime = new Date(calculateDuration)
         const now = new Date()
         if( startTime.getTime() < now.getTime()  &&
-            now.getTime() < endTime.getTime() ) {
-                div.addEventListener('click',notYetRes)
-            } else {
+            now.getTime() > endTime.getTime() ) {
                 div.setAttribute('type','result')
                 div.addEventListener('click',quizRes)
+            } else {
+                div.addEventListener('click',notYetRes)
             }
             fragment.append(div)
             return fragment

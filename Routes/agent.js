@@ -42,7 +42,7 @@ router.get('/quizlist',async(req,res)=>{
 })
 
 router.get('/getquizes',async (req,res)=>{
-    DBConnect.query("SELECT * FROM Quiz ORDER BY QDate",(err,rows)=>{
+    DBConnect.query("SELECT * FROM Quiz WHERE QStatus = 'Assigned' AND DATE_ADD(QDate, INTERVAL Duration MINUTE) ORDER BY QDate",(err,rows)=>{
         if(err) throw err
         else {
             res.send(rows)
@@ -203,7 +203,6 @@ router.post('/result/:id/getAnswersCount',(req,res)=>{
                 console.log(err);
                 res.status(400).send({"msg":"Bad Request - mo-postRes-04"})
             } else {
-                console.log(rows[0]);
                 dbData.userCount = rows[0].UserCount
                 res.send(dbData)
             }
