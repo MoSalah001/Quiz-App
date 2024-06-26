@@ -203,6 +203,7 @@ router.post('/result/:id/getAnswersCount',(req,res)=>{
                 console.log(err);
                 res.status(400).send({"msg":"Bad Request - mo-postRes-04"})
             } else {
+                console.log(rows[0]);
                 dbData.userCount = rows[0].UserCount
                 res.send(dbData)
             }

@@ -17,9 +17,6 @@ xhr.onreadystatechange = ()=>{
 setInterval(() => {
     counter-=1000
     timer.textContent = `${new Date(counter).getMinutes()} : ${new Date(counter).getSeconds()}`
-    if(counter <= 0) {
-        submitAnswer()
-    }
 }, 1000);
 
 window.onload = ()=>{
@@ -127,6 +124,7 @@ function submitAnswer(){
     }
     Object.assign(data,answersKeys)
     Object.assign(data , {"qid":window.localStorage.getItem('qid')})
+    console.log(data);
     const xhr = new XMLHttpRequest()
     xhr.open('post','./answers')
     xhr.setRequestHeader("content-type","application/json")

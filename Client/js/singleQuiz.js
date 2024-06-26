@@ -42,6 +42,7 @@ window.onload = ()=>{
 
 function markDiv(responseText) {
     let parsedData = JSON.parse(responseText)
+    console.log(parsedData);
     let quizMark = parsedData.quizCount
     let userMark = parsedData.userCount
     let div = document.createElement('div')
