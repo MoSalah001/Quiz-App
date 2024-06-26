@@ -75,14 +75,15 @@ function getNextQuiz() {
                             let variance = quizDateObj.getTime() - now
                             let dayVar = variance/day
                             let dateVariance = new Date(variance)
+                            let fixHours = (variance - zone)/1000/60/60
                             quizDate.textContent = `
                                 ${dateVariance.getMonth()} M 
                                 ${Math.floor(dayVar)} D
-                                ${dateVariance.getHours()} H: 
+                                ${Math.floor(fixHours)} H: 
                                 ${dateVariance.getMinutes()} M: 
                                 ${dateVariance.getSeconds()} S
                             `
-                            countDown(variance,dateVariance,day,0)
+                            countDown(variance,dateVariance,day,0,zone)
                         } else if(
                             (zonedDate <= now) &&
                             (now < zonedDate+(i.Duration*60*1000))) {
@@ -107,16 +108,17 @@ function getNextQuiz() {
 }
 getNextQuiz()
 
-function countDown(variance,dateVariance,day,clear){
+function countDown(variance,dateVariance,day,clear,zone){
     if(clear === 0) {
         setInterval(()=>{
             variance-=1000
             dateVariance = new Date(variance)
+            let fixHours = (variance - zone)/1000/60/60
             let dayVar = variance/day
             quizDate.textContent = `
                 ${dateVariance.getMonth()} M 
                 ${Math.floor(dayVar)} D
-                ${dateVariance.getHours()} H: 
+                ${Math.floor(fixHours)} H: 
                 ${dateVariance.getMinutes()} M: 
                 ${dateVariance.getSeconds()} S
                 `
