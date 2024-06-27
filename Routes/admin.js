@@ -213,4 +213,105 @@ router.get('/showAgents',async (req,res)=>{
     })
 })
 
+router.get('/allq',(req,res)=>{
+    res.sendFile('allq.html',{root: path.join(__dirname,"../Client/branch")})
+})
+
+router.post('/allq',(req,res)=>{
+    DBConnect.query("SELECT * FROM Quiz WHERE QStatus = 'Done'",(err,rows)=>{
+        if(err) {
+            res.status(400).send({"msg":"Error Code mo-allq-01"})
+        } else {
+            res.status(200).send(rows)
+        }
+    })
+})
+
+router.post('/result/:id',(req,res)=>{
+    let data = req.body.id
+    DBConnect.query(`
+        SELECT Answers.AID,Answers.QID,Questions.QuizID,Questions.QValue, Answers.AValue,Answers.isTrue
+        FROM Answers
+        INNER JOIN Questions ON Answers.QID = Questions.QID
+        WHERE Questions.QuizID =? 
+        `,[data],(err,rows)=>{
+        if(err) {
+            console.log(err);
+            res.status(400).send({"msg":"Bad Request - mo-postRes-01"})
+        } else {
+            res.send(rows)
+        }
+    })
+})
+
+router.get('/result/:id',(req,res)=>{
+    let data = req.params.id
+    DBConnect.query(`
+        SELECT Users.StaffID, Users.NTUser FROM Users 
+        LEFT JOIN userAnswers
+        ON Users.StaffID = userAnswers.StaffID
+        WHERE userAnswers.QuizID = ?
+        GROUP BY userAnswers.StaffID
+        `,[data],(err,rows)=>{
+            if(err) {
+                res.status(400).send({'msg':"Error Code sad-res-01"})
+            } else {
+                res.status(200).send(rows)
+            }
+        })
+})
+
+router.post('/result/:id/getAnswers',(req,res)=>{
+    let data = req.body.id
+    DBConnect.query(`
+        SELECT userAnswers.AID,userAnswers.QID,userAnswers.QuizID,Answers.AValue,Answers.isTrue
+        FROM userAnswers
+        INNER JOIN Answers ON userAnswers.AID = Answers.AID
+        WHERE userAnswers.QuizID =?
+        `,[data],(err,rows)=>{
+        if(err) {
+            console.log(err);
+            res.status(400).send({"msg":"Bad Request - mo-postRes-02"})
+        } else {
+            res.send(rows)
+        }
+    })
+})
+
+router.post('/result/:id/getAnswersCount',async (req,res)=>{
+    const data = req.body
+    let dbData = {}
+    let userResults = []
+    DBConnect.query(`
+        SELECT COUNT(*) AS QuizCount
+        FROM Answers
+        INNER JOIN Questions
+        ON Answers.QID = Questions.QID
+        WHERE Questions.QuizID =? AND Answers.IsTrue = 1
+        `,[data.quiz],(err,rows,fields)=>{
+        if(err) {
+            res.status(400).send({"msg":"Bad Request - mo-postRes-03"})
+        } else {
+            dbData.quizCount = rows[0]
+        }
+    })
+    DBConnect.query(`
+        SELECT COUNT(*) AS UserCount, userAnswers.StaffID as sID,userAnswers.QuizID as QuizID
+        FROM Answers
+        INNER JOIN userAnswers
+        ON Answers.AID = userAnswers.AID
+        WHERE userAnswers.QuizID = ? AND userAnswers.StaffID = ? AND Answers.IsTrue = 1
+        `,[data.quiz,data.sID],(err,rows)=>{
+            if(err) {
+                console.log(err);
+                res.status(400).send({"msg":"Bad Request - mo-postRes-04"})
+            } else {
+                userResults.push(rows[0])
+                console.log(userResults);              
+            } 
+    })
+    dbData.body = userResults
+    res.send(dbData)
+})
+
 module.exports = router;
