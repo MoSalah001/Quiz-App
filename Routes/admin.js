@@ -19,7 +19,7 @@ router.use(async (req,res,next)=>{
             return decoded
         }
     })
-    if(check.staffID == user) {
+    if(check != undefined && check.staffID == user ) {
         next()
     } else {
         res.redirect('/')
@@ -228,7 +228,7 @@ router.post('/allq',(req,res)=>{
 })
 
 router.post('/result/:id',(req,res)=>{
-    let data = req.body.id
+    let data = req.body.QID
     DBConnect.query(`
         SELECT Answers.AID,Answers.QID,Questions.QuizID,Questions.QValue, Answers.AValue,Answers.isTrue
         FROM Answers
@@ -261,7 +261,7 @@ router.get('/result/:id',(req,res)=>{
         })
 })
 
-router.post('/result/:id/getAnswers',(req,res)=>{
+router.post('/result/:id/getAnswers',(req,res)=>{ // to show quiz question without users
     let data = req.body.id
     DBConnect.query(`
         SELECT userAnswers.AID,userAnswers.QID,userAnswers.QuizID,Answers.AValue,Answers.isTrue
@@ -278,40 +278,59 @@ router.post('/result/:id/getAnswers',(req,res)=>{
     })
 })
 
-router.post('/result/:id/getAnswersCount',async (req,res)=>{
+router.post('/result/:id/getUserAnswers',(req,res)=>{ // to show quiz question with specific user answers
+    let data = req.body
+    DBConnect.query(`
+        SELECT userAnswers.AID,userAnswers.QID,userAnswers.QuizID,Answers.AValue,Answers.isTrue
+        FROM userAnswers
+        INNER JOIN Answers ON userAnswers.AID = Answers.AID
+        WHERE userAnswers.QuizID =? AND userAnswers.StaffID = ?
+        `,[data.QID,data.sID],(err,rows)=>{
+        if(err) {
+            console.log(err);
+            res.status(400).send({"msg":"Bad Request - mo-postRes-02"})
+        } else {
+            res.send(rows)
+        }
+    })
+})
+
+router.post('/result/:id/getAnswersBase',async (req,res)=>{
     const data = req.body
-    let dbData = {}
-    let userResults = []
     DBConnect.query(`
         SELECT COUNT(*) AS QuizCount
         FROM Answers
         INNER JOIN Questions
         ON Answers.QID = Questions.QID
         WHERE Questions.QuizID =? AND Answers.IsTrue = 1
-        `,[data.quiz],(err,rows,fields)=>{
-        if(err) {
-            res.status(400).send({"msg":"Bad Request - mo-postRes-03"})
-        } else {
-            dbData.quizCount = rows[0]
-        }
+        `,[data.quiz],(err,rows)=>{
+            if(err) {
+                console.log(err);
+                res.status(400).send({"msg":"Bad Request - mo-postRes-04"})
+            } else {
+                res.send(rows[0])
+            } 
     })
+})
+
+router.post('/result/:id/getAnswersCount',async (req,res)=>{
+    const data = req.body
     DBConnect.query(`
-        SELECT COUNT(*) AS UserCount, userAnswers.StaffID as sID,userAnswers.QuizID as QuizID
+        SELECT COUNT(*) AS UserCount, userAnswers.StaffID as sID,userAnswers.QuizID as QuizID, Users.NTUser
         FROM Answers
         INNER JOIN userAnswers
         ON Answers.AID = userAnswers.AID
-        WHERE userAnswers.QuizID = ? AND userAnswers.StaffID = ? AND Answers.IsTrue = 1
+        RIGHT JOIN Users
+        ON Users.StaffID = userAnswers.StaffID
+        WHERE userAnswers.QuizID = ? AND Users.StaffID = ? AND Answers.IsTrue = 1
         `,[data.quiz,data.sID],(err,rows)=>{
             if(err) {
                 console.log(err);
                 res.status(400).send({"msg":"Bad Request - mo-postRes-04"})
             } else {
-                userResults.push(rows[0])
-                console.log(userResults);              
+                res.send(rows[0])
             } 
     })
-    dbData.body = userResults
-    res.send(dbData)
 })
 
 module.exports = router;

@@ -174,7 +174,6 @@ function quizRes(e) {
     loadingSlider(xhr)
     xhr.onreadystatechange = ()=>{
         if(xhr.readyState === 4) {
-            console.log(JSON.parse(xhr.responseText));
             window.localStorage.setItem('QuizID',JSON.stringify(JSON.parse(xhr.responseText)[0].QuizID))
             const subXhr = new XMLHttpRequest()
             subXhr.open('get',`result/${data.id}`)
@@ -214,6 +213,25 @@ export function userAnswer(rows) {
         let qHead = new ResultCheck(rows[row],'app')
         qHead.createUserAnswer()
     }
+}
+
+export function markDiv(responseText,adminInput) {
+    let parsedData = JSON.parse(responseText)
+    let app = document.getElementById('app')
+    if(!adminInput){
+        let quizMark = parsedData.quizCount
+        let userMark = parsedData.userCount
+        let div = document.createElement('div')
+        div.setAttribute("id",'result-div')
+        div.textContent = ((userMark/quizMark)*100).toFixed(2) +"%"
+        app.append(div)
+    } else {
+        let div = document.createElement('div')
+        div.setAttribute("id",'result-div')
+        div.textContent = adminInput
+        app.append(div)        
+    }
+    
 }
 
 class ResultCheck {

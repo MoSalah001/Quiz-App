@@ -1,5 +1,5 @@
 import { loadingSlider } from "./loader.mjs"
-import { resultCheck, userAnswer } from "./quizModule.mjs"
+import { resultCheck, userAnswer, markDiv } from "./quizModule.mjs"
 const user = document.getElementById('user')
 const filterCookie = document.cookie.indexOf('user=');
 const current = document.cookie.substring(filterCookie+5,filterCookie+11)
@@ -38,16 +38,4 @@ window.onload = ()=>{
             }
     }
 
-}
-
-function markDiv(responseText) {
-    let parsedData = JSON.parse(responseText)
-    console.log(parsedData);
-    let quizMark = parsedData.quizCount
-    let userMark = parsedData.userCount
-    let div = document.createElement('div')
-    div.setAttribute("id",'result-div')
-    div.textContent = ((userMark/quizMark)*100).toFixed(2) +"%"
-    let app = document.getElementById('app')
-    app.append(div)
 }

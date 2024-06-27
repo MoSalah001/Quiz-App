@@ -1,6 +1,6 @@
 import { loadingSlider } from "./loader.mjs"
+import { userAnswer, resultCheck } from "./quizModule.mjs"
 const app = document.getElementById('app')
-const table = document.getElementById('table')
 function loadCards() {
     const xhr = new XMLHttpRequest()
     xhr.open('post','allq')
@@ -13,7 +13,6 @@ function loadCards() {
         }
     }
 }
-
 loadCards()
 
 class ResultCard {
@@ -66,10 +65,36 @@ function resultCard(rows) {
     }
 }
 
+async function addRow(response,base,table){
+    let par = ((base.QuizCount*0.6)).toFixed(0)
+    let data = JSON.parse(response)
+    const row = document.createElement('tr')
+    const uName = document.createElement('td')
+    uName.textContent = data.NTUser
+    const sID = document.createElement('td')
+    sID.textContent = data.sID
+    const qID = document.createElement('td')
+    qID.textContent = data.QuizID
+    qID.setAttribute('id','qid')
+    qID.setAttribute('sid',data.sID)
+    qID.addEventListener('click',showUserAnswers)
+    const result = document.createElement('td')
+    result.textContent = ((data.UserCount / base.QuizCount)*100).toFixed(0)+"%"
+    let check = data.UserCount >= par ? true : false
+    if(check){
+        row.classList.add('pass')
+    } else {
+        row.classList.add('fail')
+    }
+    row.append(uName,sID,result,qID)
+    table.append(row)
+}
+
 function quizRes(e){
     let data = {
         id : e.target.parentElement.id
     }
+    removeCards()
     const xhr = new XMLHttpRequest()
     xhr.open('post',`result/${data.id}`)
     xhr.setRequestHeader('content-type','application/json')
@@ -89,12 +114,23 @@ function quizRes(e){
                     tableHeaderStaff.textContent = "Staff ID"
                     const tableHeaderResult = document.createElement('th')
                     tableHeaderResult.textContent = "Result"
-
-                    table.append(tableHeaderUser,tableHeaderStaff,tableHeaderResult)
+                    const tableHeaderQuizID = document.createElement('th')
+                    tableHeaderQuizID.textContent = "Quiz ID"
+                    table.append(tableHeaderUser,tableHeaderStaff,tableHeaderResult,tableHeaderQuizID)
                     for(let i of res) {
                         let payload = {
                             quiz: data.id,
                             sID: i.StaffID
+                        }
+                        let baseXhr = new XMLHttpRequest()
+                        let base;
+                        baseXhr.open('post',`result/${data.id}/getAnswersBase`)
+                        baseXhr.setRequestHeader('content-type','application/json')
+                        baseXhr.send(JSON.stringify(payload))
+                        baseXhr.onreadystatechange = ()=>{
+                            if(baseXhr.readyState === 4) {
+                                base= JSON.parse(baseXhr.responseText)
+                            }
                         }
                         let result = new XMLHttpRequest()
                         result.open('post',`result/${data.id}/getAnswersCount`)
@@ -102,18 +138,54 @@ function quizRes(e){
                         result.send(JSON.stringify(payload))
                         result.onreadystatechange = ()=>{
                             if(result.readyState === 4) {
-                                console.log(result.responseType);
+                                let table = document.getElementById('table')
+                                addRow(result.responseText,base,table)
                             }
                         }
-                        const row = document.createElement('tr')
-                        const uName = document.createElement('td')
-                        uName.textContent = i.NTUser
-                        const sID = document.createElement('td')
-                        sID.textContent = i.StaffID
-                        row.append(uName,sID)
                     }
                 }
+                loadingSlider(subXhr)
             }
         }
     }
+    const resetBtn = document.createElement('btn')
+    resetBtn.textContent = "Reset"
+    resetBtn.setAttribute('id','reset-btn')
+    app.append(resetBtn)
+}
+
+function removeCards(){
+    const app = document.getElementById('app')
+    app.textContent = ""
+    const table = document.createElement('table')
+    table.setAttribute('id','table')
+    app.append(table)
+}
+
+function showUserAnswers(e){
+    const payload = {
+        QID: e.target.textContent,
+        sID: e.target.getAttribute('sid')
+    }
+    const xhr = new XMLHttpRequest()
+    xhr.open('post',`result/${payload.QID}`)
+    xhr.setRequestHeader('content-type','application/json')
+    xhr.send(JSON.stringify(payload))
+    xhr.onreadystatechange = ()=>{
+        if(xhr.readyState === 4) {
+            const subXhr = new XMLHttpRequest()
+            subXhr.open('post',`result/${payload.QID}/getUserAnswers`)
+            subXhr.setRequestHeader('content-type','application/json')
+            subXhr.send(JSON.stringify(payload))
+            subXhr.onreadystatechange = ()=>{
+                if(subXhr.readyState === 4) {
+                    app.textContent = ""
+                    console.log(subXhr.responseText);
+                    resultCheck(JSON.parse(xhr.responseText))
+                    userAnswer(JSON.parse(subXhr.responseText))
+                }
+            }
+        }   
+    }
+   
 }
