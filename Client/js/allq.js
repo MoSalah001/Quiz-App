@@ -181,8 +181,10 @@ function showUserAnswers(e){
                 if(subXhr.readyState === 4) {
                     app.textContent = ""
                     console.log(subXhr.responseText);
-                    resultCheck(JSON.parse(xhr.responseText))
-                    userAnswer(JSON.parse(subXhr.responseText))
+                    setTimeout(()=>{
+                        resultCheck(JSON.parse(xhr.responseText))
+                        userAnswer(JSON.parse(subXhr.responseText))
+                    },2000)
                 }
             }
         }   
