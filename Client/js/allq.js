@@ -65,7 +65,7 @@ function resultCard(rows) {
     }
 }
 
-async function addRow(response,par,base,table){
+async function addRow(response,QuizCount,base,table){
     let data = JSON.parse(response)
     const row = document.createElement('tr')
     const uName = document.createElement('td')
@@ -78,8 +78,7 @@ async function addRow(response,par,base,table){
     qID.setAttribute('sid',data.sID)
     qID.addEventListener('click',showUserAnswers)
     const result = document.createElement('td')
-    console.log(par);
-    result.textContent = ((data.UserCount / par.QuizCount)*100).toFixed(0)+"%"
+    result.textContent = ((data.UserCount / QuizCount)*100).toFixed(0)+"%"
     let check = data.UserCount >= base ? true : false
     if(check){
         row.classList.add('pass')
@@ -141,7 +140,7 @@ function quizRes(e){
                         result.onreadystatechange = ()=>{
                             if(result.readyState === 4) {
                                 let table = document.getElementById('table')
-                                addRow(result.responseText,par,base,table)
+                                addRow(result.responseText,par.QuizCount,base,table)
                             }
                         }
                     }
