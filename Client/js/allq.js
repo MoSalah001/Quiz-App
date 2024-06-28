@@ -66,7 +66,7 @@ function resultCard(rows) {
 }
 
 async function addRow(response,base,table){
-    let par = ((base.QuizCount*0.6)).toFixed(0)
+    let par = await ((base.QuizCount*0.6)).toFixed(0)
     let data = JSON.parse(response)
     const row = document.createElement('tr')
     const uName = document.createElement('td')
