@@ -78,6 +78,7 @@ async function addRow(response,par,base,table){
     qID.setAttribute('sid',data.sID)
     qID.addEventListener('click',showUserAnswers)
     const result = document.createElement('td')
+    console.log(par);
     result.textContent = ((data.UserCount / par.QuizCount)*100).toFixed(0)+"%"
     let check = data.UserCount >= base ? true : false
     if(check){
