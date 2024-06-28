@@ -65,8 +65,7 @@ function resultCard(rows) {
     }
 }
 
-async function addRow(response,base,table){
-    let par = await ((base.QuizCount*0.6)).toFixed(0)
+async function addRow(response,par,base,table){
     let data = JSON.parse(response)
     const row = document.createElement('tr')
     const uName = document.createElement('td')
@@ -79,8 +78,8 @@ async function addRow(response,base,table){
     qID.setAttribute('sid',data.sID)
     qID.addEventListener('click',showUserAnswers)
     const result = document.createElement('td')
-    result.textContent = ((data.UserCount / base.QuizCount)*100).toFixed(0)+"%"
-    let check = data.UserCount >= par ? true : false
+    result.textContent = ((data.UserCount / par.QuizCount)*100).toFixed(0)+"%"
+    let check = data.UserCount >= base ? true : false
     if(check){
         row.classList.add('pass')
     } else {
@@ -123,13 +122,15 @@ function quizRes(e){
                             sID: i.StaffID
                         }
                         let baseXhr = new XMLHttpRequest()
+                        let par;
                         let base;
                         baseXhr.open('post',`result/${data.id}/getAnswersBase`)
                         baseXhr.setRequestHeader('content-type','application/json')
                         baseXhr.send(JSON.stringify(payload))
                         baseXhr.onreadystatechange = ()=>{
                             if(baseXhr.readyState === 4) {
-                                base= JSON.parse(baseXhr.responseText)
+                                par= JSON.parse(baseXhr.responseText)
+                                base = (par.QuizCount*0.6).toFixed(0)
                             }
                         }
                         let result = new XMLHttpRequest()
@@ -139,7 +140,7 @@ function quizRes(e){
                         result.onreadystatechange = ()=>{
                             if(result.readyState === 4) {
                                 let table = document.getElementById('table')
-                                addRow(result.responseText,base,table)
+                                addRow(result.responseText,par,base,table)
                             }
                         }
                     }
