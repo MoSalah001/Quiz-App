@@ -127,10 +127,10 @@ function quizRes(e){
                         baseXhr.open('post',`result/${data.id}/getAnswersBase`)
                         baseXhr.setRequestHeader('content-type','application/json')
                         baseXhr.send(JSON.stringify(payload))
-                        baseXhr.onreadystatechange = ()=>{
+                        baseXhr.onreadystatechange = async()=>{
                             if(baseXhr.readyState === 4) {
-                                par= JSON.parse(baseXhr.responseText)
-                                base = (par.QuizCount*0.6).toFixed(0)
+                                par = await JSON.parse(baseXhr.responseText).QuizCount
+                                base = (par*0.6).toFixed(0)
                             }
                         }
                         let result = new XMLHttpRequest()
@@ -140,7 +140,7 @@ function quizRes(e){
                         result.onreadystatechange = ()=>{
                             if(result.readyState === 4) {
                                 let table = document.getElementById('table')
-                                addRow(result.responseText,par.QuizCount,base,table)
+                                addRow(result.responseText,par,base,table)
                             }
                         }
                     }
