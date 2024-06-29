@@ -297,7 +297,7 @@ router.post('/result/:id/getUserAnswers',(req,res)=>{ // to show quiz question w
 
 router.post('/result/:id/getAnswersBase',async (req,res)=>{
     const data = req.body
-    DBConnect.query(`
+    await DBConnect.query(`
         SELECT COUNT(*) AS QuizCount
         FROM Answers
         INNER JOIN Questions
@@ -315,7 +315,7 @@ router.post('/result/:id/getAnswersBase',async (req,res)=>{
 
 router.post('/result/:id/getAnswersCount',async (req,res)=>{
     const data = req.body
-    DBConnect.query(`
+    await DBConnect.query(`
         SELECT COUNT(*) AS UserCount, userAnswers.StaffID as sID,userAnswers.QuizID as QuizID, Users.NTUser
         FROM Answers
         INNER JOIN userAnswers
