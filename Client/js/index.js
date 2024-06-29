@@ -4,9 +4,9 @@ const btn = document.getElementById('btn')
 btn.addEventListener('click',login)
 
 if (!window.matchMedia('(display-mode:standalone)').matches) {
-    document.getElementById('install').style = "display:Block"
+    document.getElementById('install').style.display = "block"
 } else {
-    document.getElementById('install').style = "display:none"
+    document.getElementById('install').style.display = "none"
 }
 
 let installPrompt;
