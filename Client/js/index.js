@@ -5,6 +5,8 @@ btn.addEventListener('click',login)
 
 if (!window.matchMedia('(display-mode:standalone)').matches) {
     document.getElementById('install').style = "display:Block"
+} else {
+    document.getElementById('install').style = "display:none"
 }
 
 let installPrompt;
