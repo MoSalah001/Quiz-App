@@ -1,3 +1,18 @@
+async function networkFirst(request) {
+    try {
+        const networkResponse = await fetch(request);
+        if(networkResponse.ok) {
+            const cache = await caches.open("myCache")
+            cache.put(request,networkResponse.clone())
+        }
+        return networkResponse
+    } catch(error) {
+        const cachedResponse = await caches.match(request)
+        return cachedResponse || Response.error()
+    }
+}
+
+
 self.addEventListener('install',async ()=>{
     await caches.open('static')
     .then(cache=>{
@@ -28,13 +43,7 @@ self.addEventListener('activate',async ()=>{
 })
 
 self.addEventListener('fetch',(event)=>{
-    event.respondWith(caches.match(event.request).then(res=>{
-        if(res){
-            return res
-        } else {
-            return fetch(event.request)
-        }
-    }))
+    event.respondWith(networkFirst(event.request))
 })
 
 

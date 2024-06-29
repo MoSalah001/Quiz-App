@@ -213,7 +213,7 @@ body {
     }   
 }
 
-@media all and (display-mode: standalone) {
+@media  (display-mode: standalone) {
     #install {
         display: none;
     }
