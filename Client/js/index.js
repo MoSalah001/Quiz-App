@@ -3,7 +3,7 @@ const form = document.forms.logForm
 const btn = document.getElementById('btn')
 btn.addEventListener('click',login)
 
-if (!window.matchMedia('(display:standalone)').matches) {
+if (!window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === false) {
     document.getElementById('install').style.display = "block"
 } else {
     document.getElementById('install').style.display = "none"

@@ -212,3 +212,9 @@ body {
         width: 80dvw;
     }   
 }
+
+@media all and (display-mode: standalone) {
+    #install {
+        display: none;
+    }
+}
