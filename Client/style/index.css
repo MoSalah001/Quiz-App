@@ -184,6 +184,7 @@ body {
         place-content: center;
     }
     #install {
+        display: none;
         position: absolute;
         bottom: 0;
         font-size: 18px;
