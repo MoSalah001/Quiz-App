@@ -120,6 +120,12 @@ a#back {
     font-size: 18px;
 }
 
+#install {
+    position: absolute;
+    top: 0;
+    right: 1px;
+}
+
 a#back:hover {
     background-color: var(--clr-logo-red);
 }

@@ -2,6 +2,21 @@ import { loadingSlider, responseMsg } from "./loader.mjs";
 const form = document.forms.logForm
 const btn = document.getElementById('btn')
 btn.addEventListener('click',login)
+let installPrompt;
+
+window.addEventListener('beforeinstallprompt',(e)=>{
+    installPrompt = e
+})
+const install = document.getElementById('install')
+install.addEventListener('click',async()=>{
+    if(installPrompt !== null) {
+        installPrompt.prompt()
+        const outcome = await installPrompt.userChoice;
+        if(outcome === 'accepted') {
+            installPrompt = "null"
+        }
+    }
+})
 
 function loggedUser(){
     let cookieParser = document.cookie
@@ -76,4 +91,30 @@ function setPassword(e){
             }
         }
     }
+}
+
+
+if('serviceWorker' in navigator) {
+    send().catch(err=>{
+        console.error(err)
+    })
+}
+    
+async function send(){
+    const register = await navigator.serviceWorker.register("../sw.js")
+    // if(Notification.permission == 'granted') {
+    //     const subscription =  await register.pushManager.subscribe({
+    //         userVisibleOnly : true,
+    //         applicationServerKey : "BGRa7VZ1GpJjfeLQn6UIs2TF2A8JF3GtXURVlvnprd8PBC27gO2KiCdmSt4ozQRoJIkG7ITVehIdc-2Z01e575c"
+    //     })
+    //     await fetch('subscribe',{
+    //         method: "post",
+    //         headers: {"Content-type":"application/json"},
+    //         body: JSON.stringify(subscription)
+    //     })
+    // } else {
+    //     Notification.requestPermission().then(permission=>{
+    //         console.log(permission);
+    //     })
+    // }
 }

@@ -4,23 +4,42 @@
     "start_url":".",
     "display": "standalone",
     "orientation": "portrait",
-    "background_color": "#fff",
+    "background_color": "#FFFFFF",
     "theme_color":"#FF0000",
     "icons": [
         {
             "src":"/icons/icon-32x32.png",
             "sizes": "32x32",
-            "type":"image/png"
+            "type":"image/png",
+            "purpose" : "any"
         },
         {
             "src":"/icons/icon-64x64.png",
             "sizes": "64x64",
-            "type":"image/png"
+            "type":"image/png",
+            "purpose" : "any"
         },
         {
             "src":"/icons/icon-144x144.png",
             "sizes": "144x144",
-            "type":"image/png"
+            "type":"image/png",
+            "purpose" : "any"
+        }
+    ],
+    "screenshots" : [
+        {
+            "src":"/icons/screenshot.png",
+            "sizes" : "320x320",
+            "type" : "image/png",
+            "label":"With Quiz Hub app, You can easily take your quiz from the comfort of your mobile homepage",
+            "form_factor" :"wide"
+        },
+        {
+            "src":"/icons/screen-mob.png",
+            "sizes" : "320x320",
+            "type" : "image/png",
+            "label":"With Quiz Hub app, You can easily take your quiz from the comfort of your mobile homepage",
+            "form_factor" :"narrow"
         }
     ]
 }
