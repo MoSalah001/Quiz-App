@@ -5,6 +5,7 @@
 }
 
 #install {
+    display: none;
     position: absolute;
     bottom: 0;
     background-color: red;

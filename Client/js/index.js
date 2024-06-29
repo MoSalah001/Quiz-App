@@ -2,6 +2,11 @@ import { loadingSlider, responseMsg } from "./loader.mjs";
 const form = document.forms.logForm
 const btn = document.getElementById('btn')
 btn.addEventListener('click',login)
+
+if (!window.matchMedia('(display-mode:standalone)').matches) {
+    document.getElementById('install').style = "display:Block"
+}
+
 let installPrompt;
 
 window.addEventListener('beforeinstallprompt',(e)=>{
