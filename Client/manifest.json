@@ -8,19 +8,19 @@
     "theme_color":"#FF0000",
     "icons": [
         {
-            "src":"/icons/icon-32x32.png",
+            "src":"/icons/logo32.png",
             "sizes": "32x32",
             "type":"image/png",
             "purpose" : "any"
         },
         {
-            "src":"/icons/icon-64x64.png",
+            "src":"/icons/logo64.png",
             "sizes": "64x64",
             "type":"image/png",
             "purpose" : "any"
         },
         {
-            "src":"/icons/icon-144x144.png",
+            "src":"/icons/logo144.png",
             "sizes": "144x144",
             "type":"image/png",
             "purpose" : "any"

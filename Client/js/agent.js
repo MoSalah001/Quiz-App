@@ -99,6 +99,7 @@ function countDown(variance,dateVariance,day,clear,zone){
                 `
         },1000)
     } else {
+        console.log("test");
         return true
     }
     
