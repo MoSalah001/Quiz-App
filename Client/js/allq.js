@@ -75,7 +75,7 @@ async function addRow(response,QuizCount,base,table){
     const qID = document.createElement('td')
     qID.textContent = data.QuizID
     qID.setAttribute('id','qid')
-    qID.setAttribute('sid',data.sID)
+    qID.setAttribute('sid',data.StaffID)
     qID.addEventListener('click',showUserAnswers)
     const quotient = document.createElement('td')
     quotient.textContent = ((data.dividend / QuizCount)*100).toFixed(0)+"%"
