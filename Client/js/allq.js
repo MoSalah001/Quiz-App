@@ -66,26 +66,26 @@ function resultCard(rows) {
 }
 
 async function addRow(response,QuizCount,base,table){
-    let data = JSON.parse(response)
+    let data = response
     const row = document.createElement('tr')
     const uName = document.createElement('td')
     uName.textContent = data.NTUser
     const sID = document.createElement('td')
-    sID.textContent = data.sID
+    sID.textContent = data.StaffID
     const qID = document.createElement('td')
     qID.textContent = data.QuizID
     qID.setAttribute('id','qid')
     qID.setAttribute('sid',data.sID)
     qID.addEventListener('click',showUserAnswers)
-    const result = document.createElement('td')
-    result.textContent = ((data.UserCount / QuizCount)*100).toFixed(0)+"%"
-    let check = data.UserCount >= base ? true : false
+    const quotient = document.createElement('td')
+    quotient.textContent = ((data.dividend / QuizCount)*100).toFixed(0)+"%"
+    let check = data.dividend >= base ? true : false
     if(check){
         row.classList.add('pass')
     } else {
         row.classList.add('fail')
     }
-    row.append(uName,sID,result,qID)
+    row.append(uName,sID,quotient,qID)
     table.append(row)
 }
 
@@ -116,31 +116,31 @@ function quizRes(e){
                     const tableHeaderQuizID = document.createElement('th')
                     tableHeaderQuizID.textContent = "Quiz ID"
                     table.append(tableHeaderUser,tableHeaderStaff,tableHeaderResult,tableHeaderQuizID)
-                    for(let i of res) {
-                        let payload = {
-                            quiz: data.id,
-                            sID: i.StaffID
+                    let baseXhr = new XMLHttpRequest()
+                    let par;
+                    let base;
+                    let payload = {
+                        quiz: data.id
+                    }
+                    baseXhr.open('post',`result/${data.id}/getAnswersBase`)
+                    baseXhr.setRequestHeader('content-type','application/json')
+                    baseXhr.send(JSON.stringify(payload))
+                    baseXhr.onreadystatechange = async()=>{
+                        if(baseXhr.readyState === 4) {
+                            par = await JSON.parse(baseXhr.responseText).QuizCount
+                            base = (par*0.6).toFixed(0)
                         }
-                        let baseXhr = new XMLHttpRequest()
-                        let par;
-                        let base;
-                        baseXhr.open('post',`result/${data.id}/getAnswersBase`)
-                        baseXhr.setRequestHeader('content-type','application/json')
-                        baseXhr.send(JSON.stringify(payload))
-                        baseXhr.onreadystatechange = async()=>{
-                            if(baseXhr.readyState === 4) {
-                                par = await JSON.parse(baseXhr.responseText).QuizCount
-                                base = (par*0.6).toFixed(0)
-                            }
-                        }
-                        let result = new XMLHttpRequest()
-                        result.open('post',`result/${data.id}/getAnswersCount`)
-                        result.setRequestHeader('content-type','application/json')
-                        result.send(JSON.stringify(payload))
-                        result.onreadystatechange = ()=>{
-                            if(result.readyState === 4) {
-                                let table = document.getElementById('table')
-                                addRow(result.responseText,par,base,table)
+                    }
+                    let result = new XMLHttpRequest()
+                    result.open('post',`result/${data.id}/getAnswersCount`)
+                    result.setRequestHeader('content-type','application/json')
+                    result.send(JSON.stringify(payload))
+                    result.onreadystatechange = ()=>{
+                        if(result.readyState === 4) {
+                            let dataParser = JSON.parse(result.responseText)
+                            let table = document.getElementById('table')
+                            for(let row of dataParser) {
+                                addRow(row,par,base,table)
                             }
                         }
                     }

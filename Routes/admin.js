@@ -316,19 +316,20 @@ router.post('/result/:id/getAnswersBase',async (req,res)=>{
 router.post('/result/:id/getAnswersCount',async (req,res)=>{
     const data = req.body
     await DBConnect.query(`
-        SELECT COUNT(*) AS UserCount, userAnswers.StaffID as sID,userAnswers.QuizID as QuizID, Users.NTUser
-        FROM Answers
-        INNER JOIN userAnswers
-        ON Answers.AID = userAnswers.AID
-        RIGHT JOIN Users
+        SELECT Users.NTUser, Users.StaffID, userAnswers.QuizID,userAnswers.AID,COUNT(Answers.IsTrue) AS dividend FROM Users
+        LEFT JOIN userAnswers
         ON Users.StaffID = userAnswers.StaffID
-        WHERE userAnswers.QuizID = ? AND Users.StaffID = ? AND Answers.IsTrue = 1
-        `,[data.quiz,data.sID],(err,rows)=>{
+        LEFT JOIN Answers
+        ON userAnswers.AID = Answers.AID
+        WHERE userAnswers.QuizID = ? AND userAnswers.AID = Answers.AID AND Answers.IsTrue = True
+        GROUP BY Users.NTUser
+        ORDER BY dividend DESC
+        `,[data.quiz],(err,rows)=>{
             if(err) {
                 console.log(err);
                 res.status(400).send({"msg":"Bad Request - mo-postRes-04"})
             } else {
-                res.send(rows[0])
+                res.send(rows)
             } 
     })
 })
