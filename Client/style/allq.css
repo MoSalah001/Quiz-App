@@ -15,6 +15,10 @@ tr {
     background-color: red;
 }
 
+.no-show {
+    background-color: black;
+}
+
 #qid {
     border-radius: 5px;
 }

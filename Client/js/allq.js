@@ -73,15 +73,19 @@ async function addRow(response,QuizCount,base,table){
     const sID = document.createElement('td')
     sID.textContent = data.StaffID
     const qID = document.createElement('td')
-    qID.textContent = data.QuizID
+    qID.textContent = data.QuizID ? data.QuizID : "No Show"
     qID.setAttribute('id','qid')
     qID.setAttribute('sid',data.StaffID)
-    qID.addEventListener('click',showUserAnswers)
+    if(data.QuizID) {
+        qID.addEventListener('click',showUserAnswers)
+    }
     const quotient = document.createElement('td')
     quotient.textContent = ((data.dividend / QuizCount)*100).toFixed(0)+"%"
     let check = data.dividend >= base ? true : false
     if(check){
         row.classList.add('pass')
+    } else if(qID.textContent === "No Show"){
+        row.classList.add('no-show')
     } else {
         row.classList.add('fail')
     }

@@ -321,7 +321,8 @@ router.post('/result/:id/getAnswersCount',async (req,res)=>{
         ON Users.StaffID = userAnswers.StaffID
         LEFT JOIN Answers
         ON userAnswers.AID = Answers.AID
-        WHERE userAnswers.QuizID = ? AND userAnswers.AID = Answers.AID AND Answers.IsTrue = True
+        AND userAnswers.QuizID = ? AND userAnswers.AID = Answers.AID AND Answers.IsTrue = True
+        WHERE Users.Admin = False
         GROUP BY Users.NTUser
         ORDER BY dividend DESC
         `,[data.quiz],(err,rows)=>{
