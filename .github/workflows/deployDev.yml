@@ -2,7 +2,7 @@ on:
   push:
     branches:
       - dev
-name: Deploy to CPanel
+name: Deploy to Beta
 jobs:
   web-deploy:
     name: deploy Cpanel
