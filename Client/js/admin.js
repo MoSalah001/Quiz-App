@@ -35,9 +35,13 @@ window.onload = ()=>{
 function saveQuiz(e){
     // e.preventDefault()
     const data = {
-        date: new Date(document.getElementById("date").value).toISOString(),
+        name: document.getElementById("q-name").value,
+        dbName: document.getElementById("q-name").value +"-"+ current,
+        date: new Date().toISOString(),
         duration: document.getElementById("duration").value
     }
+    console.log(data);
+    
     const xhr = new XMLHttpRequest()
     xhr.open("post","newq/new",true)
     xhr.setRequestHeader("content-type","application/json")

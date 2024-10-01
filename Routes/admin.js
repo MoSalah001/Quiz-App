@@ -39,19 +39,19 @@ router.post('/newq/new',(req,res)=>{
         user: req.headers.cookie.substring(filterCookie+5,filterCookie+12)
     }
     const quizData = {
-        quizID: `${new Date(req.body.date).getDate()}${new Date(req.body.date).getMonth()}-${cleanCookie.user}` ,
-        quizDate: new Date(req.body.date).toISOString(),
+        quizID: req.body.dbName.toUpperCase(),
+        quizName: req.body.name.toUpperCase(),
         quizCreator: cleanCookie.user,
         quizDuration: req.body.duration
     }
-    DBConnect.query("INSERT INTO Quiz (QuizID,QDate,QCreator,Duration) VALUES (?,TIMESTAMP(?),?,?)",[quizData.quizID,quizData.quizDate,quizData.quizCreator,quizData.quizDuration],(err,rows)=>{
+    DBConnect.query("INSERT INTO Quiz (QuizID,QName,QCreator,Duration) VALUES (?,?,?,?)",[quizData.quizID,quizData.quizName,quizData.quizCreator,quizData.quizDuration],(err,rows)=>{
         if(err) {
-            res.status(400).send({"msg":"You already set a quiz on the selected day"})
+            res.status(400).send({"msg":"You already set a quiz with the same name"})
         } else {
             res.cookie("quizID",quizData.quizID)
             res.status(200).send({
                 "quizID":quizData.quizID,
-                "msg":"Quiz Assigned Successfully"
+                "msg":"Quiz Created Successfully"
             })
         }
     })
@@ -65,7 +65,7 @@ router.get('/editq',async (req,res)=>{
 router.post('/getQuizList',async (req,res)=>{
     const filterCookie = req.headers.cookie.indexOf("user=")
     const user = req.headers.cookie.substring(filterCookie+5,filterCookie+12)
-    DBConnect.query("SELECT * FROM Quiz WHERE QCreator = ? AND DATE(QDate) > NOW()",user,(err,rows)=>{
+    DBConnect.query("SELECT * FROM Quiz WHERE QCreator = ? ORDER BY QCreationDate DESC",user,(err,rows)=>{
         if(err) {
             console.log(err);
             res.send(err)

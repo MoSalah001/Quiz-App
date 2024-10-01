@@ -6,10 +6,10 @@
     width: 40dvw;
     max-width: 90dvw;
     border-radius: 5px;
-    box-shadow:  0px 0px 8px black;
+    box-shadow:  0px 0px 4px black;
     margin: 10px 0px;
     z-index: 0;
-    color: var(--btn-light-green);
+    color: darkblue;
     text-shadow: 0px 0px 5px var(--nav-light-yellow);
     font: 700 36px "Bodoni MT";
 }
@@ -19,11 +19,11 @@
     text-shadow: 0px 0px 2px var(--nav-light-yellow);
 }
 
-.quizCard[status="Assigned"]{
+.quizCard[status="Created"]{
     background-color: goldenrod;
 }
 
-.quizCard[status="Done"] {
+.quizCard[status="Populated"] {
     background-color: var(--text-light-green);
 }
 
