@@ -112,8 +112,7 @@ router.post('/setQ/qid',async (req,res)=>{
     const qid = req.body.qid
     DBConnect.query("SELECT * FROM Questions JOIN Answers ON Questions.QID = Answers.QID WHERE Questions.QuizID=?",qid,(err,rows)=>{
         if(err){
-            res.status(400).send(err)
-            // res.send({"msg":"SQL Error. Please Refer back to system admin"})
+            res.status(400).send({"msg":"Please Refer back to system admin - Err#122"})
         } else {
             res.status(200).send(rows)
         }
@@ -125,29 +124,56 @@ router.post('/setq/save',async (req,res)=>{
     const qTable = [parsedData.qid,parsedData.qValue]
     DBConnect.query("INSERT INTO Questions(QuizID,QValue) Values(?)",[qTable],(err,rows)=>{
         if(err) {
+            console.log(err);
             res.status(400).send(err)
-        } else {
+        } else {                        
             const answers = parsedData.answers
             for(let answer of answers) {
                 let singleArr=[rows.insertId,answer.value,answer.isChecked]
                 DBConnect.query("INSERT INTO Answers(QID,AValue,IsTrue) Values(?)",[singleArr],(err,rows)=>{
                     if(err) {
                         res.status(400).send(err)
-                    }
+                    }                    
                 })
             }
-            res.status(200).send({"msg":"Question Added Sucessfully"})
+            DBConnect.query("SELECT COUNT(QuizID) AS Counter from Questions WHERE QuizID=?",[parsedData.qid],(err,rows)=>{
+                if(rows[0].Counter > 0) {
+                    DBConnect.query("UPDATE Quiz SET QStatus='Populated' WHERE QuizID=?",[parsedData.qid],(err,rows)=>{
+                        if(err) {
+                            res.status(400).send({"msg":"Internal Error - Err#501"})
+                        } else {
+                            res.status(200).send({"msg":"Question Added Sucessfully"})
+                        }
+                    })
+                }     
+            })
+            
+            
         }
     })
 })
 
 router.post('/setq/delete',async (req,res)=>{
     const parsedData = req.body
+    
     DBConnect.query("DELETE FROM Questions WHERE QID=?",parsedData.questionID,(err,rows)=>{
         if(err) {
             res.send(err)
         } else {
-            res.status(200).send({"msg":"Question Removed"})
+            DBConnect.query("SELECT COUNT(QuizID) AS Counter from Questions WHERE QuizID=?",[parsedData.quizID],(err,rows)=>{
+                console.log(rows);
+                if(rows[0].Counter == 0) {                    
+                    DBConnect.query("UPDATE Quiz SET QStatus='Created' WHERE QuizID=?",[parsedData.quizID],(err,rows)=>{
+                        if(err) {
+                            res.status(400).send({"msg":"Internal Error - Err#502"})
+                        } else {
+                            res.status(200).send({"msg":"Question Removed"})
+                        }
+                    })
+                } else {
+                    res.status(200).send({"msg":"Question Removed"})
+                }     
+            })
         }
     })
 })

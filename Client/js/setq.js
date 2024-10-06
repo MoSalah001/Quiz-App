@@ -159,7 +159,7 @@ function getSaved(data) {
 }
 
 function deleteQ(e){
-    let confirm = window.alert("Are you sure you want to delete this question/n this action can't be undone")
+    let confirm = window.confirm("Are you sure you want to delete this question/n this action can't be undone")
     if(confirm){
         const data = {
             questionID:e.target.getAttribute("QID"),

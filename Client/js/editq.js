@@ -73,8 +73,8 @@ function getQuizez(){
                 const qDate = document.createElement('p')
                 const formatedDate = new Date(quizList[i].QCreationDate).toLocaleString('en-CA').split(",")
                 qDate.innerHTML = `Quiz Creation Date: <span class="quizListTemp">${formatedDate[0]}</span>`
-                // const qTime = document.createElement('p')
-                // qTime.innerHTML = `Quiz Time: <span class="quizListTemp">${formatedDate[1]}</span>`
+                const qName = document.createElement('p')
+                qName.innerHTML = `Quiz Name: <span class="quizListTemp">${quizList[i].QName}</span>`
                 const qStatus = document.createElement('p')
                 qStatus.innerHTML = `Quiz Status: <span class="quizListTemp">${quizList[i].QStatus}</span>`
                 const qCreator = document.createElement('p')
@@ -103,7 +103,7 @@ function getQuizez(){
                 // end of buttons section
                 div.setAttribute('status',quizList[i].QStatus)
                 div.setAttribute('ID',quizList[i].QuizID)
-                div.append(quizID,qDate,qStatus,qDuration,qCreator,btnSection)
+                div.append(quizID,qName,qDate,qStatus,qDuration,qCreator,btnSection)
                 main.append(div)
             }
         }
