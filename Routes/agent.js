@@ -20,7 +20,7 @@ router.use(async (req,res,next)=>{
             return decoded
         }
     })
-    if(check.staffID == user) {
+    if(check && check.staffID == user) {
         next()
     } else {
         res.redirect('/')
