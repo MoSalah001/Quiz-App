@@ -2,11 +2,14 @@ import { loadingSlider, responseMsg } from "./loader.mjs"
 
 export function quizCard(rows) {
     const dataArray = JSON.parse(rows)
-    for(let i in dataArray) {
+    for(let i in dataArray) {        
         const testCard = new QuizCard(dataArray[i]).create()
         const app = document.getElementById('app')
-        if(testCard == null) continue
-        else {
+        if(testCard == null) {
+            console.log('no');
+            continue
+        }
+        else {                        
             app.append(testCard)
         }
     }
@@ -28,54 +31,30 @@ export function resultCard(rows) {
 class QuizCard{
     constructor(rows) {
         this.id = rows.QuizID
-        this.date = rows.QDate
-        this.status = rows.QStatus
+        this.name = rows.QName
         this.creator = rows.QCreator
         this.duration = rows.Duration
     }
 
-    create(){
+    create(){        
         const fragment = document.createDocumentFragment()
         const div = document.createElement('div')
         div.classList.add('card')
         div.setAttribute('id',this.id)
-        const filterDate = new Date(this.date).getTime()
-        const zone = Math.abs(new Date(this.date).getTimezoneOffset()*60*1000)
-        const zonedDate = filterDate+zone
-        const shownDate = new Date(zonedDate).toLocaleString('en-CA').split(',')
-        const date = document.createElement('p')
-        date.textContent = "Quiz Date: "+ shownDate[0]
-        const quizTime = document.createElement('p')
-        quizTime.innerHTML = `Quiz Time: ${shownDate[1]}`
-        const status = document.createElement('p')
-        status.textContent ="Quiz Status: "+ this.status
         const creator = document.createElement('p')
         creator.textContent ="Created By: "+ this.creator
+        creator.setAttribute('id',this.id)
         const duration = document.createElement('p')
         duration.textContent = "Quiz Duration: "+ this.duration
+        duration.setAttribute('id',this.id)
         const id = document.createElement('p')
         id.textContent = "Quiz ID: "+this.id
-        div.append(id,date,quizTime,status,creator,duration)
-        const startTime = new Date(zonedDate)
-        const calculateDuration = startTime.getTime()+(this.duration*60*1000)
-        const endTime = new Date(calculateDuration)
-        const now = new Date()
-        if( startTime.getTime() < now.getTime()  &&
-            now.getTime() < endTime.getTime() ) {
-                div.setAttribute('type','pending')
-                div.addEventListener('click',takeQuiz)
-            } else {
-                div.addEventListener('click',notYet)
-            }
-            fragment.append(div)
-        if( startTime.getTime() < now.getTime()  &&
-            now.getTime() > endTime.getTime() 
-        ) {
-
-            return null
-        } else {
-            return fragment
-        }
+        id.setAttribute('id',this.id)
+        div.addEventListener('click',takeQuiz)
+        div.append(id,creator,duration)
+        fragment.append(div)       
+        
+        return fragment
     }
 
 
@@ -131,6 +110,8 @@ function takeQuiz(e){
     const data = {
         id:e.target.parentElement.getAttribute('id')
     }
+    console.log(e.target.id);
+    
     const xhr = new XMLHttpRequest()
     xhr.open('post',`./quiz${data.id}`)
     xhr.send()
@@ -138,8 +119,11 @@ function takeQuiz(e){
     xhr.onreadystatechange = ()=>{
         if(xhr.readyState === 4 && xhr.status !== 400) {
             window.localStorage.setItem("json",xhr.responseText)
-            const qid = JSON.parse(xhr.responseText)[0].QuizID
-            window.localStorage.setItem("qid",qid)
+            if(xhr.responseText[0]) {
+                const qid = JSON.parse(xhr.responseText)[0].QuizID
+                window.localStorage.setItem("qid",qid)
+            }            
+        
             const subXhr = new XMLHttpRequest()
             subXhr.open('get',`./quiz/q${data.id}`)
             subXhr.send()

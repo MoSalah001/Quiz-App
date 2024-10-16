@@ -42,19 +42,25 @@ function getNextQuiz() {
             subXhr.open('post','agent/quizData')
             subXhr.setRequestHeader('content-type','application/json')
             subXhr.send(JSON.stringify(jsonParser[0]))
-            try {
-                const rows = JSON.parse(subXhr.responseText)
-                console.log(rows);
-                
-                if(rows.length !== 0){
-                    quizDate.textContent = `New Quiz Assgined - Take It Now`
-                    } else {
-                    quizDate.textContent = `No new quiz assigned`
+            subXhr.onreadystatechange = ()=>{
+                if(subXhr.readyState === 4) {
+                    try {
+                        const rows = JSON.parse(subXhr.responseText)
+                        window.localStorage.setItem('rows',JSON.stringify(rows))
+                        
+                        if(rows.length !== 0){
+                            quizDate.textContent = `New Quiz Assgined - Take It Now`
+                            } else {
+                            quizDate.textContent = `No new quiz assigned`
+                        }
+                    }
+                    catch{
+                        window.location.assign(xhr.responseURL)
+                    }
+
                 }
             }
-            catch{
-                window.location.assign(xhr.responseURL)
-            }
+            
         }
     }
 }

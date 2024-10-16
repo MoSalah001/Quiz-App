@@ -3,20 +3,34 @@ const timer = document.getElementById("timer")
 let counter;
 const xhr = new XMLHttpRequest()
 xhr.open('post','timer')
-console.log(window.localStorage.getItem("qid"));
-xhr.send(window.localStorage.getItem("qid"))
+xhr.setRequestHeader('content-type','application/json')
+xhr.send(window.localStorage.getItem("rows"))
 xhr.onreadystatechange = ()=>{
     if(xhr.readyState === 4) {
-        console.log(xhr.responseText);
-        let time = JSON.parse(xhr.responseText)[0].Duration
-        let start = JSON.parse(xhr.responseText)[0].QDate
-        counter = new Date((time*60*1000)-(new Date().getTime() - new Date(start).getTime()))
-        timer.textContent = `${counter.getMinutes()} : ${counter.getSeconds()}`
+        return
     }
 }
+const subXhr = new XMLHttpRequest()
+subXhr.open('post','getTimer')
+subXhr.setRequestHeader('content-type','application/json')
+subXhr.send(window.localStorage.getItem('rows'))
+subXhr.onreadystatechange = ()=>{
+    if(subXhr.readyState === 4) {
+        const jsonParser = JSON.parse(subXhr.responseText)
+        console.log(jsonParser);
+        const startTime = new Date(jsonParser.StartTime).getTime()
+        const quizDuration = jsonParser.Duration*60
+        const finishTime = startTime+quizDuration
+        let time = finishTime
+        let start = startTime
+        counter = new Date(time-(start + new Date().getTime()))
+        timer.textContent = `${counter.getUTCMinutes()} : ${counter.getUTCSeconds()}`
+    }
+}
+
 setInterval(() => {
     counter-=1000
-    timer.textContent = `${new Date(counter).getMinutes()} : ${new Date(counter).getSeconds()}`
+    timer.textContent = `${new Date(counter).getUTCMinutes()} : ${new Date(counter).getUTCSeconds()}`
 }, 1000);
 
 window.onload = ()=>{

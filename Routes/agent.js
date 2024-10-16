@@ -28,7 +28,7 @@ router.use(async (req,res,next)=>{
     
 })
 
-router.all('/agentData',async(req,res)=>{
+router.post('/agentData',async(req,res)=>{
     const parsedData = req.body    
     DBConnect.query("SELECT StaffID,StoreID,AreaID FROM Users WHERE StaffID =?",[parsedData.user],(err,rows)=>{
         if(err) throw err
@@ -67,10 +67,12 @@ router.get('/getquizes',async (req,res)=>{
 router.post('/quiz:id',(req,res)=>{
     let filterCookie = req.headers.cookie.indexOf('user=');
     const user = req.headers.cookie.substring(filterCookie+5,filterCookie+11)
+    
     DBConnect.query('SELECT * FROM userAnswers WHERE StaffID = ? AND userAnswers.QuizID = ?',[String(user),req.params.id],(err,rows)=>{
         if(err) {
             res.status(500).send({"msg":"Refer back to system admin - Error mo-sel-1"})
         } else {
+            
             if(rows.length > 0) {
                 res.status(400).send({"msg":"Your answers for the selected quiz are already submitted"})
             } else {
@@ -119,9 +121,39 @@ router.post('/quiz/answers',(req,res)=>{
 })
 
 router.post('/quiz/timer',(req,res)=>{
-    const qid = req.body
-    DBConnect.query("SELECT Duration,QDate FROM Quiz WHERE QuizID = ?",qid,(err,rows)=>{
-        res.send(rows)
+    let filterCookie = req.headers.cookie.indexOf('user=');
+    const user = req.headers.cookie.substring(filterCookie+5,filterCookie+11)
+    const parsedData = req.body[0]
+    DBConnect.query("SELECT Tickler,QuizID FROM History WHERE Tickler=? AND QuizID=?",[user,parsedData.QuizID],(err,rows)=>{
+        if(err){
+            console.error(err)
+        } else {
+            
+            if(rows.length > 0){  
+                return
+            } else {
+                DBConnect.query("INSERT INTO History(QuizID,Duration,StartTime,Tickler,Affects) VALUES(?,?,CURRENT_TIMESTAMP,?,?) ",[parsedData.QuizID,parsedData.Duration,user,parsedData.Affects],(err,rows)=>{
+                    if(err){
+                        console.error(err)
+                    } else {
+                        res.send(rows)
+                    }
+                })
+            }
+        }
+    })
+    
+})
+router.post('/quiz/getTimer',(req,res)=>{
+    let filterCookie = req.headers.cookie.indexOf('user=');
+    const user = req.headers.cookie.substring(filterCookie+5,filterCookie+11)
+    const parsedData = req.body[0]
+    DBConnect.query("SELECT StartTime,Duration FROM History WHERE Tickler=? AND QuizID=?",[user,parsedData.QuizID],(err,rows)=>{
+        if(err){
+            console.error(err)
+        } else {            
+            res.send(rows[0])
+        }
     })
 })
 

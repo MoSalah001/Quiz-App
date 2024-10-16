@@ -22,8 +22,16 @@
     width: 80dvw;
 }
 
-.card[type=result] {
+.card {
     background-color: var(--text-light-green);
+}
+
+.card div p {
+    z-index: 0;
+}
+
+.card div {
+    z-index: 2;
 }
 
 .card[type=pending] {
@@ -35,5 +43,13 @@
     .card {
         width: 30dvw;
         font-size: 30px;
+    }
+
+    .card div {
+        z-index: 2;
+    }
+
+    .card div p {
+        z-index: 0;
     }
 }

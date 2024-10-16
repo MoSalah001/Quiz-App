@@ -99,11 +99,7 @@ function setPassword(e){
         }
     }
 }
-navigator.serviceWorker.getRegistrations().then(registrations => {
-    for (const registration of registrations) {
-        registration.unregister();
-    } 
-});
+
 
 // if('serviceWorker' in navigator) {
 //     send().catch(err=>{
@@ -111,25 +107,25 @@ navigator.serviceWorker.getRegistrations().then(registrations => {
 //     })
 // }
 
-// const registerServiceWorker = async()=>{
-//     if('serviceWorker' in navigator) {
-//         try{
-//             const registration = await navigator.serviceWorker.register('../sw.js',{
-//                 scope: '/'
-//             })
-//             if(registration.installing) {
-//                 console.log('service worker installing');
-//             } else if( registration.waiting) {
-//                 console.log('service worker installed');
-//             } else if(registration.active) {
-//                 console.log('service worker active');
-//             }
-//         } catch (error) {
-//             console.error(`Reg faield with ${error}`)
-//         }
-//     }
-// }
-// registerServiceWorker()
+const registerServiceWorker = async()=>{
+    if('serviceWorker' in navigator) {
+        try{
+            const registration = await navigator.serviceWorker.register('../sw.js',{
+                scope: '/'
+            })
+            if(registration.installing) {
+                console.log('service worker installing');
+            } else if( registration.waiting) {
+                console.log('service worker installed');
+            } else if(registration.active) {
+                console.log('service worker active');
+            }
+        } catch (error) {
+            console.error(`Reg faield with ${error}`)
+        }
+    }
+}
+registerServiceWorker()
 
 // async function send(){
 //     const register = await navigator.serviceWorker.register("../sw.js")
