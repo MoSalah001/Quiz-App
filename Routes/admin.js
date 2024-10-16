@@ -416,17 +416,4 @@ router.post('/editq/assign',async (req,res)=>{
 })
 
 
-// to execute sql statments directly
-/*
-router.get('/sqlExecute',async(req,res)=>{
-    DBConnect.query("ALTER TABLE Users ADD CONSTRAINT fk_Stores_StoreID_Unique FOREIGN KEY (StoreID) REFERENCES Stores(StoreID)",(err,rows)=>{
-        if(err){
-            console.log(err);
-        } else {
-            res.send(rows)
-        }
-    })
-})
-*/
-
 module.exports = router;

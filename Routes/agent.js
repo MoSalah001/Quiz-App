@@ -27,7 +27,8 @@ router.use(async (req,res,next)=>{
     }
     
 })
-router.post('/agentData',async(req,res)=>{
+
+router.all('/agentData',async(req,res)=>{
     const parsedData = req.body    
     DBConnect.query("SELECT StaffID,StoreID,AreaID FROM Users WHERE StaffID =?",[parsedData.user],(err,rows)=>{
         if(err) throw err

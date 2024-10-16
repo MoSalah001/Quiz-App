@@ -225,18 +225,3 @@ app.post('/subscribe', (req,res)=>{
     })
 })
 
-setInterval(checkQuizStatus,1800000)
-
-function checkQuizStatus(){
-    DBConnect.query(`
-        UPDATE Quiz
-        SET QStatus = "Done"
-        WHERE DATE_ADD(QDate, INTERVAL 1 HOUR) <= NOW()
-        `,(err,result)=>{
-            if(err){
-                console.log(err);
-            } else {
-                console.log(result);
-            }
-        })
-}

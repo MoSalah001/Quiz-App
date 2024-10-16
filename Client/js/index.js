@@ -99,29 +99,54 @@ function setPassword(e){
         }
     }
 }
+navigator.serviceWorker.getRegistrations().then(registrations => {
+    for (const registration of registrations) {
+        registration.unregister();
+    } 
+});
 
+// if('serviceWorker' in navigator) {
+//     send().catch(err=>{
+//         console.error(err)
+//     })
+// }
 
-if('serviceWorker' in navigator) {
-    send().catch(err=>{
-        console.error(err)
-    })
-}
-    
-async function send(){
-    const register = await navigator.serviceWorker.register("../sw.js")
-    // if(Notification.permission == 'granted') {
-    //     const subscription =  await register.pushManager.subscribe({
-    //         userVisibleOnly : true,
-    //         applicationServerKey : "BGRa7VZ1GpJjfeLQn6UIs2TF2A8JF3GtXURVlvnprd8PBC27gO2KiCdmSt4ozQRoJIkG7ITVehIdc-2Z01e575c"
-    //     })
-    //     await fetch('subscribe',{
-    //         method: "post",
-    //         headers: {"Content-type":"application/json"},
-    //         body: JSON.stringify(subscription)
-    //     })
-    // } else {
-    //     Notification.requestPermission().then(permission=>{
-    //         console.log(permission);
-    //     })
-    // }
-}
+// const registerServiceWorker = async()=>{
+//     if('serviceWorker' in navigator) {
+//         try{
+//             const registration = await navigator.serviceWorker.register('../sw.js',{
+//                 scope: '/'
+//             })
+//             if(registration.installing) {
+//                 console.log('service worker installing');
+//             } else if( registration.waiting) {
+//                 console.log('service worker installed');
+//             } else if(registration.active) {
+//                 console.log('service worker active');
+//             }
+//         } catch (error) {
+//             console.error(`Reg faield with ${error}`)
+//         }
+//     }
+// }
+// registerServiceWorker()
+
+// async function send(){
+//     const register = await navigator.serviceWorker.register("../sw.js")
+
+//     // if(Notification.permission == 'granted') {
+//     //     const subscription =  await register.pushManager.subscribe({
+//     //         userVisibleOnly : true,
+//     //         applicationServerKey : "BGRa7VZ1GpJjfeLQn6UIs2TF2A8JF3GtXURVlvnprd8PBC27gO2KiCdmSt4ozQRoJIkG7ITVehIdc-2Z01e575c"
+//     //     })
+//     //     await fetch('subscribe',{
+//     //         method: "post",
+//     //         headers: {"Content-type":"application/json"},
+//     //         body: JSON.stringify(subscription)
+//     //     })
+//     // } else {
+//     //     Notification.requestPermission().then(permission=>{
+//     //         console.log(permission);
+//     //     })
+//     // }
+// }

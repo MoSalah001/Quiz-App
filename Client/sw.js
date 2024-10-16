@@ -1,18 +1,3 @@
-async function networkFirst(request) {
-    try {
-        const networkResponse = await fetch(request);
-        if(networkResponse.ok) {
-            const cache = await caches.open("myCache")
-            cache.put(request,networkResponse.clone())
-        }
-        return networkResponse
-    } catch(error) {
-        const cachedResponse = await caches.match(request)
-        return cachedResponse || Response.error()
-    }
-}
-
-
 self.addEventListener('install',async ()=>{
     await caches.open('static')
     .then(cache=>{
@@ -20,8 +5,6 @@ self.addEventListener('install',async ()=>{
             '/',
             '/index.html',
             '/js/index.js',
-            '/js/admin.js',
-            '/js/agent.js',
             '/style/index.css',
             '/style/admin.css',
             '/style/agent.css',
@@ -35,15 +18,27 @@ self.addEventListener('install',async ()=>{
     })
 })
 
-self.addEventListener('activate',async ()=>{
-    const subscription = await self.registration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: "BGRa7VZ1GpJjfeLQn6UIs2TF2A8JF3GtXURVlvnprd8PBC27gO2KiCdmSt4ozQRoJIkG7ITVehIdc-2Z01e575c"
-    })
-})
+// self.addEventListener('activate',async ()=>{
+//     const subscription = await self.registration.pushManager.subscribe({
+//         userVisibleOnly: true,
+//         applicationServerKey: "BGRa7VZ1GpJjfeLQn6UIs2TF2A8JF3GtXURVlvnprd8PBC27gO2KiCdmSt4ozQRoJIkG7ITVehIdc-2Z01e575c"
+//     })
+// })
 
 self.addEventListener('fetch',(event)=>{
-    event.respondWith(networkFirst(event.request))
+    let request = event.request;
+    if (event.request.cache === 'only-if-cached' && event.request.mode !== 'same-origin') return;
+
+    if (request.headers.get('Accept').includes('text/javascript')) {
+        event.respondWith(fetch(request).then((response)=>{
+            return response
+        }).catch((error)=>{
+            return caches.match(request).then((response)=>{
+                return response
+            })
+        }))
+        return;
+      }
 })
 
 
