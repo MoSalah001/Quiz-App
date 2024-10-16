@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../style/general.css">
+    <link rel="stylesheet" href="../../style/assignForm.css">
+    <title>Quiz Hub - admin portal</title>
+</head>
+<body>
+    <h5 id="user"></h5>
+    <h1>Quiz App</h1>
+    <div id="app">
+        <div id="form">
+            <label for="impact">Whom to Exam?</label>
+            <select name="impact" required id="impact">
+                <option value="" selected disabled>Please Select</option>
+                <option value="Area">Area</option>
+                <option value="Store">Store</option>
+                <option value="Agent">Agent</option>
+            </select>
+            <datalist id="data">
+
+            </datalist>
+        </div>
+        
+    </div>
+    <a id="back" href="../">back</a>
+    <script src="../../js/assignForm.js" type="module"></script>
+</body>
+</html>

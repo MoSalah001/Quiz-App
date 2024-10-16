@@ -27,11 +27,24 @@ router.use(async (req,res,next)=>{
     }
     
 })
-
-router.get('/quizez',async(req,res)=>{
-    DBConnect.query("SELECT * FROM Quiz WHERE QDate >= CURRENT_DATE() ORDER BY QDate ASC",(err,rows)=>{
+router.post('/agentData',async(req,res)=>{
+    const parsedData = req.body    
+    DBConnect.query("SELECT StaffID,StoreID,AreaID FROM Users WHERE StaffID =?",[parsedData.user],(err,rows)=>{
         if(err) throw err
         else {
+            res.send(rows)
+        }
+    })
+})
+
+router.post('/quizData',async (req,res)=>{
+    const parsedData = req.body
+    console.log(parsedData);
+    DBConnect.query('SELECT * FROM Quiz INNER JOIN Assigned ON Quiz.QuizID = Assigned.QuizID WHERE Assigned.Affects = ? OR Assigned.Affects = ? OR Assigned.Affects=?',[parsedData.StaffID,parsedData.StoreID,parsedData.AreaID],(err,rows)=>{
+        if(err){
+            console.log(err);
+            
+        } else {
             res.send(rows)
         }
     })

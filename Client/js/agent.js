@@ -30,77 +30,32 @@ checkUserStatus()
 
 function getNextQuiz() {
     const xhr = new XMLHttpRequest()
-    xhr.open('get','agent/quizez')
-    xhr.send()
+    xhr.open('post','agent/agentData')
+    xhr.setRequestHeader('content-type','application/json')
+    xhr.send(JSON.stringify({user: current}))
     loadingSlider(xhr)
     xhr.onreadystatechange = ()=>{
         if(xhr.readyState === 4) {
             loadingSlider(xhr)
+            let jsonParser = JSON.parse(xhr.responseText)            
+            const subXhr = new XMLHttpRequest()
+            subXhr.open('post','agent/quizData')
+            subXhr.setRequestHeader('content-type','application/json')
+            subXhr.send(JSON.stringify(jsonParser[0]))
             try {
-                const rows = JSON.parse(xhr.responseText)
+                const rows = JSON.parse(subXhr.responseText)
+                console.log(rows);
+                
                 if(rows.length !== 0){
-                    for(let i of rows) {
-                        let now = new Date().getTime()
-                        let qDate = new Date(i.QDate).getTime()
-                        let zone = Math.abs(new Date(i.QDate).getTimezoneOffset()*60*1000)
-                        let zonedDate = new Date(qDate+zone).getTime()
-                        if(zonedDate > now) {
-                            const quizDateObj = new Date(zonedDate)
-                            const day = 60 * 60 * 24 * 1000
-                            let variance = quizDateObj.getTime() - now
-                            let dayVar = variance/day
-                            let dateVariance = new Date(variance)
-                            let fixHours = (variance - zone)/1000/60/60
-                            quizDate.textContent = `
-                                ${dateVariance.getMonth()} M 
-                                ${Math.floor(dayVar)} D
-                                ${Math.floor(fixHours)} H: 
-                                ${dateVariance.getMinutes()} M: 
-                                ${dateVariance.getSeconds()} S
-                            `
-                            countDown(variance,dateVariance,day,0,zone)
-                        } else if(
-                            (zonedDate <= now) &&
-                            (now < zonedDate+(i.Duration*60*1000))) {
-                                quizDate.textContent = `Take the quiz now!!`
-                                break
-                        } else {
-                            
-                            quizDate.textContent = `No new quiz assigned`
-                        }
-                    }
-                } else {
+                    quizDate.textContent = `New Quiz Assgined - Take It Now`
+                    } else {
                     quizDate.textContent = `No new quiz assigned`
                 }
             }
             catch{
                 window.location.assign(xhr.responseURL)
             }
-            
-            
         }
     }
 }
 getNextQuiz()
-
-function countDown(variance,dateVariance,day,clear,zone){
-    if(clear === 0) {
-        setInterval(()=>{
-            variance-=1000
-            dateVariance = new Date(variance)
-            let fixHours = (variance - zone)/1000/60/60
-            let dayVar = variance/day
-            quizDate.textContent = `
-                ${dateVariance.getMonth()} M 
-                ${Math.floor(dayVar)} D
-                ${Math.floor(fixHours)} H: 
-                ${dateVariance.getMinutes()} M: 
-                ${dateVariance.getSeconds()} S
-                `
-        },1000)
-    } else {
-        console.log("test");
-        return true
-    }
-    
-}

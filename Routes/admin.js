@@ -62,6 +62,10 @@ router.get('/editq',async (req,res)=>{
     res.sendFile('./editq.html',{root: path.join(__dirname,'../Client/branch')})
 })
 
+router.get('/editq/:id',async (req,res)=>{
+res.sendFile('./assignForm.html',{root:path.join(__dirname,'../Client/branch')})
+})
+
 router.post('/getQuizList',async (req,res)=>{
     const filterCookie = req.headers.cookie.indexOf("user=")
     const user = req.headers.cookie.substring(filterCookie+5,filterCookie+12)
@@ -244,7 +248,7 @@ router.get('/allq',(req,res)=>{
 })
 
 router.post('/allq',(req,res)=>{
-    DBConnect.query("SELECT * FROM Quiz WHERE QStatus = 'Done'",(err,rows)=>{
+    DBConnect.query("SELECT * FROM Quiz LEFT JOIN Assigned ON Quiz.QuizID = Assigned.QuizID WHERE Quiz.QStatus = 'Populated'",(err,rows)=>{
         if(err) {
             res.status(400).send({"msg":"Error Code mo-allq-01"})
         } else {
@@ -360,5 +364,69 @@ router.post('/result/:id/getAnswersCount',async (req,res)=>{
             } 
     })
 })
+
+
+router.get('/editq/getData/:selectValue',async (req,res)=>{
+    switch(req.params.selectValue) {
+        case "Area":
+            //get areas
+            DBConnect.query('SELECT AreaID AS "Key", CONCAT_WS("-",AreaName,AreaID) AS Data FROM Areas',async (err,rows)=>{
+                if(err) {
+                    res.status(503).send({"msg":err.message})
+                } else {
+                    res.send(rows)
+                }
+            })
+            break;
+        case "Store":
+            //get stores
+            DBConnect.query('SELECT StoreID AS "Key",CONCAT_WS("-",StoreID,StoreName) AS Data FROM Stores',async (err,rows)=>{
+                if(err) {
+                    res.status(503).send({"msg":err.message})
+                } else {
+                    res.send(rows)
+                }
+            })
+            break;
+        case "Agent":
+            //get Agents
+            DBConnect.query('SELECT StaffID AS "Key", CONCAT_WS("-",NTUser,StaffID,StoreID) AS Data FROM Users WHERE ADMIN = 0 AND Status = "ACTIVE"',async (err,rows)=>{
+                if(err) {
+                    res.status(503).send({"msg":err.message})
+                } else {
+                    res.send(rows)
+                }
+            })
+            break;
+    }
+})
+
+router.post('/editq/assign',async (req,res)=>{
+    const parsedData = req.body
+    console.log(parsedData);
+    
+    DBConnect.query('INSERT INTO Assigned(QuizID,Duration,QuizDate,Affects) VALUES(?,?,?,?)',[parsedData.quizID,parsedData.time,parsedData.strictDate,parsedData.subImpact],async (err,rows)=>{
+        if(err) {
+            console.log(err);
+        } else {
+            res.status(200).send({"msg":"Quiz Assigned"})
+            
+        }
+    })
+})
+
+
+// to execute sql statments directly
+/*
+router.get('/sqlExecute',async(req,res)=>{
+    DBConnect.query("ALTER TABLE Users ADD CONSTRAINT fk_Stores_StoreID_Unique FOREIGN KEY (StoreID) REFERENCES Stores(StoreID)",(err,rows)=>{
+        if(err){
+            console.log(err);
+        } else {
+            res.send(rows)
+        }
+    })
+})
+*/
 
 module.exports = router;

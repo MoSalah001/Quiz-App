@@ -30,22 +30,11 @@ class ResultCard {
         div.classList.add('card')
         div.setAttribute('id',this.id)
         div.setAttribute('type','pending')
-        const filterDate = new Date(this.date)
-        const zone = filterDate.getTimezoneOffset() < 0 ? Math.abs(filterDate.getTimezoneOffset()*60*1000) : filterDate.getTimezoneOffset()*60*1000*-1 
-        const shownDate = new Date(filterDate.getTime()+zone).toLocaleString('en-CA').split(',')
-        const date = document.createElement('p')
-        date.textContent = "Quiz Date: "+ shownDate[0]
-        const quizTime = document.createElement('p')
-        quizTime.innerHTML = `Quiz Time: ${shownDate[1]}`
-        const status = document.createElement('p')
-        status.textContent ="Quiz Status: "+ this.status
         const creator = document.createElement('p')
         creator.textContent ="Created By: "+ this.creator
-        const duration = document.createElement('p')
-        duration.textContent = "Quiz Duration: "+ this.duration
         const id = document.createElement('p')
         id.textContent = "Quiz ID: "+this.id
-        div.append(id,date,quizTime,status,creator,duration)
+        div.append(id,creator)
         div.setAttribute('type','result')
         div.addEventListener('click',quizRes)
         fragment.append(div)

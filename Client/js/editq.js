@@ -94,12 +94,17 @@ function getQuizez(){
                 const setQuestionBtn = document.createElement('button')
                 setQuestionBtn.classList.add('edit')
                 setQuestionBtn.textContent = "Set Quiz Questions"
-                setQuestionBtn.classList.add('assigned')
+                setQuestionBtn.classList.add('set-question')
                 setQuestionBtn.setAttribute('id',quizList[i].QuizID)
                 setQuestionBtn.addEventListener('click',setQuizQuestions)
-                // setQuestionBtn.addEventListener()
 
-                btnSection.append(deleteBtn,setQuestionBtn)
+                const assignBtn = document.createElement('button')
+                assignBtn.textContent = "Assign Quiz"
+                assignBtn.classList.add("assigned")
+                assignBtn.setAttribute("id",quizList[i].QuizID)
+                assignBtn.addEventListener('click',assignQuizProcess)
+
+                btnSection.append(deleteBtn,setQuestionBtn,assignBtn)
                 // end of buttons section
                 div.setAttribute('status',quizList[i].QStatus)
                 div.setAttribute('ID',quizList[i].QuizID)
@@ -112,4 +117,27 @@ function getQuizez(){
 
 window.onload = ()=>{
     getQuizez()
+    // executeSQL()
+}
+
+// for easy sql execution
+function executeSQL(){
+    const xhr = new XMLHttpRequest()
+    xhr.open('get','sqlExecute')
+    xhr.send()
+    if(xhr.readyState === 4) {
+        window.alert(xhr.responseText)
+    }
+}
+
+function assignQuizProcess(e){
+    window.localStorage.setItem('quizID',e.target.id)
+    const xhr = new XMLHttpRequest()
+    xhr.open('get',`editq/${e.target.id}`)
+    xhr.send()
+    xhr.onreadystatechange = ()=>{
+        if(xhr.readyState === 4) {
+            window.location.href = xhr.responseURL
+        }
+    }
 }

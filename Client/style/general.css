@@ -11,6 +11,7 @@ Start of general styling
     --text-light-green : hsl(120,100%,35%);
     --text-light-yellow : hsl(60,100%,65%);
     --nav-light-yellow: hsl(60,100%,65%);
+    --text-light-purple: hsl(270,100%,30%);
 }
 
 * {

@@ -41,9 +41,9 @@
     font-size: 28px;
     border-radius: 5px;
     padding: 4px 10px;
-    color: var(--text-light-yellow);
     box-shadow: 0px 0px 3px black;
     z-index: 1;
+    color: var(--text-light-yellow);
 }
 
 .delete {
@@ -51,7 +51,10 @@
 }
 .assigned {
     background-color: var(--btn-light-green);
+}
 
+.set-question {
+    background-color: var(--text-light-purple);
 }
 
 @media screen and (max-width: 640px) {
