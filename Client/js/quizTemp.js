@@ -17,7 +17,6 @@ subXhr.send(window.localStorage.getItem('rows'))
 subXhr.onreadystatechange = ()=>{
     if(subXhr.readyState === 4) {
         const jsonParser = JSON.parse(subXhr.responseText)
-        console.log(jsonParser);
         const startTime = new Date(jsonParser.StartTime).getTime()
         const quizDuration = jsonParser.Duration*60
         const finishTime = startTime+quizDuration

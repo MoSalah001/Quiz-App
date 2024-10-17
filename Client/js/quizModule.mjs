@@ -63,7 +63,6 @@ class QuizCard{
 class ResultCard {
     constructor(rows) {
         this.id = rows.QuizID
-        this.date = rows.QDate
         this.status = rows.QStatus
         this.creator = rows.QCreator
         this.duration = rows.Duration
@@ -75,12 +74,6 @@ class ResultCard {
         div.classList.add('card')
         div.setAttribute('id',this.id)
         div.setAttribute('type','pending')
-        const filterDate = new Date(this.date).getTime()
-        const shownDate = new Date(filterDate).toLocaleString('en-CA').split(',')
-        const date = document.createElement('p')
-        date.textContent = "Quiz Date: "+ shownDate[0]
-        const quizTime = document.createElement('p')
-        quizTime.innerHTML = `Quiz Time: ${shownDate[1]}`
         const status = document.createElement('p')
         status.textContent ="Quiz Status: "+ this.status
         const creator = document.createElement('p')
@@ -89,20 +82,10 @@ class ResultCard {
         duration.textContent = "Quiz Duration: "+ this.duration
         const id = document.createElement('p')
         id.textContent = "Quiz ID: "+this.id
-        div.append(id,date,quizTime,status,creator,duration)
-        const startTime = new Date(filterDate)
-        const calculateDuration = startTime.getTime()+(this.duration*60*1000)
-        const endTime = new Date(calculateDuration)
-        const now = new Date()
-        if( startTime.getTime() < now.getTime()  &&
-            now.getTime() > endTime.getTime() ) {
-                div.setAttribute('type','result')
-                div.addEventListener('click',quizRes)
-            } else {
-                div.addEventListener('click',notYetRes)
-            }
-            fragment.append(div)
-            return fragment
+        div.append(id,status,creator,duration)
+        div.addEventListener('click',quizRes)
+        fragment.append(div)
+        return fragment
     }
 }
 
