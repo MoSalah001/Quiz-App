@@ -248,7 +248,7 @@ router.get('/allq',(req,res)=>{
 })
 
 router.post('/allq',(req,res)=>{
-    DBConnect.query("SELECT * FROM Quiz LEFT JOIN Assigned ON Quiz.QuizID = Assigned.QuizID WHERE Quiz.QStatus = 'Populated'",(err,rows)=>{
+    DBConnect.query("SELECT * FROM Quiz INNER JOIN Assigned ON Quiz.QuizID = Assigned.QuizID WHERE Quiz.QStatus = 'Populated'",(err,rows)=>{
         if(err) {
             res.status(400).send({"msg":"Error Code mo-allq-01"})
         } else {
@@ -269,6 +269,8 @@ router.post('/result/:id',(req,res)=>{
             console.log(err);
             res.status(400).send({"msg":"Bad Request - mo-postRes-01"})
         } else {
+            console.log(rows);
+            
             res.send(rows)
         }
     })
@@ -345,21 +347,23 @@ router.post('/result/:id/getAnswersBase',async (req,res)=>{
 
 router.post('/result/:id/getAnswersCount',async (req,res)=>{
     const data = req.body
+    console.log(data);
+    
     await DBConnect.query(`
         SELECT Users.NTUser, Users.StaffID, userAnswers.QuizID,userAnswers.AID,COUNT(Answers.IsTrue) AS dividend FROM Users
         LEFT JOIN userAnswers
         ON Users.StaffID = userAnswers.StaffID
         LEFT JOIN Answers
-        ON userAnswers.AID = Answers.AID
-        AND userAnswers.QuizID = ? AND userAnswers.AID = Answers.AID AND Answers.IsTrue = True
-        WHERE Users.Admin = False
+        ON userAnswers.QuizID = ?
+        AND userAnswers.AID = Answers.AID AND userAnswers.AID = Answers.AID AND Answers.IsTrue = True
+        WHERE Users.Admin = False AND userAnswers.QuizID = ?
         GROUP BY Users.NTUser
         ORDER BY dividend DESC
-        `,[data.quiz],(err,rows)=>{
+        `,[data.quiz,data.quiz],(err,rows)=>{
             if(err) {
                 console.log(err);
                 res.status(400).send({"msg":"Bad Request - mo-postRes-04"})
-            } else {
+            } else {                               
                 res.send(rows)
             } 
     })
