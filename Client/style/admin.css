@@ -11,10 +11,11 @@
     flex-direction: column;
     place-content: center;
     list-style: none;
+    max-height: 75vh;
 }
 .nav-ul li {
     text-align: center;
-    margin: 25px auto;
+    margin: 15px auto;
     /* border: 2px solid var(--clr-logo); */
     border-radius: 25px;
     transition: 0.7s;

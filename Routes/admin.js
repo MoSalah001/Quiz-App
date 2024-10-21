@@ -347,7 +347,6 @@ router.post('/result/:id/getAnswersBase',async (req,res)=>{
 
 router.post('/result/:id/getAnswersCount',async (req,res)=>{
     const data = req.body
-    console.log(data);
     
     await DBConnect.query(`
         SELECT Users.NTUser, Users.StaffID, userAnswers.QuizID,userAnswers.AID,COUNT(Answers.IsTrue) AS dividend FROM Users
@@ -415,6 +414,30 @@ router.post('/editq/assign',async (req,res)=>{
         } else {
             res.status(200).send({"msg":"Quiz Assigned"})
             
+        }
+    })
+})
+
+router.get('/updatedb',async (req,res)=>{
+    res.sendFile('updateDB.html',{root: path.join(__dirname,"../Client/branch")})
+})
+
+router.post('/getAreas',async (req,res)=>{
+    DBConnect.query('SELECT AreaID AS "Area", CONCAT_WS(" - ",AreaID,AreaName) AS listRow FROM Areas',(err,rows)=>{
+        if(err){
+            console.error(err)
+        }
+        res.send(rows)
+    })
+})
+
+router.post('/updateStores',async (req,res)=>{
+    const fd = req.body
+    DBConnect.query("INSERT INTO Stores VALUES(?,?,?)",[fd.storeName,fd.storeID,fd.areaID],(err,rows)=>{
+        if(err){
+            res.status(400).send(err)
+        } else {
+            res.status(200).send("Store Added Successfully")
         }
     })
 })

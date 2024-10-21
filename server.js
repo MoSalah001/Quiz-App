@@ -6,7 +6,8 @@ const app = express()
 const mysql = require('mysql')
 const webpush = require('web-push')
 const cookieParser = require('cookie-parser')
-
+const multer = require('multer')
+const upload = multer()
 require('dotenv').config()
 
 
@@ -50,6 +51,9 @@ app.use(express.text())
 app.use(express.urlencoded({
     extended: false
 }))
+app.use(upload.array()); 
+app.use(express.static('public'));
+
 app.use(express.json())
 app.use('/admin',admin)
 app.use('/agent',agent)
