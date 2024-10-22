@@ -433,7 +433,8 @@ router.post('/getAreas',async (req,res)=>{
 
 router.post('/updateStores',async (req,res)=>{
     const fd = req.body
-    DBConnect.query("INSERT INTO Stores VALUES(?,?,?)",[fd.storeName,fd.storeID,fd.areaID],(err,rows)=>{
+    
+    DBConnect.query("INSERT INTO Stores VALUES(?,?,?)",[fd.storeName,fd.storeID,fd.selectArea],(err,rows)=>{
         if(err){
             res.status(400).send(err)
         } else {

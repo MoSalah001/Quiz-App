@@ -23,12 +23,7 @@ webpush.setVapidDetails('mailto:contact@devmosalah.com',
 
 
 
-let DBConnect = mysql.createConnection({
-    host : process.env.DBHost,
-    user : process.env.DBUser,
-    password : process.env.DBPass,
-    database : process.env.DBName
-}) 
+let DBConnect;
 
 
 const port = process.env.PORT || 8800
@@ -36,14 +31,37 @@ const port = process.env.PORT || 8800
 const admin = require('./Routes/admin')
 const agent = require('./Routes/agent')
 
-DBConnect.connect((err)=>{
-    if(err){
-        console.log(`error connecting: `,err.stack);
-        return
+function dbConnect(){
+        DBConnect = mysql.createConnection({
+        host : process.env.DBHost,
+        user : process.env.DBUser,
+        password : process.env.DBPass,
+        database : process.env.DBName
+    }) 
+
+    DBConnect.connect((err)=>{
+        if(err){
+            console.log("Error connecting db .... ",err);
+            setTimeout(dbConnect,2000)
+        } else {
+            console.log('Connected');
+            
+        }
+    })
+
+    DBConnect.on('error',(err)=>{
+        console.log("DB Error: ",err);
+    if(err.code === 'PROTOCOL_CONNECTION_LOST') {
+        dbConnect()
     } else {
-        console.log(`Connected as id `,DBConnect.threadId);
+        throw err
     }
-})
+        
+    })
+}
+
+dbConnect()
+
 
 app.use(cookieParser())
 app.use(express.static("Client"))
