@@ -173,7 +173,7 @@ app.post('/firstReg',async (req,res)=>{ // first admin user
                 }
             }  else {
                 DBConnect.query(regQuery,[req.body.sfid,hash,req.body.storeID,"PENDING",req.body.NTUser.toUpperCase()],(error, result, fields)=>{
-                    if(error) {
+                    if(error) {                        
                         res.status(400).send({"msg":"User Not Saved"});
                     }
                      else {
