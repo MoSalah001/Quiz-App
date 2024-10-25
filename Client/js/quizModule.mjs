@@ -93,7 +93,6 @@ function takeQuiz(e){
     const data = {
         id:e.target.parentElement.getAttribute('id')
     }
-    console.log(e.target.id);
     
     const xhr = new XMLHttpRequest()
     xhr.open('post',`./quiz${data.id}`)

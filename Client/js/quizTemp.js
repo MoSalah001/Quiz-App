@@ -1,36 +1,49 @@
 import {loadingSlider, responseMsg} from './loader.mjs'
 const timer = document.getElementById("timer")
 let counter;
+let data
+let parser = window.localStorage.getItem('qid')
+let rowParser = JSON.parse(window.localStorage.getItem('rows'))
+rowParser.map(row=>{
+    if(row.QuizID === parser) {
+        return data = JSON.stringify(row)
+    }
+    
+})  
 const xhr = new XMLHttpRequest()
 xhr.open('post','timer')
 xhr.setRequestHeader('content-type','application/json')
-xhr.send(window.localStorage.getItem("rows"))
+xhr.send(data)
 xhr.onreadystatechange = ()=>{
     if(xhr.readyState === 4) {
-        return
+        const subXhr = new XMLHttpRequest()
+        subXhr.open('post','getTimer')
+        subXhr.setRequestHeader('content-type','application/json')
+        subXhr.send(data)
+        subXhr.onreadystatechange = ()=>{
+            if(subXhr.readyState === 4) {        
+                const jsonParser = JSON.parse(subXhr.responseText)
+                const startTime = new Date(jsonParser.StartTime).getTime()
+                const zoneOffset = Math.abs(new Date(jsonParser.StartTime).getTimezoneOffset()*60*1000)
+                const quizDuration = jsonParser.Duration*60*1000
+                const finishTime = (startTime+zoneOffset)+quizDuration
+                let time = finishTime             
+                counter = new Date(time -new Date().getTime())
+                timer.textContent = `${counter.getUTCMinutes()} : ${counter.getUTCSeconds()}`
+            }
+        }
+        let counterFunc = setInterval(() => {            
+            if(counter > 0) {
+                counter-=1000
+                timer.textContent = `${new Date(counter).getUTCMinutes()} : ${new Date(counter).getUTCSeconds()}`
+            } else {
+                clearInterval(counterFunc)
+                submitAnswer()
+            }            
+        }, 1000);
+        return counterFunc;
     }
 }
-const subXhr = new XMLHttpRequest()
-subXhr.open('post','getTimer')
-subXhr.setRequestHeader('content-type','application/json')
-subXhr.send(window.localStorage.getItem('rows'))
-subXhr.onreadystatechange = ()=>{
-    if(subXhr.readyState === 4) {
-        const jsonParser = JSON.parse(subXhr.responseText)
-        const startTime = new Date(jsonParser.StartTime).getTime()
-        const quizDuration = jsonParser.Duration*60
-        const finishTime = startTime+quizDuration
-        let time = finishTime
-        let start = startTime
-        counter = new Date(time-(start + new Date().getTime()))
-        timer.textContent = `${counter.getUTCMinutes()} : ${counter.getUTCSeconds()}`
-    }
-}
-
-setInterval(() => {
-    counter-=1000
-    timer.textContent = `${new Date(counter).getUTCMinutes()} : ${new Date(counter).getUTCSeconds()}`
-}, 1000);
 
 window.onload = ()=>{
     const submitBtn = document.getElementById('submit')

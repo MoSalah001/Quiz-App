@@ -30,7 +30,7 @@ router.use(async (req,res,next)=>{
 
 router.post('/agentData',async(req,res)=>{
     const parsedData = req.body        
-    DBConnect.query("SELECT StaffID,StoreID,AreaID FROM Users WHERE StaffID =?",[parsedData.user],(err,rows)=>{
+    DBConnect.query("SELECT StaffID,StoreID FROM Users WHERE StaffID =?",[parsedData.user],(err,rows)=>{
         if(err) throw err
         else {
             res.send(rows)
@@ -40,7 +40,6 @@ router.post('/agentData',async(req,res)=>{
 
 router.post('/quizData',async (req,res)=>{
     const parsedData = req.body
-    console.log(parsedData);
     DBConnect.query('SELECT * FROM Quiz INNER JOIN Assigned ON Quiz.QuizID = Assigned.QuizID WHERE Assigned.Affects = ? OR Assigned.Affects = ? OR Assigned.Affects=?',[parsedData.StaffID,parsedData.StoreID,parsedData.AreaID],(err,rows)=>{
         if(err){
             console.log(err);
@@ -55,15 +54,6 @@ router.get('/quizlist',async(req,res)=>{
     res.sendFile('./quizList.html',{root: path.join(__dirname,'../Client/agent')}) 
 })
 
-router.get('/getquizes',async (req,res)=>{
-    DBConnect.query("SELECT * FROM Quiz WHERE QStatus = 'Assigned' AND DATE_ADD(QDate, INTERVAL Duration MINUTE) ORDER BY QDate",(err,rows)=>{
-        if(err) throw err
-        else {
-            res.send(rows)
-        }
-    })
-})
-
 router.post('/quiz:id',(req,res)=>{
     let filterCookie = req.headers.cookie.indexOf('user=');
     const user = req.headers.cookie.substring(filterCookie+5,filterCookie+11)
@@ -75,7 +65,7 @@ router.post('/quiz:id',(req,res)=>{
             
             if(rows.length > 0) {
                 res.status(400).send({"msg":"Your answers for the selected quiz are already submitted"})
-            } else {
+            } else {                
                 DBConnect.query(
                     `
                     SELECT * FROM Questions 
@@ -87,7 +77,7 @@ router.post('/quiz:id',(req,res)=>{
                     if(err) {
                         res.send(err)
                     }
-                    else{
+                    else{                        
                         res.send(rows);
                     }
                 })
@@ -123,16 +113,22 @@ router.post('/quiz/answers',(req,res)=>{
 router.post('/quiz/timer',(req,res)=>{
     let filterCookie = req.headers.cookie.indexOf('user=');
     const user = req.headers.cookie.substring(filterCookie+5,filterCookie+11)
-    const parsedData = req.body[0]
+    const parsedData = req.body
+    let date = new Date().toISOString().replace("Z","").split("T")
+    
+    
+    
+
+    
     DBConnect.query("SELECT Tickler,QuizID FROM History WHERE Tickler=? AND QuizID=?",[user,parsedData.QuizID],(err,rows)=>{
         if(err){
             console.error(err)
         } else {
             
-            if(rows.length > 0){  
-                return
+            if(rows.length > 0){                                            
+                res.status(200).send()
             } else {
-                DBConnect.query("INSERT INTO History(QuizID,Duration,StartTime,Tickler,Affects) VALUES(?,?,CURRENT_TIMESTAMP,?,?) ",[parsedData.QuizID,parsedData.Duration,user,parsedData.Affects],(err,rows)=>{
+                DBConnect.query("INSERT INTO History(QuizID,Duration,StartTime,Tickler,Affects) VALUES(?,?,TIMESTAMP(?,?),?,?)",[parsedData.QuizID,parsedData.Duration,date[0].toString(),date[1],user,parsedData.Affects],(err,rows)=>{
                     if(err){
                         console.error(err)
                     } else {
@@ -147,7 +143,7 @@ router.post('/quiz/timer',(req,res)=>{
 router.post('/quiz/getTimer',(req,res)=>{
     let filterCookie = req.headers.cookie.indexOf('user=');
     const user = req.headers.cookie.substring(filterCookie+5,filterCookie+11)
-    const parsedData = req.body[0]
+    const parsedData = req.body
     DBConnect.query("SELECT StartTime,Duration FROM History WHERE Tickler=? AND QuizID=?",[user,parsedData.QuizID],(err,rows)=>{
         if(err){
             console.error(err)

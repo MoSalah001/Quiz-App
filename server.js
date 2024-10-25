@@ -42,7 +42,7 @@ function dbConnect(){
     DBConnect.connect((err)=>{
         if(err){
             console.log("Error connecting db .... ",err);
-            setTimeout(dbConnect,2000)
+            setTimeout(dbConnect,3000)
         } else {
             console.log('Connected');
             
@@ -54,7 +54,7 @@ function dbConnect(){
     if(err.code === 'PROTOCOL_CONNECTION_LOST') {
         dbConnect()
     } else {
-        throw err
+        console.log(err);
     }
         
     })

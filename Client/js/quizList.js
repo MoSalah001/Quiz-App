@@ -1,4 +1,3 @@
-import {loadingSlider , responseMsg} from './loader.mjs'
 import { quizCard } from './quizModule.mjs'
 const user = document.getElementById('user')
 const filterCookie = document.cookie.indexOf('user=');
