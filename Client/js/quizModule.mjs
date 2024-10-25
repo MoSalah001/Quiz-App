@@ -1,4 +1,4 @@
-import { loadingSlider, responseMsg } from "./loader.mjs"
+import { loadingSlider, responseMsg, msg } from "./loader.mjs"
 
 export function quizCard(rows) {
     const dataArray = JSON.parse(rows)
@@ -66,6 +66,7 @@ class ResultCard {
         this.status = rows.QStatus
         this.creator = rows.QCreator
         this.duration = rows.Duration
+        this.showRes = rows.ShowResult
     }
 
     result(){
@@ -83,7 +84,12 @@ class ResultCard {
         const id = document.createElement('p')
         id.textContent = "Quiz ID: "+this.id
         div.append(id,status,creator,duration)
-        div.addEventListener('click',quizRes)
+        let checkRes = this.showRes
+        if(checkRes) {
+            div.addEventListener('click',quizRes)
+        } else {
+            div.addEventListener('click',notYetRes)
+        }
         fragment.append(div)
         return fragment
     }
@@ -125,8 +131,8 @@ function notYet(e) {
     window.alert("Please Wait for quiz time")
 }
 
-function notYetRes(){
-    window.alert("Please wait for quiz to finish")
+function notYetRes(){    
+    msg("You are not allowed to see the results Yet",3)
 }
 
 function quizRes(e) {

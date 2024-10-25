@@ -14,6 +14,7 @@ Start of general styling
     --text-light-red: hsl(0,100%,50%);
     --text-light-white: hsl(0,100%,100%);
     --nav-light-yellow: hsl(60,100%,65%);
+    --bg-light-golden : hsl(42,100%,45%);
 }
 
 * {
@@ -110,6 +111,11 @@ body {
 
 .respond {
     background-color: green;
+}
+
+.info {
+    background-color: var(--bg-light-golden);
+    color: white;
 }
 
 a#back {

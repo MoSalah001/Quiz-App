@@ -408,7 +408,7 @@ router.post('/editq/assign',async (req,res)=>{
     const parsedData = req.body
     console.log(parsedData);
     
-    DBConnect.query('INSERT INTO Assigned(QuizID,Duration,QuizDate,Affects) VALUES(?,?,?,?)',[parsedData.quizID,parsedData.time,parsedData.strictDate,parsedData.subImpact],async (err,rows)=>{
+    DBConnect.query('INSERT INTO Assigned(QuizID,Duration,QuizDate,Affects,ShowResult) VALUES(?,?,?,?,0)',[parsedData.quizID,parsedData.time,parsedData.strictDate,parsedData.subImpact],async (err,rows)=>{
         if(err) {
             console.log(err);
         } else {

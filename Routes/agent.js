@@ -39,12 +39,19 @@ router.post('/agentData',async(req,res)=>{
 })
 
 router.post('/quizData',async (req,res)=>{
-    const parsedData = req.body
-    DBConnect.query('SELECT * FROM Quiz INNER JOIN Assigned ON Quiz.QuizID = Assigned.QuizID WHERE Assigned.Affects = ? OR Assigned.Affects = ? OR Assigned.Affects=?',[parsedData.StaffID,parsedData.StoreID,parsedData.AreaID],(err,rows)=>{
+    const parsedData = req.body    
+    DBConnect.query(`
+        SELECT * FROM Quiz 
+        INNER JOIN Assigned 
+        ON Quiz.QuizID = Assigned.QuizID 
+        WHERE Assigned.Affects = ? 
+        OR Assigned.Affects = ?
+        AND NOT EXISTS (SELECT Tickler FROM History WHERE Tickler = ?)
+        `,[parsedData.StaffID,parsedData.StoreID,parsedData.StaffID],(err,rows)=>{
         if(err){
             console.log(err);
-            
         } else {
+            console.log(rows);
             res.send(rows)
         }
     })
@@ -163,12 +170,17 @@ router.post('/result',(req,res)=>{
     DBConnect.query(`
     SELECT * FROM Quiz INNER JOIN userAnswers
     ON Quiz.QuizID = userAnswers.QuizID
+    LEFT JOIN Assigned
+    ON Quiz.QuizID = Assigned.QuizID
+    AND Assigned.Affects =?
     AND userAnswers.StaffID = ?
-    GROUP BY Quiz.QuizID  
-    `,String(user),(err,rows)=>{
+    GROUP BY Quiz.QuizID
+    `,[String(user),String(user)],(err,rows)=>{
         if(err){
+            console.log(err);
+            
             res.status(500).send("Refer back to system admin - Error mo-res-1")
-        } else {
+        } else {                        
             res.send(rows)
         }
     })

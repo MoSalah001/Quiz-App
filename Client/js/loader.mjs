@@ -62,3 +62,22 @@ export function loadingSliderFetchRemover(res,msg){
         },3000)
     }
 }
+
+
+export function msg(text,type){
+    const box = document.createElement('div')
+    box.classList.add('dialog')
+    box.textContent = text
+    if(type === 1 || !type) {
+        box.classList.add('respond')
+    } else if(type === "err" || type === 0) {
+        box.classList.add('error')
+    } else {
+        box.classList.add('info')
+    }
+    document.body.append(box)
+    setTimeout(()=>{
+        document.body.removeChild(box)
+    },3000)
+
+}
