@@ -79,8 +79,6 @@ function getQuizez(){
                 qStatus.innerHTML = `Quiz Status: <span class="quizListTemp">${quizList[i].QStatus}</span>`
                 const qCreator = document.createElement('p')
                 qCreator.innerHTML = `Staff ID: <span class="quizListTemp">${quizList[i].QCreator}</span>`
-                const qDuration = document.createElement('p')
-                qDuration.innerHTML = `Quiz Duration: <span class="quizListTemp">${quizList[i].Duration} Min</span>`
                 // buttons section
                 const btnSection = document.createElement('section')
                 btnSection.classList.add('buttons-section')
@@ -108,7 +106,7 @@ function getQuizez(){
                 // end of buttons section
                 div.setAttribute('status',quizList[i].QStatus)
                 div.setAttribute('ID',quizList[i].QuizID)
-                div.append(quizID,qName,qDate,qStatus,qDuration,qCreator,btnSection)
+                div.append(quizID,qName,qDate,qStatus,qCreator,btnSection)
                 main.append(div)
             }
         }
@@ -117,18 +115,8 @@ function getQuizez(){
 
 window.onload = ()=>{
     getQuizez()
-    // executeSQL()
 }
 
-// for easy sql execution
-function executeSQL(){
-    const xhr = new XMLHttpRequest()
-    xhr.open('get','sqlExecute')
-    xhr.send()
-    if(xhr.readyState === 4) {
-        window.alert(xhr.responseText)
-    }
-}
 
 function assignQuizProcess(e){
     window.localStorage.setItem('quizID',e.target.id)

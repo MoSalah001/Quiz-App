@@ -42,9 +42,8 @@ router.post('/newq/new',(req,res)=>{
         quizID: req.body.dbName.toUpperCase(),
         quizName: req.body.name.toUpperCase(),
         quizCreator: cleanCookie.user,
-        quizDuration: req.body.duration
     }
-    DBConnect.query("INSERT INTO Quiz (QuizID,QName,QCreator,Duration) VALUES (?,?,?,?)",[quizData.quizID,quizData.quizName,quizData.quizCreator,quizData.quizDuration],(err,rows)=>{
+    DBConnect.query("INSERT INTO Quiz (QuizID,QName,QCreator) VALUES (?,?,?)",[quizData.quizID,quizData.quizName,quizData.quizCreator,quizData.quizDuration],(err,rows)=>{
         if(err) {
             res.status(400).send({"msg":"You already set a quiz with the same name"})
         } else {
@@ -165,7 +164,6 @@ router.post('/setq/delete',async (req,res)=>{
             res.send(err)
         } else {
             DBConnect.query("SELECT COUNT(QuizID) AS Counter from Questions WHERE QuizID=?",[parsedData.quizID],(err,rows)=>{
-                console.log(rows);
                 if(rows[0].Counter == 0) {                    
                     DBConnect.query("UPDATE Quiz SET QStatus='Created' WHERE QuizID=?",[parsedData.quizID],(err,rows)=>{
                         if(err) {
@@ -248,7 +246,7 @@ router.get('/allq',(req,res)=>{
 })
 
 router.post('/allq',(req,res)=>{
-    DBConnect.query("SELECT * FROM Quiz INNER JOIN Assigned ON Quiz.QuizID = Assigned.QuizID WHERE Quiz.QStatus = 'Populated'",(err,rows)=>{
+    DBConnect.query("SELECT * FROM Quiz INNER JOIN Assigned ON Quiz.QuizID = Assigned.QuizID WHERE Quiz.QStatus = 'Populated' GROUP BY Quiz.QuizID",(err,rows)=>{
         if(err) {
             res.status(400).send({"msg":"Error Code mo-allq-01"})
         } else {
@@ -268,9 +266,7 @@ router.post('/result/:id',(req,res)=>{
         if(err) {
             console.log(err);
             res.status(400).send({"msg":"Bad Request - mo-postRes-01"})
-        } else {
-            console.log(rows);
-            
+        } else {            
             res.send(rows)
         }
     })
@@ -406,14 +402,31 @@ router.get('/editq/getData/:selectValue',async (req,res)=>{
 
 router.post('/editq/assign',async (req,res)=>{
     const parsedData = req.body
-    console.log(parsedData);
     
-    DBConnect.query('INSERT INTO Assigned(QuizID,Duration,QuizDate,Affects,ShowResult) VALUES(?,?,?,?,0)',[parsedData.quizID,parsedData.time,parsedData.strictDate,parsedData.subImpact],async (err,rows)=>{
+    DBConnect.query('SELECT QuizID, Affects FROM Assigned WHERE QuizID = ? AND Affects = ?',[parsedData.quizID,parsedData.subImpact],(err,check)=>{
         if(err) {
-            console.log(err);
+            console.error(err)
         } else {
-            res.status(200).send({"msg":"Quiz Assigned"})
-            
+            if(check.length > 0) {
+                res.status(400).send({"msg":"This quiz already assgined to this user"})
+            } else if (parsedData.strictDate == null) {
+                DBConnect.query('INSERT INTO Assigned(QuizID,Duration,QuizDate,Affects,ShowResult) VALUES(?,?,?,?,0)',[parsedData.quizID,parsedData.time,parsedData.strictDate,parsedData.subImpact],async (err,rows)=>{
+                    if(err) {
+                        console.log(err);
+                    } else {
+                        res.status(200).send({"msg":"Quiz Assigned"})
+                    }
+                })
+            } else {
+                const formattedDate = parsedData.strictDate
+                DBConnect.query('INSERT INTO Assigned(QuizID,Duration,QuizDate,Affects,ShowResult) VALUES(?,?,TIMESTAMP(?,?),?,0)',[parsedData.quizID,parsedData.time,formattedDate[0],formattedDate[1],parsedData.subImpact],async (err,rows)=>{
+                    if(err) {
+                        console.log(err);
+                    } else {
+                        res.status(200).send({"msg":"Quiz Assigned"})
+                    }
+                })
+            }
         }
     })
 })

@@ -40,14 +40,15 @@ router.post('/agentData',async(req,res)=>{
 
 router.post('/quizData',async (req,res)=>{
     const parsedData = req.body    
+
     DBConnect.query(`
         SELECT * FROM Quiz 
-        INNER JOIN Assigned 
-        ON Quiz.QuizID = Assigned.QuizID 
+        LEFT JOIN Assigned 
+        ON Quiz.QuizID  = Assigned.QuizID 
         WHERE Assigned.Affects = ? 
         OR Assigned.Affects = ?
-        AND NOT EXISTS (SELECT Tickler FROM History WHERE Tickler = ?)
-        `,[parsedData.StaffID,parsedData.StoreID,parsedData.StaffID],(err,rows)=>{
+        ORDER BY Assigned.ID DESC
+        `,[parsedData.StaffID,parsedData.StoreID],(err,rows)=>{
         if(err){
             console.log(err);
         } else {
@@ -122,11 +123,6 @@ router.post('/quiz/timer',(req,res)=>{
     const user = req.headers.cookie.substring(filterCookie+5,filterCookie+11)
     const parsedData = req.body
     let date = new Date().toISOString().replace("Z","").split("T")
-    
-    
-    
-
-    
     DBConnect.query("SELECT Tickler,QuizID FROM History WHERE Tickler=? AND QuizID=?",[user,parsedData.QuizID],(err,rows)=>{
         if(err){
             console.error(err)
@@ -135,13 +131,29 @@ router.post('/quiz/timer',(req,res)=>{
             if(rows.length > 0){                                            
                 res.status(200).send()
             } else {
-                DBConnect.query("INSERT INTO History(QuizID,Duration,StartTime,Tickler,Affects) VALUES(?,?,TIMESTAMP(?,?),?,?)",[parsedData.QuizID,parsedData.Duration,date[0].toString(),date[1],user,parsedData.Affects],(err,rows)=>{
-                    if(err){
-                        console.error(err)
+                /* check strict */
+                DBConnect.query("SELECT QuizDate FROM Assigned WHERE QuizID=?",[parsedData.QuizID],(err,qid)=>{
+                    let id = qid[0].QuizDate
+                    if(id == null) {
+                        DBConnect.query("INSERT INTO History(QuizID,Duration,StartTime,Tickler,Affects) VALUES(?,?,TIMESTAMP(?,?),?,?)",[parsedData.QuizID,parsedData.Duration,date[0].toString(),date[1],user,parsedData.Affects],(err,rows)=>{
+                            if(err){
+                                console.error(err)
+                            } else {
+                                res.send(rows)
+                            }
+                        })
                     } else {
-                        res.send(rows)
+                        const strictDate = new Date(id).toISOString().replace("Z","").split("T")
+                        DBConnect.query("INSERT INTO History(QuizID,Duration,StartTime,Tickler,Affects) VALUES(?,?,TIMESTAMP(?,?),?,?)",[parsedData.QuizID,parsedData.Duration,strictDate[0].toString(),strictDate[1],user,parsedData.Affects],(err,rows)=>{
+                            if(err){
+                                console.error(err)
+                            } else {
+                                res.send(rows)
+                            }
+                        })
                     }
                 })
+                
             }
         }
     })

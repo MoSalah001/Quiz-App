@@ -15,6 +15,7 @@ Start of general styling
     --text-light-white: hsl(0,100%,100%);
     --nav-light-yellow: hsl(60,100%,65%);
     --bg-light-golden : hsl(42,100%,45%);
+    --bg-light-green : hsl(120,100%,35%);
 }
 
 * {

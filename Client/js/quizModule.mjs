@@ -1,7 +1,7 @@
 import { loadingSlider, responseMsg, msg } from "./loader.mjs"
 
 export function quizCard(rows) {
-    const dataArray = JSON.parse(rows)
+    const dataArray = JSON.parse(rows)    
     for(let i in dataArray) {        
         const testCard = new QuizCard(dataArray[i]).create()
         const app = document.getElementById('app')
@@ -32,8 +32,9 @@ class QuizCard{
     constructor(rows) {
         this.id = rows.QuizID
         this.name = rows.QName
-        this.creator = rows.QCreator
+        this.Status = rows.QCreator
         this.duration = rows.Duration
+        this.date = rows.QuizDate
     }
 
     create(){        
@@ -41,17 +42,44 @@ class QuizCard{
         const div = document.createElement('div')
         div.classList.add('card')
         div.setAttribute('id',this.id)
-        const creator = document.createElement('p')
-        creator.textContent ="Created By: "+ this.creator
-        creator.setAttribute('id',this.id)
+        const Status = document.createElement('p')
+        const checkStrict = this.date != null ? new Date(this.date) : null
+        if(checkStrict === null) {
+            const date = new Date(this.date)
+            const zone = new Date(date).getTimezoneOffset() * 60 * 1000 * -1
+            const zonedDate = new Date(date.getTime() + zone)    
+            const now = new Date()        
+            const finish = new Date(this.duration *60 * 1000 + zonedDate.getTime())       
+            if(now.getTime() > zonedDate.getTime() && now.getTime() <= finish.getTime()) {
+                Status.textContent ="Status: Open"   
+                div.setAttribute('type','open')
+                div.addEventListener('click',takeQuiz)
+            } else if(now.getTime() > finish.getTime()) {
+                Status.textContent ="Status: Closed "
+                div.setAttribute('type','closed')
+                div.addEventListener('click',notYetRes)
+            } else {            
+                Status.textContent ="Status: Pending"
+                div.setAttribute('type','pending')
+                div.addEventListener('click',notYet)
+            }
+        } else {
+            Status.textContent ="Status: Open"   
+            div.setAttribute('type','open')
+            div.addEventListener('click',takeQuiz)
+        }
+        
+        const showDate = document.createElement('p')
+        showDate.textContent = new Date(this.date)
+        Status.setAttribute('id',this.id)
         const duration = document.createElement('p')
         duration.textContent = "Quiz Duration: "+ this.duration
         duration.setAttribute('id',this.id)
         const id = document.createElement('p')
         id.textContent = "Quiz ID: "+this.id
         id.setAttribute('id',this.id)
-        div.addEventListener('click',takeQuiz)
-        div.append(id,creator,duration)
+        
+        div.append(id,Status,duration,showDate)
         fragment.append(div)       
         
         return fragment
@@ -64,7 +92,7 @@ class ResultCard {
     constructor(rows) {
         this.id = rows.QuizID
         this.status = rows.QStatus
-        this.creator = rows.QCreator
+        this.Status = rows.QCreator
         this.duration = rows.Duration
         this.showRes = rows.ShowResult
     }
@@ -72,18 +100,22 @@ class ResultCard {
     result(){
         const fragment = document.createDocumentFragment()
         const div = document.createElement('div')
-        div.classList.add('card')
-        div.setAttribute('id',this.id)
-        div.setAttribute('type','pending')
+        const checker = this.showRes ? true : false        
         const status = document.createElement('p')
-        status.textContent ="Quiz Status: "+ this.status
-        const creator = document.createElement('p')
-        creator.textContent ="Created By: "+ this.creator
+        if(checker == true) {
+            div.setAttribute('type','available')
+            status.textContent ="Quiz Result: "+ "Available"
+        } else {
+            div.setAttribute('type','pending')
+            status.textContent ="Quiz Result: "+ "Pending"
+        }
+        div.classList.add('card')
+        div.setAttribute('id',this.id)    
         const duration = document.createElement('p')
         duration.textContent = "Quiz Duration: "+ this.duration
         const id = document.createElement('p')
         id.textContent = "Quiz ID: "+this.id
-        div.append(id,status,creator,duration)
+        div.append(id,status,duration)
         let checkRes = this.showRes
         if(checkRes) {
             div.addEventListener('click',quizRes)

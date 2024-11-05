@@ -22,21 +22,22 @@ xhr.onreadystatechange = ()=>{
         subXhr.send(data)
         subXhr.onreadystatechange = ()=>{
             if(subXhr.readyState === 4) {        
-                const jsonParser = JSON.parse(subXhr.responseText)
+                const jsonParser = JSON.parse(subXhr.responseText)                
                 const startTime = new Date(jsonParser.StartTime).getTime()
-                const zoneOffset = Math.abs(new Date(jsonParser.StartTime).getTimezoneOffset()*60*1000)
+                const zoneOffset = new Date(jsonParser.StartTime).getTimezoneOffset()*60*1000*-1                
                 const quizDuration = jsonParser.Duration*60*1000
                 const finishTime = (startTime+zoneOffset)+quizDuration
-                let time = finishTime             
-                counter = new Date(time -new Date().getTime())
+                let time = finishTime                
+                counter = new Date(time - new Date().getTime())
                 timer.textContent = `${counter.getUTCMinutes()} : ${counter.getUTCSeconds()}`
             }
         }
-        let counterFunc = setInterval(() => {            
+        let counterFunc = setInterval(() => {                                    
             if(counter > 0) {
                 counter-=1000
+                
                 timer.textContent = `${new Date(counter).getUTCMinutes()} : ${new Date(counter).getUTCSeconds()}`
-            } else {
+            } else {                
                 clearInterval(counterFunc)
                 submitAnswer()
             }            
@@ -153,7 +154,6 @@ function submitAnswer(e){
     }
     Object.assign(data,answersKeys)
     Object.assign(data , {"qid":window.localStorage.getItem('qid')})
-    console.log(data);
     const xhr = new XMLHttpRequest()
     xhr.open('post','./answers')
     xhr.setRequestHeader("content-type","application/json")

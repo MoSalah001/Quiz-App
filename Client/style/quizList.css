@@ -12,7 +12,7 @@
 
 
 .card {
-    background-color: var(--clr-logo-red);
+    background-color: var(--text-light-red);
     border-radius: 5px;
     font-size: 18px;
     color: white;
@@ -22,9 +22,17 @@
     width: 80dvw;
 }
 
-.card {
-    background-color: var(--text-light-green);
+.card [type=closed] {
+    background-color: var(--bg-light-golden);
 }
+.card[type=pending] {
+    background-color: goldenrod;
+}
+
+.card[type=available] , .card[type=open] {
+    background-color: var(--bg-light-green);
+}
+
 
 .card div p {
     z-index: 0;
@@ -34,9 +42,6 @@
     z-index: 2;
 }
 
-.card[type=pending] {
-    background-color: goldenrod;
-}
 
 
 @media only screen and (min-width: 700px) {
