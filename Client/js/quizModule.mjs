@@ -44,9 +44,9 @@ class QuizCard{
         div.setAttribute('id',this.id)
         const Status = document.createElement('p')
         const checkStrict = this.date != null ? new Date(this.date) : null
+        const date = new Date(this.date)
+        const zone = new Date(date).getTimezoneOffset() * 60 * 1000 * -1
         if(checkStrict === null) {
-            const date = new Date(this.date)
-            const zone = new Date(date).getTimezoneOffset() * 60 * 1000 * -1
             const zonedDate = new Date(date.getTime() + zone)    
             const now = new Date()        
             const finish = new Date(this.duration *60 * 1000 + zonedDate.getTime())       
@@ -70,7 +70,10 @@ class QuizCard{
         }
         
         const showDate = document.createElement('p')
-        showDate.textContent = new Date(this.date)
+        const zonedDate = new Date(date.getTime() + zone).toLocaleString('en-CA').split(',')
+        const showTime = document.createElement('p')
+        showDate.textContent = "Quiz Date: "+zonedDate[0]
+        showTime.textContent = "Quiz Time: "+ zonedDate[1]
         Status.setAttribute('id',this.id)
         const duration = document.createElement('p')
         duration.textContent = "Quiz Duration: "+ this.duration
@@ -79,7 +82,7 @@ class QuizCard{
         id.textContent = "Quiz ID: "+this.id
         id.setAttribute('id',this.id)
         
-        div.append(id,Status,duration,showDate)
+        div.append(id,Status,duration,showDate,showTime)
         fragment.append(div)       
         
         return fragment

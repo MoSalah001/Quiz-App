@@ -144,6 +144,38 @@ a#back:hover {
     background-color: var(--clr-logo-red);
 }
 
+#exportBtn {
+    width: 10vw;
+    place-self: center;
+    height: 5vh;
+    border-radius: 10px;
+    border: 5px ridge red;
+    font-size: 18px;
+    font-variant: normal;
+    font-weight: 600;
+    font-style: italic;
+    font-family: 'Courier New', Courier, monospace;
+
+    background-color: hsl(208, 100%, 92%);
+    color: var(--text-light-green);
+    transition: 0.5s;
+}
+
+#exportBtn:hover {
+    width: 10vw;
+    place-self: center;
+    height: 5vh;
+    border-radius: 10px;
+    border: 5px ridge var(--text-light-green);
+    font-size: 22px;
+    font-variant: normal;
+    font-weight: 600;
+    font-style: italic;
+    font-family: 'Courier New', Courier, monospace;
+    background-color: hsl(208, 100%, 97%);
+    color: var(--text-light-red);
+}
+
 @keyframes loader {
     0% {
         width: 50px;

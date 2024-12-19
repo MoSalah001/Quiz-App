@@ -39,7 +39,8 @@ router.post('/agentData',async(req,res)=>{
 })
 
 router.post('/quizData',async (req,res)=>{
-    const parsedData = req.body    
+    const parsedData = req.body
+        
 
     DBConnect.query(`
         SELECT * FROM Quiz 
@@ -52,7 +53,6 @@ router.post('/quizData',async (req,res)=>{
         if(err){
             console.log(err);
         } else {
-            console.log(rows);
             res.send(rows)
         }
     })

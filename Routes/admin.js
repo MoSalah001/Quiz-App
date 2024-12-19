@@ -2,6 +2,8 @@ const router = require('express').Router();
 const path = require('path')
 const mysql = require('mysql');
 const jwt = require('jsonwebtoken')
+const XLSX = require('xlsx')
+const fs = require('fs')
 
 const DBConnect = mysql.createConnection({
     host : process.env.DBHost,
@@ -455,6 +457,15 @@ router.post('/updateStores',async (req,res)=>{
         }
     })
 })
-
+router.get('/reports',async (req,res)=>{
+    res.sendFile('./reports.html',{root: path.join(__dirname,"../Client/branch")})
+})
+/* Reports Section */ 
+ router.post('/reports/agent',async (req,res) =>{
+    
+ })
+ router.post('/reports/agent/test',async (req,res) =>{
+    // let ws = XLSX.utils.table_to_sheet()
+ })
 
 module.exports = router;

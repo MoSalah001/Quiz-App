@@ -1,11 +1,14 @@
 import {loadingSlider , responseMsg} from './loader.mjs'
 const user = document.getElementById('user')
 const filterCookie = document.cookie.indexOf('user=');
-const current = document.cookie.substring(filterCookie+5,filterCookie+11)
+const current = document.cookie.substring(filterCookie+5,filterCookie+12)
 user.innerHTML = `Staff ID: <span>${current}</span>`
 const lgout = document.getElementById('lgout')
 const quizDate = document.getElementById('quizDate')
 lgout.addEventListener('click',lgoutUser)
+
+console.log(filterCookie);
+
 
 
 

@@ -1,7 +1,11 @@
 import { loadingSlider } from "./loader.mjs"
 import { userAnswer, resultCheck } from "./quizModule.mjs"
+import {exportToExcel} from "./exportExcel.mjs"
+const exportBtn = document.getElementById("exportBtn")
+exportBtn.addEventListener('click',exportToExcel)
 const app = document.getElementById('app')
-let ct = 0
+
+
 function loadCards() {
     const xhr = new XMLHttpRequest()
     xhr.open('post','allq')
@@ -9,14 +13,14 @@ function loadCards() {
     loadingSlider(xhr)
     xhr.onreadystatechange = ()=>{
         if(xhr.readyState == 4){
-            resultCard(xhr.responseText);
+            resultCardAgents(xhr.responseText);
             loadingSlider(xhr)
         }
     }
 }
 loadCards()
 
-class ResultCard {
+class ResultCardAgents {
     constructor(rows) {
         this.id = rows.QuizID
         this.date = rows.QDate
@@ -43,10 +47,10 @@ class ResultCard {
     }
 }
 
-function resultCard(rows) {
+function resultCardAgents(rows) {
     const dataArray = JSON.parse(rows)
     for(let i in dataArray) {        
-        const testCard = new ResultCard(dataArray[i]).result()
+        const testCard = new ResultCardAgents(dataArray[i]).result()
         const app = document.getElementById('app')
         if(testCard == null) continue
         else {
@@ -90,7 +94,8 @@ function quizRes(e){
         id : e.target.parentElement.id
     }
     window.localStorage.setItem("quizIDLocal",data.id)
-    removeCards()              
+    removeCards()
+    const headerRow = document.createElement('tr') // for excel export              
     const tableHeaderUser = document.createElement('th')
     tableHeaderUser.textContent = "NT User"
     const tableHeaderStaff = document.createElement('th')
@@ -99,7 +104,8 @@ function quizRes(e){
     tableHeaderResult.textContent = "Result"
     const tableHeaderQuizID = document.createElement('th')
     tableHeaderQuizID.textContent = "Quiz ID"
-    table.append(tableHeaderUser,tableHeaderStaff,tableHeaderResult,tableHeaderQuizID)
+    headerRow.append(tableHeaderUser,tableHeaderStaff,tableHeaderResult,tableHeaderQuizID)
+    table.append(headerRow)
     let baseXhr = new XMLHttpRequest()
     let par;
     let base;

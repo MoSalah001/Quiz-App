@@ -1,6 +1,7 @@
 import { loadingSlider, responseMsg } from "./loader.mjs"
-
-
+import {exportToExcel} from "./exportExcel.mjs"
+const exportBtn = document.getElementById("exportBtn")
+exportBtn.addEventListener('click',exportToExcel)
 window.onload = ()=>{
     const xhr = new XMLHttpRequest()
     xhr.open("get","./showAgents")
@@ -11,17 +12,20 @@ window.onload = ()=>{
             loadingSlider(xhr)
             const dataParser = JSON.parse(xhr.responseText)
             const headers = Object.keys(dataParser[0]) 
-            //create table with data
             const table = document.getElementById("table")
+            let headerRow = document.createElement('tr')
+            headerRow.classList.add('header-row')
             for(let header of headers) {
                 let th = document.createElement("th")
                 th.classList.add('table-header')
                 th.textContent=header
-                table.append(th)
-            }
+                headerRow.append(th)
+            } 
+            table.append(headerRow)
             for(let row in dataParser) {
-                new tableData(dataParser[row]).create()
-            }
+               let singleRow = new tableData(dataParser[row]).create()
+               table.append(singleRow)               
+            } 
         }
     }
 }
@@ -36,7 +40,6 @@ class tableData {
     }
 
     create() {
-        const table = document.getElementById("table")
         const row = document.createElement("tr")
         row.classList.add('table-row')
         const user = document.createElement("td")
@@ -55,6 +58,8 @@ class tableData {
         const approve = document.createElement("td")
         approve.classList.add('table-cell')
         row.append(staff,user,store,cDate)
-        table.append(row)
+        return row
     }
 }
+
+
