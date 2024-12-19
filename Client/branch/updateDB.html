@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../style/general.css">
+    <link rel="stylesheet" href="../style/updateDB.css">
+    <title>Quiz Hub - admin portal</title>
+</head>
+<body>
+    <h5 id="user"></h5>
+    <h1>Quiz App</h1>
+    <div id="app">
+        <form method="post" action="updateStores" id="updateDBForm" enctype="multipart/form-data">
+            <label for="storeName">Store Name:</label>
+            <input type="text" name="storeName" id="storeName" placeholder="Store Name">
+            <label for="storeID">Store ID:</label>
+            <input type="number" name="storeID" id="storeID" required placeholder="Store ID">
+            <label for="selectArea">Area:</label>
+            <select name="selectArea" id="selectArea"></select>
+            <button type="submit" id="submit">Submit</button>
+        </form>
+
+    </div>
+    <a id="back" href="./">back</a>
+    <script src="../js/updateDB.js" type="module"></script>
+</body>
+</html>
