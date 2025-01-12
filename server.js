@@ -26,7 +26,7 @@ require('dotenv').config()
 let DBConnect;
 
 
-const port = process.env.PORT || 8800
+const port = process.env.PORT || 4400
 
 const admin = require('./Routes/admin')
 const agent = require('./Routes/agent')
