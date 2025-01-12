@@ -24,3 +24,7 @@ nav ul li {
 nav ul li:hover {
     background-color: red;
 }
+
+.hide {
+    display: none;
+}

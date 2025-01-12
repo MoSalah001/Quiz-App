@@ -41,7 +41,7 @@ function dbConnect(){
 
     DBConnect.connect((err)=>{
         if(err){
-            console.log("Error connecting db .... ",err);
+            console.log("Error connecting db: ",err);
             setTimeout(dbConnect,3000)
         } else {
             console.log('Connected');
