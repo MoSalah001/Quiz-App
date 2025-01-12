@@ -11,15 +11,15 @@ const upload = multer()
 require('dotenv').config()
 
 
-const vapidKeys = {
-    publicKey: "BGRa7VZ1GpJjfeLQn6UIs2TF2A8JF3GtXURVlvnprd8PBC27gO2KiCdmSt4ozQRoJIkG7ITVehIdc-2Z01e575c",
-    privateKey: process.env.vapidKeyPrivate
-}
+// const vapidKeys = {
+//     publicKey: "BGRa7VZ1GpJjfeLQn6UIs2TF2A8JF3GtXURVlvnprd8PBC27gO2KiCdmSt4ozQRoJIkG7ITVehIdc-2Z01e575c",
+//     privateKey: process.env.vapidKeyPrivate
+// }
 
-webpush.setVapidDetails('mailto:contact@devmosalah.com',
-    vapidKeys.publicKey,
-    vapidKeys.privateKey
-)
+// webpush.setVapidDetails('mailto:contact@devmosalah.com',
+//     vapidKeys.publicKey,
+//     vapidKeys.privateKey
+// )
 
 
 
