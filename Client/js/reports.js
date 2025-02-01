@@ -1,7 +1,7 @@
 import { loadingSlider } from "./loader.mjs"
 // get db data and store locally
 window.onload = async()=>{
-    let fetchData = await fetch('main',{
+    let fetchData = await fetch('reports/main',{
         method: "GET"
     })
     let data = await fetchData.json()
