@@ -1,7 +1,12 @@
 import { loadingSlider } from "./loader.mjs"
 // get db data and store locally
 window.onload = async()=>{
-    const fetchData = fetch('')
+    let fetchData = await fetch('main',{
+        method: "GET"
+    })
+    let data = await fetchData.json()
+    console.log(data);
+    
 }
 
 const control = document.getElementById('control')

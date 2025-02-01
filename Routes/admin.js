@@ -461,11 +461,25 @@ router.get('/reports',async (req,res)=>{
     res.sendFile('./reports.html',{root: path.join(__dirname,"../Client/branch")})
 })
 /* Reports Section */ 
- router.post('/reports/agent',async (req,res) =>{
-    
- })
- router.post('/reports/agent/test',async (req,res) =>{
-    // let ws = XLSX.utils.table_to_sheet()
+ router.get('/reports/main',async (req,res) =>{
+    DBConnect.query(`
+        SELECT Assigned.QuizID, Assigned.Affects, Assigned.QuizDate, Assigned.Duration,History.Tickler, Users.NTUser,Users.StoreID,Stores.StoreName,Areas.AreaName,Areas.AreaID
+        FROM "Assigned"
+        JOIN History
+        ON Assigned.QuizID = History.QuizID
+        JOIN Users
+        ON History.Tickler = Users.StaffID
+        JOIN Stores
+        ON Users.StoreID = Stores.StoreID
+        JOIN Areas
+        ON Stores.AreaID = Areas.AreaID
+    `,(err,rows)=>{
+        if(err) {
+            res.status(500).send("App is down!!")
+        } else {
+            res.send(rows)
+        }
+    })
  })
 
 module.exports = router;

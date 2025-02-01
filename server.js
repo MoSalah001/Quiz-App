@@ -34,14 +34,16 @@ const agent = require('./Routes/agent')
 function dbConnect(){
         DBConnect = mysql.createConnection({
         host : process.env.DBHost,
+        port: 3306,
         user : process.env.DBUser,
         password : process.env.DBPass,
-        database : process.env.DBName
+        database : process.env.DBName,
+        connectTimeout: 1000000
     }) 
 
     DBConnect.connect((err)=>{
         if(err){
-            console.log("Error connecting db: ",err);
+            console.log("Error connecting db: ",err.code);
             setTimeout(dbConnect,3000)
         } else {
             console.log('Connected');
