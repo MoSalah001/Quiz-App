@@ -475,7 +475,7 @@ router.get('/reports',async (req,res)=>{
         ON Stores.AreaID = Areas.AreaID
     `,(err,rows)=>{
         if(err) {
-            res.status(500).send("App is down!!")
+            res.status(500).send(err)
         } else {
             res.send(rows)
         }
