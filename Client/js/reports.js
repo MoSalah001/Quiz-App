@@ -5,7 +5,10 @@ window.onload = async()=>{
         method: "GET"
     })
     let data = await fetchData.json()
-    console.log(data);
+    for(let i of data) {
+        console.log(data);
+        
+    }
     
 }
 
