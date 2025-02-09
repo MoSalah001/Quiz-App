@@ -5,9 +5,15 @@ window.onload = async()=>{
         method: "GET"
     })
     let data = await fetchData.json()
+    const request = window.indexedDB.open("quizReports",1)
+    request.onerror = (event)=>{
+        window.alert(event)
+    }
+    request.onsuccess = (event)=>{
+        window.alert("opened")
+    }
     for(let i of data) {
-        console.log(data);
-        
+        console.log(i);
     }
     
 }
