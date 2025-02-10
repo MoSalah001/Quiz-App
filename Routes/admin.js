@@ -463,7 +463,7 @@ router.get('/reports',async (req,res)=>{
 /* Reports Section */ 
  router.get('/reports/main',async (req,res) =>{
     DBConnect.query(`
-        SELECT Assigned.QuizID, Assigned.Affects, Assigned.QuizDate, Assigned.Duration,History.Tickler, Users.NTUser,Users.StoreID,Stores.StoreName,Areas.AreaName,Areas.AreaID
+        SELECT Assinged.ID, Assigned.QuizID, Assigned.Affects, Assigned.QuizDate, Assigned.Duration,History.Tickler, Users.NTUser,Users.StoreID,Stores.StoreName,Areas.AreaName,Areas.AreaID
         FROM Assigned
         JOIN History
         ON Assigned.QuizID = History.QuizID
