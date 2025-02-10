@@ -14,8 +14,11 @@ window.onload = async()=>{
     request.onupgradeneeded = (event)=>{
         const db = event.target.result
         const objStore = db.createObjectStore("Quizes", {autoIncrement: true})
+        objStore.createIndex('')
         for(let i in data) {
             objStore.add(data[i])
+            console.log(data[i]);
+            
         }
     }
 
