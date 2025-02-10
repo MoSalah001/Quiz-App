@@ -1,7 +1,5 @@
 import { loadingSlider } from "./loader.mjs"
 // get db data and store locally
-
-let db;
 window.onload = async()=>{
     let fetchData = await fetch('reports/main',{
         method: "GET"
@@ -11,11 +9,13 @@ window.onload = async()=>{
     request.onerror = (event)=>{
         window.alert(event)
     }
-    request.onsuccess = (event)=>{
-        window.alert("opened and saved")
+
+    request.onupgradeneeded = (event)=>{
+        const db = event.target.result
+        const objectStore = db.createObjectStore()
     }
 
-    db.onerror = (event)=>{
+    request.onerror = (event)=>{
         console.error(`Database error: ${event.target.error?.message}`)
     }
     for(let i of data) {
