@@ -6,21 +6,20 @@ window.onload = async()=>{
     })
     let data = await fetchData.json()
     const request = window.indexedDB.open("quizReports",1)
-    request.onerror = (event)=>{
-        window.alert(event)
-    }
-
-    request.onupgradeneeded = (event)=>{
-        const db = event.target.result
-        const objectStore = db.createObjectStore()
-    }
 
     request.onerror = (event)=>{
         console.error(`Database error: ${event.target.error?.message}`)
     }
-    for(let i in data) {
-        console.log(data[i]);
+
+    request.onupgradeneeded = (event)=>{
+        const db = event.target.result
+        const objStore = db.createObjectStore("Quizes", {autoIncrement: true})
+        for(let i in data) {
+            objStore.add(data[i])
+        }
     }
+
+
     
 }
 
