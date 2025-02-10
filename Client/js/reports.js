@@ -18,7 +18,7 @@ window.onload = async()=>{
     request.onerror = (event)=>{
         console.error(`Database error: ${event.target.error?.message}`)
     }
-    for(let i of data) {
+    for(let i in data) {
         console.log(data[i]);
     }
     
