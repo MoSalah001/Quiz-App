@@ -33,11 +33,17 @@ window.onload = async()=>{
         const queryArea = filterArea.getAll(["Alex"])
         const queryStore = filterStore.getAll(["Marsa Matrouh"])
         const queryAgent = filterAgent.getAll(["V23MSAYED2"])
-        console.log(queryAgent);
-        console.log("next");
-        console.log(queryArea);
-        console.log("last");
-        console.log(queryStore);
+        queryArea.onsuccess = ()=>{
+            console.log(queryArea.result);
+        }
+
+        queryStore.onsuccess = ()=>{
+            console.log(queryStore.result);
+        }
+
+        queryAgent.onsuccess = ()=>{
+            console.log(queryAgent.result);
+        }
     }  
 }
 
