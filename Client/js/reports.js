@@ -19,7 +19,11 @@ window.onload = async()=>{
         objStore.createIndex('AgentName','AgentName',{unique: false})
         for(let i in data) {
             objStore.add(data[i])
-            console.log(data[i]);
+            console.log(data[i])
+        }
+        db.transaction("Quizes").objectStore("AgentName").get("V23MSAYED2").onsuccess = (event)=>{
+            console.log(`Result: ${event.target.result.name}`);
+            
         }
     }
 
