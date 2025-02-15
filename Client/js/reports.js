@@ -24,7 +24,7 @@ window.onload = async()=>{
     }  
 
     request.onsuccess = ()=>{
-        const db = request.result.transaction(["Quizez"],"readonly").objectStore("AgentName").get('V23MSAYED2').onsuccess = (event)=>{
+        const db = request.result.transaction(["Quizes"],"readonly").objectStore("AgentName").get('V23MSAYED2').onsuccess = (event)=>{
             console.log(`Result: ${event.target.result.name}`);
             
         }
