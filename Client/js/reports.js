@@ -21,13 +21,14 @@ window.onload = async()=>{
             objStore.add(data[i])
             console.log(data[i])
         }
-    }    
+    }  
+    request.transaction("Quizes").objectStore("AgentName").get("V23MSAYED2").onsuccess = (event)=>{
+        console.log(`Result: ${event.target.result.name}`);
+        
+    }  
 }
 
-db.transaction("Quizes").objectStore("AgentName").get("V23MSAYED2").onsuccess = (event)=>{
-    console.log(`Result: ${event.target.result.name}`);
-    
-}
+
 
 const control = document.getElementById('control')
 // select area || store || agent 
