@@ -24,10 +24,20 @@ window.onload = async()=>{
     }  
 
     request.onsuccess = ()=>{
-        const db = request.result.transaction(["Quizes"],"readonly").objectStore("StoreName").get('Marsa Matrouh').onsuccess = (event)=>{
-            console.log(`Result: ${event.target.result.name}`);
-            
-        }
+        const db = request.result
+        const trx = db.transaction("Quizes",'readonly')
+        const filter = trx.objectStore("Quizes")
+        const filterArea = filter.index("AreaName")
+        const filterStore = filter.index("StoreName")
+        const filterAgent = filter.index("AgentName")
+        const queryArea = filterArea.getAll(["Alex"])
+        const queryStore = filterStore.getAll(["Marsa Matrouh"])
+        const queryAgent = filterAgent.getAll(["V23MSAYED2"])
+        console.log(queryAgent);
+        console.log("next");
+        console.log(queryArea);
+        console.log("last");
+        console.log(queryStore);
     }  
 }
 
