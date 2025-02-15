@@ -22,9 +22,12 @@ window.onload = async()=>{
             console.log(data[i])
         }
     }  
-    request.transaction("Quizes").objectStore("AgentName").get("V23MSAYED2").onsuccess = (event)=>{
-        console.log(`Result: ${event.target.result.name}`);
-        
+
+    request.onsuccess = ()=>{
+        const db = request.result.transaction(["Quizez"],"readonly").objectStore("AgentName").get('V23MSAYED2').onsuccess = (event)=>{
+            console.log(`Result: ${event.target.result.name}`);
+            
+        }
     }  
 }
 
