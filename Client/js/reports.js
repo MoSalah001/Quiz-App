@@ -16,7 +16,7 @@ window.onload = async()=>{
         const objStore = db.createObjectStore("Quizes", {autoIncrement: true})
         objStore.createIndex('AreaName','AreaName',{unique: false})
         objStore.createIndex('StoreName','StoreName',{unique: false})
-        objStore.createIndex('AgentName','AgentName',{unique: false})
+        objStore.createIndex('AgentName','NTUser',{unique: false})
         for(let i in data) {
             objStore.add(data[i])
             console.log(data[i])
