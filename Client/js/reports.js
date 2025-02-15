@@ -19,7 +19,7 @@ window.onload = async()=>{
         objStore.createIndex('AgentName','NTUser',{unique: false})
         for(let i in data) {
             objStore.add(data[i])
-            console.log(data[i])
+            // console.log(data[i])
         }
     }  
 
@@ -30,9 +30,9 @@ window.onload = async()=>{
         const filterArea = filter.index("AreaName")
         const filterStore = filter.index("StoreName")
         const filterAgent = filter.index("AgentName")
-        const queryArea = filterArea.getAll(["Alex"])
-        const queryStore = filterStore.getAll(["Marsa Matrouh"])
-        const queryAgent = filterAgent.getAll(["V23MSAYED2"])
+        const queryArea = filterArea.getAll("Alex")
+        const queryStore = filterStore.getAll("Marsa Matrouh")
+        const queryAgent = filterAgent.getAll("V23MSAYED2")
         queryArea.onsuccess = ()=>{
             console.log(queryArea.result);
         }
