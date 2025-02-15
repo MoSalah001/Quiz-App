@@ -21,13 +21,11 @@ window.onload = async()=>{
             objStore.add(data[i])
             console.log(data[i])
         }
-        db.transaction("Quizes").objectStore("AgentName").get("V23MSAYED2").onsuccess = (event)=>{
-            console.log(`Result: ${event.target.result.name}`);
-            
-        }
-    }
+    }    
+}
 
-
+db.transaction("Quizes").objectStore("AgentName").get("V23MSAYED2").onsuccess = (event)=>{
+    console.log(`Result: ${event.target.result.name}`);
     
 }
 
