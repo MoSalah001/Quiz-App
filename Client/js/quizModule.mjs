@@ -44,6 +44,8 @@ class QuizCard{
         div.setAttribute('id',this.id)
         const Status = document.createElement('p')
         const checkStrict = this.date != null ? new Date(this.date) : null
+        console.log(checkStrict);
+        
         const date = new Date(this.date)
         const zone = new Date(date).getTimezoneOffset() * 60 * 1000 * -1
         if(checkStrict === null) {
