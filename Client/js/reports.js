@@ -5,6 +5,8 @@ window.onload = async()=>{
         method: "GET"
     })
     let data = await fetchData.json()
+    console.log(data);
+    
     const request = window.indexedDB.open("quizReports",1)
 
     request.onerror = (event)=>{
@@ -19,7 +21,7 @@ window.onload = async()=>{
         objStore.createIndex('AgentName','NTUser',{unique: false})
         for(let i in data) {
             objStore.add(data[i])
-            console.log(data[i])
+            // console.log(data[i])
         }
     }  
 
