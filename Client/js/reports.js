@@ -33,9 +33,9 @@ window.onload = async()=>{
         const queryArea = filterArea.getAll("Alex")
         const queryStore = filterStore.getAll("Zahran")
         const queryAgent = filterAgent.getAll("V23MSAYED2")
-        // queryArea.onsuccess = ()=>{
-        //     console.log(queryArea.result);
-        // }
+        queryArea.onsuccess = ()=>{
+            console.log(queryArea.result);
+        }
 
         queryStore.onsuccess = ()=>{
             console.log(queryStore.result);
