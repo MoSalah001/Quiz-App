@@ -48,7 +48,7 @@ class QuizCard{
         
         const date = new Date(this.date)
         const zone = new Date(date).getTimezoneOffset() * 60 * 1000 * -1
-        if(checkStrict === null) {
+        if(checkStrict !== null) {
             const zonedDate = new Date(date.getTime() + zone)    
             const now = new Date()        
             const finish = new Date(this.duration *60 * 1000 + zonedDate.getTime())       
