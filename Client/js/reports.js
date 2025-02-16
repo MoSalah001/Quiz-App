@@ -31,19 +31,19 @@ window.onload = async()=>{
         const filterStore = filter.index("StoreName")
         const filterAgent = filter.index("AgentName")
         const queryArea = filterArea.getAll("Alex")
-        const queryStore = filterStore.getAll("Marsa Matrouh")
+        const queryStore = filterStore.getAll("Zahran")
         const queryAgent = filterAgent.getAll("V23MSAYED2")
-        queryArea.onsuccess = ()=>{
-            console.log(queryArea.result);
-        }
+        // queryArea.onsuccess = ()=>{
+        //     console.log(queryArea.result);
+        // }
 
         queryStore.onsuccess = ()=>{
             console.log(queryStore.result);
         }
 
-        queryAgent.onsuccess = ()=>{
-            console.log(queryAgent.result);
-        }
+        // queryAgent.onsuccess = ()=>{
+        //     console.log(queryAgent.result);
+        // }
     }  
 }
 
