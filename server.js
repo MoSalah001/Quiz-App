@@ -21,7 +21,7 @@ require('dotenv').config()
 //     vapidKeys.privateKey
 // )
 
-let dev = true
+let dev = false
 
 let DBConnect;
 

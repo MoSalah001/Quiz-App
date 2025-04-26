@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken')
 const XLSX = require('xlsx')
 const fs = require('fs')
 
-let dev = true
+let dev = false
 
 let DBConnect;
 
