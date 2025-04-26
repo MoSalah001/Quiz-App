@@ -3,12 +3,72 @@ const path = require('path');
 const mysql = require('mysql');
 const jwt = require('jsonwebtoken')
 
-const DBConnect = mysql.createConnection({
-    host : process.env.DBHost,
-    user : process.env.DBUser,
-    password : process.env.DBPass,
-    database : process.env.DBName
-}) 
+let dev = true
+
+let DBConnect;
+
+if (dev){
+    function dbConnect(){
+        DBConnect = mysql.createConnection({
+        host : process.env.DBHostDev,
+        user : process.env.DBUserDev,
+        password : process.env.DBPassDev,
+        database : process.env.DBNameDev,
+        timezone: "UTC"
+    }) 
+
+    DBConnect.connect((err)=>{
+        if(err){
+            console.log("Error connecting db: ",err.code);
+            setTimeout(dbConnect,3000)
+        } else {            
+        }
+    })
+
+    DBConnect.on('error',(err)=>{
+        console.log("DB Error: ",err);
+    if(err.code === 'PROTOCOL_CONNECTION_LOST') {
+        dbConnect()
+    } else {
+        console.log(err);
+    }    
+    })
+    }
+
+dbConnect()
+} else {
+        function dbConnect(){
+            DBConnect = mysql.createConnection({
+            host : process.env.DBHost,
+            port: 3306,
+            user : process.env.DBUser,
+            password : process.env.DBPass,
+            database : process.env.DBName,
+            timezone: "UTC"
+        }) 
+    
+        DBConnect.connect((err)=>{
+            if(err){
+                console.log("Error connecting db: ",err.code);
+                setTimeout(dbConnect,3000)
+            } else {
+            }
+        })
+    
+        DBConnect.on('error',(err)=>{
+            console.log("DB Error: ",err);
+        if(err.code === 'PROTOCOL_CONNECTION_LOST') {
+            dbConnect()
+        } else {
+            console.log(err);
+        }
+            
+        })
+    }
+    
+    dbConnect()
+
+}
 
 router.use(async (req,res,next)=>{
     let token = req.cookies.token ? req.cookies.token : "wrong token" 
@@ -52,7 +112,7 @@ router.post('/quizData',async (req,res)=>{
         `,[parsedData.StaffID,parsedData.StoreID],(err,rows)=>{
         if(err){
             console.log(err);
-        } else {
+        } else {            
             res.send(rows)
         }
     })
@@ -117,25 +177,26 @@ router.post('/quiz/answers',(req,res)=>{
     }
     res.status(200).send({"msg":"Your answers have been saved Successfully"})
 })
-
+// quiz timer section
 router.post('/quiz/timer',(req,res)=>{
     let filterCookie = req.headers.cookie.indexOf('user=');
     const user = req.headers.cookie.substring(filterCookie+5,filterCookie+11)
     const parsedData = req.body
-    let date = new Date().toISOString().replace("Z","").split("T")
+    let date = new Date().toISOString().replace("Z","").replace("T"," ")   
+    
     DBConnect.query("SELECT Tickler,QuizID FROM History WHERE Tickler=? AND QuizID=?",[user,parsedData.QuizID],(err,rows)=>{
         if(err){
             console.error(err)
         } else {
-            
-            if(rows.length > 0){                                            
+            if(rows.length > 0){          
+                                                  
                 res.status(200).send()
             } else {
                 /* check strict */
                 DBConnect.query("SELECT QuizDate FROM Assigned WHERE QuizID=?",[parsedData.QuizID],(err,qid)=>{
                     let id = qid[0].QuizDate
-                    if(id == null) {
-                        DBConnect.query("INSERT INTO History(QuizID,Duration,StartTime,Tickler,Affects) VALUES(?,?,TIMESTAMP(?,?),?,?)",[parsedData.QuizID,parsedData.Duration,date[0].toString(),date[1],user,parsedData.Affects],(err,rows)=>{
+                    if(id == null) {                                                
+                        DBConnect.query("INSERT INTO History(QuizID,StartTime,Tickler) VALUES(?,?,?)",[parsedData.QuizID,date,user],(err,rows)=>{
                             if(err){
                                 console.error(err)
                             } else {
@@ -143,8 +204,8 @@ router.post('/quiz/timer',(req,res)=>{
                             }
                         })
                     } else {
-                        const strictDate = new Date(id).toISOString().replace("Z","").split("T")
-                        DBConnect.query("INSERT INTO History(QuizID,Duration,StartTime,Tickler,Affects) VALUES(?,?,TIMESTAMP(?,?),?,?)",[parsedData.QuizID,parsedData.Duration,strictDate[0].toString(),strictDate[1],user,parsedData.Affects],(err,rows)=>{
+                        const strictDate = new Date(id).toISOString().replace("Z","").replace("T"," ")
+                        DBConnect.query("INSERT INTO History(QuizID,StartTime,Tickler) VALUES(?,?,?)",[parsedData.QuizID,strictDate,user],(err,rows)=>{
                             if(err){
                                 console.error(err)
                             } else {
@@ -163,10 +224,10 @@ router.post('/quiz/getTimer',(req,res)=>{
     let filterCookie = req.headers.cookie.indexOf('user=');
     const user = req.headers.cookie.substring(filterCookie+5,filterCookie+11)
     const parsedData = req.body
-    DBConnect.query("SELECT StartTime,Duration FROM History WHERE Tickler=? AND QuizID=?",[user,parsedData.QuizID],(err,rows)=>{
+    DBConnect.query(`SELECT History.StartTime, Assigned.Duration FROM History JOIN Assigned ON History.QuizID = Assigned.QuizID WHERE History.Tickler=? AND History.QuizID=?`,[user,parsedData.QuizID],(err,rows)=>{
         if(err){
             console.error(err)
-        } else {            
+        } else {                                    
             res.send(rows[0])
         }
     })
@@ -180,19 +241,20 @@ router.post('/result',(req,res)=>{
     let filterCookie = req.headers.cookie.indexOf('user=');
     const user = req.headers.cookie.substring(filterCookie+5,filterCookie+11)
     DBConnect.query(`
-    SELECT * FROM Quiz INNER JOIN userAnswers
+    SELECT Quiz.QuizID,QName,QStatus,Quiz.Duration FROM Quiz INNER JOIN userAnswers
     ON Quiz.QuizID = userAnswers.QuizID
     LEFT JOIN Assigned
     ON Quiz.QuizID = Assigned.QuizID
     AND Assigned.Affects =?
     AND userAnswers.StaffID = ?
-    GROUP BY Quiz.QuizID
-    `,[String(user),String(user)],(err,rows)=>{
+    WHERE Assigned.Affects = ?
+    GROUP BY Quiz.QuizID,QName,QStatus,Quiz.Duration
+    `,[String(user),String(user),String(user)],(err,rows)=>{        
         if(err){
             console.log(err);
             
             res.status(500).send("Refer back to system admin - Error mo-res-1")
-        } else {                        
+        } else {                                    
             res.send(rows)
         }
     })

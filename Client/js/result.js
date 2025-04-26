@@ -9,7 +9,7 @@ window.onload = ()=>{
     loadingSlider(xhr)
     xhr.onreadystatechange = ()=>{
         if(xhr.readyState == 4){
-            loadingSlider(xhr)
+            loadingSlider(xhr)            
             resultCard(xhr.responseText);
         }
     }

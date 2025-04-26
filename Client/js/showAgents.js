@@ -36,7 +36,9 @@ class tableData {
         this.staffID = data.StaffID,
         this.NTUser = data.NTUser,
         this.storeID = data.StoreID,
-        this.creationDate = data.CreationDate
+        this.creationDate = data.CreationDate,
+        this.areaName = data.AreaName,
+        this.storeName = data.StoreName
     }
 
     create() {
@@ -48,16 +50,22 @@ class tableData {
         const staff = document.createElement("td")
         staff.classList.add('table-cell')
         staff.textContent = this.staffID
-        const store = document.createElement("td")
-        store.classList.add('table-cell')
-        store.textContent = this.storeID
+        const storeID = document.createElement("td")
+        storeID.classList.add('table-cell')
+        storeID.textContent = this.storeID
+        const storeName = document.createElement("td")
+        storeName.classList.add('table-cell')
+        storeName.textContent = this.storeName
+        const area = document.createElement("td")
+        area.classList.add('table-cell')
+        area.textContent = this.areaName
         const cDate = document.createElement("td")
         cDate.classList.add('table-cell')
         cDate.innerHTML = `${new Date(this.creationDate).toLocaleString("en-CA").split(",")[0]}<br>
         ${new Date(this.creationDate).toLocaleString("en-CA").split(",")[1]}`
         const approve = document.createElement("td")
         approve.classList.add('table-cell')
-        row.append(staff,user,store,cDate)
+        row.append(staff,user,storeID,storeName,area,cDate)
         return row
     }
 }

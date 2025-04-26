@@ -42,24 +42,35 @@ class QuizCard{
         const div = document.createElement('div')
         div.classList.add('card')
         div.setAttribute('id',this.id)
-        const Status = document.createElement('p')
-        const checkStrict = this.date != null ? new Date(this.date) : null
-        console.log(checkStrict);
-        
-        const date = new Date(this.date)
-        const zone = new Date(date).getTimezoneOffset() * 60 * 1000 * -1
-        if(checkStrict !== null) {
-            const zonedDate = new Date(date.getTime() + zone)    
-            const now = new Date()        
-            const finish = new Date(this.duration *60 * 1000 + zonedDate.getTime())       
-            if(now.getTime() > zonedDate.getTime() && now.getTime() <= finish.getTime()) {
+        const Status = document.createElement('p')        
+        const checkStrict = this.date != null ? new Date(this.date) : "Any" //strict checker
+        if(checkStrict !== "Any") {            
+            const now = new Date()      
+            const date = new Date(this.date)  
+            const finish = new Date(date.getTime() + this.duration *60 * 1000)
+            const showDate = document.createElement('p')
+            const zonedDateDisplay = new Date(date).toLocaleString('en-CA').split(',')
+            const showTime = document.createElement('p')
+            showDate.textContent = "Quiz Date: "+zonedDateDisplay[0]
+            showTime.textContent = "Quiz Time: "+ zonedDateDisplay[1]
+            Status.setAttribute('id',this.id)
+            const duration = document.createElement('p')
+            duration.textContent = "Quiz Duration: "+ this.duration
+            duration.setAttribute('id',this.id)
+            const id = document.createElement('p')
+            id.textContent = "Quiz ID: "+this.id
+            id.setAttribute('id',this.id)
+            
+            div.append(id,Status,duration,showDate,showTime)
+            fragment.append(div)                     
+            if(now.getTime() > date.getTime() && now.getTime() <= finish.getTime()) {
                 Status.textContent ="Status: Open"   
                 div.setAttribute('type','open')
                 div.addEventListener('click',takeQuiz)
             } else if(now.getTime() > finish.getTime()) {
                 Status.textContent ="Status: Closed "
                 div.setAttribute('type','closed')
-                div.addEventListener('click',notYetRes)
+                div.addEventListener('click',alreadyAnswered)
             } else {            
                 Status.textContent ="Status: Pending"
                 div.setAttribute('type','pending')
@@ -69,24 +80,22 @@ class QuizCard{
             Status.textContent ="Status: Open"   
             div.setAttribute('type','open')
             div.addEventListener('click',takeQuiz)
-        }
-        
-        const showDate = document.createElement('p')
-        const zonedDate = new Date(date.getTime() + zone).toLocaleString('en-CA').split(',')
-        const showTime = document.createElement('p')
-        showDate.textContent = "Quiz Date: "+zonedDate[0]
-        showTime.textContent = "Quiz Time: "+ zonedDate[1]
-        Status.setAttribute('id',this.id)
-        const duration = document.createElement('p')
-        duration.textContent = "Quiz Duration: "+ this.duration
-        duration.setAttribute('id',this.id)
-        const id = document.createElement('p')
-        id.textContent = "Quiz ID: "+this.id
-        id.setAttribute('id',this.id)
-        
-        div.append(id,Status,duration,showDate,showTime)
-        fragment.append(div)       
-        
+            const showDate = document.createElement('p')
+            const showTime = document.createElement('p')
+            showDate.textContent = "Quiz Date: Any"
+            showTime.textContent = "Quiz Time: Any"
+            Status.setAttribute('id',this.id)
+            const duration = document.createElement('p')
+            duration.textContent = "Quiz Duration: "+ this.duration
+            duration.setAttribute('id',this.id)
+            const id = document.createElement('p')
+            id.textContent = "Quiz ID: "+this.id
+            id.setAttribute('id',this.id)
+            
+            div.append(id,Status,duration,showDate,showTime)
+            fragment.append(div)       
+            
+        }        
         return fragment
     }
 
@@ -166,6 +175,10 @@ function takeQuiz(e){
 
 function notYet(e) {
     window.alert("Please Wait for quiz time")
+}
+
+function alreadyAnswered(){
+    msg("You already answered this quiz",2)
 }
 
 function notYetRes(){    

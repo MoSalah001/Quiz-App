@@ -91,11 +91,11 @@ function assignQuiz(){
         time: document.getElementById('time').value,
         impact: document.getElementById('impact').value,
         subImpact: document.getElementById('secondInput').value,
-        strictDate: document.getElementById('date-strict') ? new Date(document.getElementById('date-strict').value).toISOString().replace("Z","").split("T") : null 
+        strictDate: document.getElementById('date-strict') ? new Date(document.getElementById('date-strict').value).toISOString().replace("Z","").replace("T"," ") : null 
     }    
     const xhr = new XMLHttpRequest()
     xhr.open('post','assign')
-    xhr.setRequestHeader('content-type','application/json')
+    xhr.setRequestHeader('content-type','application/json')    
     xhr.send(JSON.stringify(data))
     loadingSlider(xhr)
     xhr.onreadystatechange = ()=>{

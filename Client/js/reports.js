@@ -4,9 +4,7 @@ window.onload = async()=>{
     let fetchData = await fetch('reports/main',{
         method: "GET"
     })
-    let data = await fetchData.json()
-    console.log(data);
-    
+    let data = await fetchData.json()    
     const request = window.indexedDB.open("quizReports",1)
 
     request.onerror = (event)=>{

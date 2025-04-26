@@ -7,10 +7,6 @@ const lgout = document.getElementById('lgout')
 const quizDate = document.getElementById('quizDate')
 lgout.addEventListener('click',lgoutUser)
 
-console.log(filterCookie);
-
-
-
 
 function lgoutUser(){
     const xhr = new XMLHttpRequest()
@@ -40,7 +36,7 @@ function getNextQuiz() {
     xhr.onreadystatechange = ()=>{
         if(xhr.readyState === 4) {
             loadingSlider(xhr)
-            let jsonParser = JSON.parse(xhr.responseText)            
+            let jsonParser = JSON.parse(xhr.responseText)
             const subXhr = new XMLHttpRequest()
             subXhr.open('post','agent/quizData')
             subXhr.setRequestHeader('content-type','application/json')
@@ -49,8 +45,7 @@ function getNextQuiz() {
                 if(subXhr.readyState === 4) {
                     try {
                         const rows = JSON.parse(subXhr.responseText)
-                        window.localStorage.setItem('rows',JSON.stringify(rows))
-                        
+                        window.localStorage.setItem('rows',JSON.stringify(rows))                        
                         if(rows.length !== 0){
                             quizDate.textContent = `New Quiz Assgined - Take It Now`
                             } else {

@@ -5,12 +5,73 @@ const jwt = require('jsonwebtoken')
 const XLSX = require('xlsx')
 const fs = require('fs')
 
-const DBConnect = mysql.createConnection({
-    host : process.env.DBHost,
-    user : process.env.DBUser,
-    password : process.env.DBPass,
-    database : process.env.DBName
-}) 
+let dev = true
+
+let DBConnect;
+
+if (dev){
+    function dbConnect(){
+        DBConnect = mysql.createConnection({
+        host : process.env.DBHostDev,
+        user : process.env.DBUserDev,
+        password : process.env.DBPassDev,
+        database : process.env.DBNameDev,
+        timezone: "UTC"
+    }) 
+
+    DBConnect.connect((err)=>{
+        if(err){
+            console.log("Error connecting db: ",err.code);
+            setTimeout(dbConnect,3000)
+        } else {            
+        }
+    })
+
+    DBConnect.on('error',(err)=>{
+        console.log("DB Error: ",err);
+    if(err.code === 'PROTOCOL_CONNECTION_LOST') {
+        dbConnect()
+    } else {
+        console.log(err);
+    }    
+    })
+    }
+
+dbConnect()
+} else {
+        function dbConnect(){
+            DBConnect = mysql.createConnection({
+            host : process.env.DBHost,
+            port: 3306,
+            user : process.env.DBUser,
+            password : process.env.DBPass,
+            database : process.env.DBName,
+            timezone: "UTC"
+        }) 
+    
+        DBConnect.connect((err)=>{
+            if(err){
+                console.log("Error connecting db: ",err.code);
+                setTimeout(dbConnect,3000)
+            } else {
+            }
+        })
+    
+        DBConnect.on('error',(err)=>{
+            console.log("DB Error: ",err);
+        if(err.code === 'PROTOCOL_CONNECTION_LOST') {
+            dbConnect()
+        } else {
+            console.log(err);
+        }
+            
+        })
+    }
+    
+    dbConnect()
+
+}
+
 router.use(async (req,res,next)=>{
     let token = req.cookies.token ? req.cookies.token : "wrong token" 
     let user = req.cookies.user
@@ -29,11 +90,11 @@ router.use(async (req,res,next)=>{
     
 })
 
-router.get('/newq',(req,res)=>{
+router.get('/newq',(req,res)=>{ // get new quiz file
     res.sendFile('./newForm.html',{root: path.join(__dirname,"../Client/branch")})
 })
 
-router.post('/newq/new',(req,res)=>{
+router.post('/newq/new',(req,res)=>{// save quiz data to DB
     const cookies = req.headers.cookie.split('=')
     const filterCookie = req.headers.cookie.indexOf("user=")
     const cleanCookie = {
@@ -45,8 +106,10 @@ router.post('/newq/new',(req,res)=>{
         quizName: req.body.name.toUpperCase(),
         quizCreator: cleanCookie.user,
     }
-    DBConnect.query("INSERT INTO Quiz (QuizID,QName,QCreator) VALUES (?,?,?)",[quizData.quizID,quizData.quizName,quizData.quizCreator,quizData.quizDuration],(err,rows)=>{
+    DBConnect.query("INSERT INTO Quiz (QuizID,QName,QCreator) VALUES (?,?,?)",[quizData.quizID,quizData.quizName,quizData.quizCreator],(err,rows)=>{
         if(err) {
+            console.log(err);
+            
             res.status(400).send({"msg":"You already set a quiz with the same name"})
         } else {
             res.cookie("quizID",quizData.quizID)
@@ -59,13 +122,46 @@ router.post('/newq/new',(req,res)=>{
 })
 
 
-router.get('/editq',async (req,res)=>{
+router.get('/editq',async (req,res)=>{ // get editq file
     res.sendFile('./editq.html',{root: path.join(__dirname,'../Client/branch')})
 })
 
-router.get('/editq/:id',async (req,res)=>{
+router.get('/editq/:id',async (req,res)=>{ // get assign file
 res.sendFile('./assignForm.html',{root:path.join(__dirname,'../Client/branch')})
 })
+
+
+router.post('/editq/assign',async (req,res)=>{
+    const parsedData = req.body
+    
+    DBConnect.query('SELECT QuizID, Affects FROM Assigned WHERE QuizID = ? AND Affects = ?',[parsedData.quizID,parsedData.subImpact],(err,check)=>{
+        if(err) {
+            console.error(err)
+        } else {
+            if(check.length > 0) {
+                
+                res.status(400).send({"msg":"This quiz already assgined to this user"})
+            } else if (parsedData.strictDate == null) {
+                DBConnect.query('INSERT INTO Assigned(QuizID,Duration,QuizDate,Affects,ShowResult) VALUES(?,?,?,?,0)',[parsedData.quizID,parsedData.time,parsedData.strictDate,parsedData.subImpact],async (err,rows)=>{
+                    if(err) {
+                        console.log(err);
+                    } else {
+                        res.status(200).send({"msg":"Quiz Assigned"})
+                    }
+                })
+            } else {                
+                DBConnect.query('INSERT INTO Assigned(QuizID,Duration,QuizDate,Affects,ShowResult) VALUES(?,?,?,?,0)',[parsedData.quizID,parsedData.time,parsedData.strictDate,parsedData.subImpact],async (err,rows)=>{
+                    if(err) {
+                        console.log(err);
+                    } else {
+                        res.status(200).send({"msg":"Quiz Assigned"})
+                    }
+                })
+            }
+        }
+    })
+})
+
 
 router.post('/getQuizList',async (req,res)=>{
     const filterCookie = req.headers.cookie.indexOf("user=")
@@ -234,8 +330,15 @@ router.get('/agents',async (req,res)=>{
 })
 
 router.get('/showAgents',async (req,res)=>{
-    DBConnect.query('SELECT StaffID, NTUser, StoreID, CreationDate FROM Users WHERE Status = "ACTIVE" AND Admin =0',(err,resolve,fields)=>{
-        if(err) {
+    DBConnect.query(`SELECT Users.StaffID, Users.NTUser, Users.StoreID, Stores.StoreName , Areas.AreaName , Users.CreationDate FROM Users 
+        JOIN Stores
+        ON Users.StoreID = Stores.StoreID
+        JOIN Areas
+        ON Stores.AreaID = Areas.AreaID
+        WHERE Status = "ACTIVE" AND Admin =0`,(err,resolve,fields)=>{
+        if(err) {  
+            console.log(err);
+                      
             res.send({"msg":"internal server Error"})
         } else {
             res.send(resolve)
@@ -402,37 +505,6 @@ router.get('/editq/getData/:selectValue',async (req,res)=>{
     }
 })
 
-router.post('/editq/assign',async (req,res)=>{
-    const parsedData = req.body
-    
-    DBConnect.query('SELECT QuizID, Affects FROM Assigned WHERE QuizID = ? AND Affects = ?',[parsedData.quizID,parsedData.subImpact],(err,check)=>{
-        if(err) {
-            console.error(err)
-        } else {
-            if(check.length > 0) {
-                res.status(400).send({"msg":"This quiz already assgined to this user"})
-            } else if (parsedData.strictDate == null) {
-                DBConnect.query('INSERT INTO Assigned(QuizID,Duration,QuizDate,Affects,ShowResult) VALUES(?,?,?,?,0)',[parsedData.quizID,parsedData.time,parsedData.strictDate,parsedData.subImpact],async (err,rows)=>{
-                    if(err) {
-                        console.log(err);
-                    } else {
-                        res.status(200).send({"msg":"Quiz Assigned"})
-                    }
-                })
-            } else {
-                const formattedDate = parsedData.strictDate
-                DBConnect.query('INSERT INTO Assigned(QuizID,Duration,QuizDate,Affects,ShowResult) VALUES(?,?,TIMESTAMP(?,?),?,0)',[parsedData.quizID,parsedData.time,formattedDate[0],formattedDate[1],parsedData.subImpact],async (err,rows)=>{
-                    if(err) {
-                        console.log(err);
-                    } else {
-                        res.status(200).send({"msg":"Quiz Assigned"})
-                    }
-                })
-            }
-        }
-    })
-})
-
 router.get('/updatedb',async (req,res)=>{
     res.sendFile('updateDB.html',{root: path.join(__dirname,"../Client/branch")})
 })
@@ -473,6 +545,7 @@ router.get('/reports',async (req,res)=>{
         ON Users.StoreID = Stores.StoreID
         JOIN Areas
         ON Stores.AreaID = Areas.AreaID
+        GROUP BY Assigned.QuizID, Assigned.Affects, Assigned.QuizDate, Assigned.Duration,History.Tickler, Users.NTUser,Users.StoreID,Stores.StoreName,Areas.AreaName,Areas.AreaID
     `,(err,rows)=>{
         if(err) {
             res.status(500).send("App is down!!")

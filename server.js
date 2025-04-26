@@ -21,33 +21,25 @@ require('dotenv').config()
 //     vapidKeys.privateKey
 // )
 
-
+let dev = true
 
 let DBConnect;
 
-
-const port = process.env.PORT || 1234
-
-const admin = require('./Routes/admin')
-const agent = require('./Routes/agent')
-
-function dbConnect(){
+if (dev){
+    function dbConnect(){
         DBConnect = mysql.createConnection({
-        host : process.env.DBHost,
-        port: 3306,
-        user : process.env.DBUser,
-        password : process.env.DBPass,
-        database : process.env.DBName,
-        connectTimeout: 1000000
+        host : process.env.DBHostDev,
+        user : process.env.DBUserDev,
+        password : process.env.DBPassDev,
+        database : process.env.DBNameDev,
+        timezone: "UTC"
     }) 
 
     DBConnect.connect((err)=>{
         if(err){
             console.log("Error connecting db: ",err.code);
             setTimeout(dbConnect,3000)
-        } else {
-            console.log('Connected');
-            
+        } else {            
         }
     })
 
@@ -57,12 +49,50 @@ function dbConnect(){
         dbConnect()
     } else {
         console.log(err);
-    }
-        
+    }    
     })
-}
+    }
 
 dbConnect()
+} else {
+        function dbConnect(){
+            DBConnect = mysql.createConnection({
+            host : process.env.DBHost,
+            port: 3306,
+            user : process.env.DBUser,
+            password : process.env.DBPass,
+            database : process.env.DBName,
+            timezone: "UTC"
+        }) 
+    
+        DBConnect.connect((err)=>{
+            if(err){
+                console.log("Error connecting db: ",err.code);
+                setTimeout(dbConnect,3000)
+            } else {
+            }
+        })
+    
+        DBConnect.on('error',(err)=>{
+            console.log("DB Error: ",err);
+        if(err.code === 'PROTOCOL_CONNECTION_LOST') {
+            dbConnect()
+        } else {
+            console.log(err);
+        }
+            
+        })
+    }
+    
+    dbConnect()
+
+}
+
+const port = process.env.PORT || 1234
+
+const admin = require('./Routes/admin')
+const agent = require('./Routes/agent')
+
 
 
 app.use(cookieParser())

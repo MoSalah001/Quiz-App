@@ -36,8 +36,7 @@ function saveQuiz(e){
     // e.preventDefault()
     const data = {
         name: document.getElementById("q-name").value,
-        dbName: document.getElementById("q-name").value +"-"+ current,
-        date: new Date().toISOString(),
+        dbName: document.getElementById("q-name").value +"-"+ current
     }
     
     const xhr = new XMLHttpRequest()
