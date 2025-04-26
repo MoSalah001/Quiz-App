@@ -1,4 +1,52 @@
 #form {
     display: flex;
     flex-direction: column;
+    font-size: 24px;
+    box-shadow: 0px 0px 5px 1px red;
+    padding: 5px 10px;
+    margin-bottom: 18px;
+    border-radius: 5px;
 }
+ select {
+    border: 2px solid black;
+    height: 28px;
+    width: 80vw;
+    margin: 8px 0px;
+    font-size: 18px;
+    color: red;
+ }
+
+ input {
+    padding: 5px 5px;
+    font-size: 18px;
+    height: 28px;
+    width: 80vw;
+    color: red;
+ }
+
+ button {
+    margin-top: 20px;
+    color: white;
+    font-weight: 600;
+    background-color: red;
+    font-size: 18px;
+    height: 40px;
+    width: 80vw;
+    padding: 5px;
+    box-shadow: 0px 0px 5px 5px aliceblue;
+    border-radius: 5px;
+    border: none;
+ }
+
+ @media screen and (min-width: 800px) {
+    select , input , button {
+        width : 25vw;
+        max-width: 30vw;
+        min-width: 25vw;
+        height: 40px;
+    }
+    button {
+        margin-top: 40px;
+    }
+    
+ }

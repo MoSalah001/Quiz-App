@@ -161,6 +161,40 @@ router.post('/editq/assign',async (req,res)=>{
         }
     })
 })
+router.get('/editq/getData/:selectValue',async (req,res)=>{
+    switch(req.params.selectValue) {
+        case "Area":
+            //get areas
+            DBConnect.query('SELECT AreaID AS "Key", CONCAT_WS("-",AreaName,AreaID) AS Data FROM Areas',async (err,rows)=>{
+                if(err) {
+                    res.status(503).send({"msg":err.message})
+                } else {
+                    res.send(rows)
+                }
+            })
+            break;
+        case "Store":
+            //get stores
+            DBConnect.query('SELECT StoreID AS "Key",CONCAT_WS("-",StoreID,StoreName) AS Data FROM Stores',async (err,rows)=>{
+                if(err) {
+                    res.status(503).send({"msg":err.message})
+                } else {
+                    res.send(rows)
+                }
+            })
+            break;
+        case "Agent":
+            //get Agents
+            DBConnect.query('SELECT StaffID AS "Key", CONCAT_WS("-",NTUser,StaffID,StoreID) AS Data FROM Users WHERE ADMIN = 0 AND Status = "ACTIVE"',async (err,rows)=>{
+                if(err) {
+                    res.status(503).send({"msg":err.message})
+                } else {
+                    res.send(rows)
+                }
+            })
+            break;
+    }
+})
 
 
 router.post('/getQuizList',async (req,res)=>{
@@ -470,40 +504,6 @@ router.post('/result/:id/getAnswersCount',async (req,res)=>{
 })
 
 
-router.get('/editq/getData/:selectValue',async (req,res)=>{
-    switch(req.params.selectValue) {
-        case "Area":
-            //get areas
-            DBConnect.query('SELECT AreaID AS "Key", CONCAT_WS("-",AreaName,AreaID) AS Data FROM Areas',async (err,rows)=>{
-                if(err) {
-                    res.status(503).send({"msg":err.message})
-                } else {
-                    res.send(rows)
-                }
-            })
-            break;
-        case "Store":
-            //get stores
-            DBConnect.query('SELECT StoreID AS "Key",CONCAT_WS("-",StoreID,StoreName) AS Data FROM Stores',async (err,rows)=>{
-                if(err) {
-                    res.status(503).send({"msg":err.message})
-                } else {
-                    res.send(rows)
-                }
-            })
-            break;
-        case "Agent":
-            //get Agents
-            DBConnect.query('SELECT StaffID AS "Key", CONCAT_WS("-",NTUser,StaffID,StoreID) AS Data FROM Users WHERE ADMIN = 0 AND Status = "ACTIVE"',async (err,rows)=>{
-                if(err) {
-                    res.status(503).send({"msg":err.message})
-                } else {
-                    res.send(rows)
-                }
-            })
-            break;
-    }
-})
 
 router.get('/updatedb',async (req,res)=>{
     res.sendFile('updateDB.html',{root: path.join(__dirname,"../Client/branch")})
