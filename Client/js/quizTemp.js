@@ -61,17 +61,17 @@ if(data.QuizDate === null) {
                 if(subXhr.readyState === 4) {        
                     const jsonParser = JSON.parse(subXhr.responseText)                    
                     const startTime = new Date(jsonParser.StartTime).getTime()
-                    const quizDuration = jsonParser.Duration*60*1000                    
-                    const finishTime = startTime+quizDuration
-                    console.log(new Date(finishTime).getTime());
+                    let zone = new Date(jsonParser.startTime).getTimezoneOffset()
+                    console.log(zone);
                     
+                    const quizDuration = jsonParser.Duration*60*1000                    
+                    const finishTime = startTime+quizDuration                    
                     counter = new Date(finishTime - new Date().getTime())
                     timer.textContent = `${counter.getUTCMinutes()} : ${counter.getUTCSeconds()}`
                     
                 }
             }
-            let counterFunc = setInterval(() => {
-                console.log(counter);                        
+            let counterFunc = setInterval(() => {                   
                 if(counter > 0) {
                     counter-=1000
 
