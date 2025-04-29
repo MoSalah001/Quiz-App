@@ -63,7 +63,7 @@ if(data.QuizDate === null) {
                     const startTime = new Date(jsonParser.StartTime).getTime()
                     const quizDuration = jsonParser.Duration*60*1000                    
                     const finishTime = startTime+quizDuration
-                    console.log(new Date(finishTime));
+                    console.log(new Date(finishTime).getTime());
                     
                     counter = new Date(finishTime - new Date().getTime())
                     timer.textContent = `${counter.getUTCMinutes()} : ${counter.getUTCSeconds()}`
