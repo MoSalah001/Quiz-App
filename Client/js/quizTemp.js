@@ -32,7 +32,7 @@ if(data.QuizDate === null) {
                     timer.textContent = `${counter.getUTCMinutes()} : ${counter.getUTCSeconds()}`
                 }
             }
-            let counterFunc = setInterval(() => {                                    
+            let counterFunc = setInterval(() => {                                                   
                 if(counter > 0) {
                     counter-=1000
 
@@ -71,7 +71,7 @@ if(data.QuizDate === null) {
                 }
             }
             let counterFunc = setInterval(() => {
-                                                                    
+                console.log(counter);                            
                 if(counter > 0) {
                     counter-=1000
 
