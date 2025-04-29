@@ -59,12 +59,12 @@ if(data.QuizDate === null) {
             subXhr.send(jsonData)
             subXhr.onreadystatechange = ()=>{
                 if(subXhr.readyState === 4) {        
-                    const jsonParser = JSON.parse(subXhr.responseText)
-                    console.log(jsonParser);
-                    
+                    const jsonParser = JSON.parse(subXhr.responseText)                    
                     const startTime = new Date(jsonParser.StartTime).getTime()
                     const quizDuration = jsonParser.Duration*60*1000                    
                     const finishTime = startTime+quizDuration
+                    console.log(new Date(finishTime));
+                    
                     counter = new Date(finishTime - new Date().getTime())
                     timer.textContent = `${counter.getUTCMinutes()} : ${counter.getUTCSeconds()}`
                     
