@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken')
 const XLSX = require('xlsx')
 const fs = require('fs')
 
-let dev = true
+let dev = false
 
 let DBConnect;
 
@@ -561,7 +561,6 @@ router.get('/reset',(req,res)=>{
 
 router.post('/resetPassword',(req,res)=>{
     const parser = req.body
-    console.log(parser);
     
     DBConnect.query(`
         Update Users

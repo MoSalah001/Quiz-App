@@ -3,7 +3,7 @@ const path = require('path');
 const mysql = require('mysql');
 const jwt = require('jsonwebtoken')
 
-let dev = true
+let dev = false
 
 let DBConnect;
 
