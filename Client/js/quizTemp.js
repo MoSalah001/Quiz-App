@@ -71,7 +71,7 @@ if(data.QuizDate === null) {
                 }
             }
             let counterFunc = setInterval(() => {
-                console.log(counter.getTime());                        
+                console.log(counter);                        
                 if(counter > 0) {
                     counter-=1000
 
