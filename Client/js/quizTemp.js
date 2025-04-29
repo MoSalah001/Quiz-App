@@ -61,7 +61,7 @@ if(data.QuizDate === null) {
                 if(subXhr.readyState === 4) {        
                     const jsonParser = JSON.parse(subXhr.responseText)                    
                     const startTime = new Date(jsonParser.StartTime).getTime()
-                    let zone = new Date(jsonParser.startTime).getTimezoneOffset()
+                    let zone = new Date(jsonParser.StartTime).getTimezoneOffset()
                     console.log(zone);
                     
                     const quizDuration = jsonParser.Duration*60*1000                    
