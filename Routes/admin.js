@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken')
 const XLSX = require('xlsx')
 const fs = require('fs')
 
-let dev = false
+let dev = true
 
 let DBConnect;
 
@@ -554,5 +554,26 @@ router.get('/reports',async (req,res)=>{
         }
     })
  })
+
+router.get('/reset',(req,res)=>{
+    res.sendFile('./reset.html',{root: path.join(__dirname,"../Client/branch")})
+})
+
+router.post('/resetPassword',(req,res)=>{
+    const parser = req.body
+    console.log(parser);
+    
+    DBConnect.query(`
+        Update Users
+        SET Users.PHashed = 0
+        WHERE Users.StaffID = ?
+        `,[parser],(err,msg)=>{
+            if(err){
+                res.status(401).json({err: err})
+            } else {
+                res.status(200).json({msg: "Password Resetted"})
+            }
+        })
+})
 
 module.exports = router;

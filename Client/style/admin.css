@@ -25,13 +25,13 @@
 .nav-ul li::before {
     /* content: "\2020  "; */
     content: "\261B  ";
-    font-size: 26px;
+    font-size: 20px;
     color: var(--clr-logo-red);
     transition: 0.7s;
 }
 .nav-ul li::after {
     content: "  \261A";
-    font-size: 26px;
+    font-size: 20px;
     color: var(--clr-logo-red);
     transition: 0.7s;
 }
@@ -48,7 +48,7 @@
 }
 
 .nav-ul li a , .nav-ul li a:visited {
-    font-size: 20px;
+    font-size: 16px;
     text-decoration: none;
     color: var(--text-light-green);
 }
@@ -101,10 +101,10 @@
 
 @media only screen and (min-width: 640px) {
     .nav-ul li a {
-        font-size: 48px;
+        font-size: 28px;
     }
     .nav-ul li::after , .nav-ul li::before {
-        font-size: 48px;
+        font-size: 28px;
     }
     #form-div {
         width: 30dvw;
