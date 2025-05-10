@@ -66,15 +66,15 @@ if(data.QuizDate === null) {
                     
                     const quizDuration = jsonParser.Duration*60*1000                    
                     const finishTime = startTime+quizDuration+zone
+                    console.log(new Date(finishTime));
+                    
                     rawCounter=finishTime - new Date().getTime()
                     counter = new Date(rawCounter)
                     timer.textContent = `${counter.getUTCMinutes()} : ${counter.getUTCSeconds()}`
                     
                 }
             }
-            let counterFunc = setInterval(() => {    
-                console.log(rawCounter);
-                                            
+            let counterFunc = setInterval(() => {                                                
                 if(rawCounter > 0) {
                     rawCounter-=1000
 
