@@ -8,7 +8,7 @@
     "start": "node server.js"
   },
   "keywords": [],
-  "author": "Mohamed Salah-Eldeen Mahmoud <mhmdsalah707@gmail.com>",
+  "author": "Mohamed Salah-Eldeen Mahmoud <mhmdsalah505@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -22,6 +22,7 @@
     "multer": "^1.4.5-lts.1",
     "mysql": "^2.18.1",
     "mysql2": "^3.12.0",
+    "quiz-app": "file:",
     "web-push": "^3.6.7",
     "xlsx": "^0.18.5"
   },

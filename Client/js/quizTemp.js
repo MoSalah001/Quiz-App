@@ -71,14 +71,14 @@ if(data.QuizDate === null) {
                 }
             }
             let counterFunc = setInterval(() => {                   
-                // if(counter > 0) {
+                if(counter > 0) {
                     counter-=1000
 
                     timer.textContent = `${new Date(counter).getUTCMinutes()} : ${new Date(counter).getUTCSeconds()}`
-                // } else {                           
-                //     clearInterval(counterFunc)
-                //     submitAnswer()
-                // }            
+                } else {                           
+                    clearInterval(counterFunc)
+                    submitAnswer()
+                }            
             }, 1000);
             return counterFunc;
         }
