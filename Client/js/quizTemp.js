@@ -1,6 +1,7 @@
 import {loadingSlider, responseMsg} from './loader.mjs'
 const timer = document.getElementById("timer")
 let counter;
+let rawCounter;
 let data;
 let parser = window.localStorage.getItem('qid')
 let rowParser = JSON.parse(window.localStorage.getItem('rows'))
@@ -64,19 +65,18 @@ if(data.QuizDate === null) {
                     let zone = new Date(jsonParser.StartTime).getTimezoneOffset()
                     
                     const quizDuration = jsonParser.Duration*60*1000                    
-                    const finishTime = startTime+quizDuration+zone                    
-                    counter = new Date(finishTime - new Date().getTime())
+                    const finishTime = startTime+quizDuration+zone
+                    rawCounter=finishTime - new Date().getTime()
+                    counter = new Date(rawCounter)
                     timer.textContent = `${counter.getUTCMinutes()} : ${counter.getUTCSeconds()}`
                     
                 }
             }
-            let counterFunc = setInterval(() => {    
-                console.log(counter);
-                               
-                if(counter > 0) {
-                    counter-=1000
+            let counterFunc = setInterval(() => {                                
+                if(rawCounter > 0) {
+                    rawCounter-=1000
 
-                    timer.textContent = `${new Date(counter).getUTCMinutes()} : ${new Date(counter).getUTCSeconds()}`
+                    timer.textContent = `${new Date(rawCounter).getUTCMinutes()} : ${new Date(rawCounter).getUTCSeconds()}`
                 } else {                           
                     clearInterval(counterFunc)
                     submitAnswer()
