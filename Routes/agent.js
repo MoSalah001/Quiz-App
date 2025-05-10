@@ -182,7 +182,7 @@ router.post('/quiz/timer',(req,res)=>{
     let filterCookie = req.headers.cookie.indexOf('user=');
     const user = req.headers.cookie.substring(filterCookie+5,filterCookie+11)
     const parsedData = req.body
-    let date = new Date().toISOString().replace("Z","").replace("T"," ")   
+    let date = new Date().toISOString().replace("Z","").replace("T"," ")
     
     DBConnect.query("SELECT Tickler,QuizID FROM History WHERE Tickler=? AND QuizID=?",[user,parsedData.QuizID],(err,rows)=>{
         if(err){
@@ -193,7 +193,7 @@ router.post('/quiz/timer',(req,res)=>{
                 res.status(200).send()
             } else {
                 /* check strict */
-                DBConnect.query("SELECT QuizDate FROM Assigned WHERE QuizID=?",[parsedData.QuizID],(err,qid)=>{
+                DBConnect.query("SELECT QuizDate FROM Assigned WHERE QuizID=? AND Affects=?",[parsedData.QuizID,user],(err,qid)=>{
                     let id = qid[0].QuizDate
                     if(id == null) {                                                
                         DBConnect.query("INSERT INTO History(QuizID,StartTime,Tickler) VALUES(?,?,?)",[parsedData.QuizID,date,user],(err,rows)=>{
