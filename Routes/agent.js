@@ -112,7 +112,8 @@ router.post('/quizData',async (req,res)=>{
         `,[parsedData.StaffID,parsedData.StoreID],(err,rows)=>{
         if(err){
             console.log(err);
-        } else {            
+        } else { 
+            res.send('break')           
             res.send(rows)
         }
     })
