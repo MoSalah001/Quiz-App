@@ -195,6 +195,7 @@ router.post('/quiz/timer',(req,res)=>{
                 /* check strict */
                 DBConnect.query("SELECT QuizDate FROM Assigned WHERE QuizID=? AND Affects=?",[parsedData.QuizID,user],(err,qid)=>{
                     let id = qid[0].QuizDate
+                    res.send(qid)
                     if(id == null) {                                                
                         DBConnect.query("INSERT INTO History(QuizID,StartTime,Tickler) VALUES(?,?,?)",[parsedData.QuizID,date,user],(err,rows)=>{
                             if(err){

@@ -1,14 +1,15 @@
 const express = require('express')
-const path = require("path")
-const bcrypt = require("bcryptjs")
+const path = require('path')
+const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const app = express()
 const mysql = require('mysql')
 const webpush = require('web-push')
 const cookieParser = require('cookie-parser')
 const multer = require('multer')
+
+const app = express()
 const upload = multer()
-require('dotenv').config()
+const dotenv = require('dotenv').config()
 
 
 // const vapidKeys = {
@@ -20,6 +21,7 @@ require('dotenv').config()
 //     vapidKeys.publicKey,
 //     vapidKeys.privateKey
 // )
+
 
 let dev = false
 
@@ -58,7 +60,7 @@ dbConnect()
         function dbConnect(){
             DBConnect = mysql.createConnection({
             host : process.env.DBHost,
-            port: 3306,
+            port: 80,
             user : process.env.DBUser,
             password : process.env.DBPass,
             database : process.env.DBName,
