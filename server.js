@@ -5,10 +5,10 @@ const jwt = require('jsonwebtoken')
 const mysql = require('mysql')
 const webpush = require('web-push')
 const cookieParser = require('cookie-parser')
-const multer = require('multer')
+// const multer = require('multer')
 
 const app = express()
-const upload = multer()
+// const upload = multer()
 const dotenv = require('dotenv').config()
 
 
