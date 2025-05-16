@@ -1,6 +1,6 @@
 const express = require('express')
 const path = require('path')
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const mysql = require('mysql')
 const webpush = require('web-push')
