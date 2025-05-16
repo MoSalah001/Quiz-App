@@ -93,6 +93,8 @@ router.post('/agentData',async(req,res)=>{
     DBConnect.query("SELECT StaffID,StoreID FROM Users WHERE StaffID =?",[parsedData.user],(err,rows)=>{
         if(err) throw err
         else {
+            console.log(rows);
+            
             res.send(rows)
         }
     })
