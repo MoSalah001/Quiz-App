@@ -188,7 +188,8 @@ router.post('/quiz/timer',(req,res)=>{
         if(err){
             console.error(err)
         } else {
-            if(rows.length > 0){          
+            if(rows.length > 0){
+                res.send(rows)
                                                   
                 res.status(200).send()
             } else {
