@@ -189,13 +189,14 @@ router.post('/quiz/timer',(req,res)=>{
             console.error(err)
         } else {
             if(rows.length > 0){
-                res.send(rows)
                                                   
                 res.status(200).send()
             } else {
                 /* check strict */
                 DBConnect.query("SELECT QuizDate FROM Assigned WHERE QuizID=? AND Affects=?",[parsedData.QuizID,user],(err,qid)=>{
                     let id = qid[0].QuizDate
+                    console.log("strict");
+                    
                     res.send(qid)
                     if(id == null) {                                                
                         DBConnect.query("INSERT INTO History(QuizID,StartTime,Tickler) VALUES(?,?,?)",[parsedData.QuizID,date,user],(err,rows)=>{
@@ -206,6 +207,8 @@ router.post('/quiz/timer',(req,res)=>{
                             }
                         })
                     } else {
+                        console.log("non strict");
+                        
                         const strictDate = new Date(id).toISOString().replace("Z","").replace("T"," ")
                         DBConnect.query("INSERT INTO History(QuizID,StartTime,Tickler) VALUES(?,?,?)",[parsedData.QuizID,strictDate,user],(err,rows)=>{
                             if(err){
