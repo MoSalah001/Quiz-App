@@ -103,7 +103,7 @@ app.use(express.text())
 app.use(express.urlencoded({
     extended: false
 }))
-app.use(upload.array()); 
+// app.use(upload.array()); 
 app.use(express.static('public'));
 
 app.use(express.json())
