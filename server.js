@@ -39,18 +39,18 @@ if (dev){
 
     DBConnect.connect((err)=>{
         if(err){
-            console.log("Error connecting db: ",err.code);
+            console.error("Error connecting db: ",err.code);
             setTimeout(dbConnect,3000)
         } else {            
         }
     })
 
     DBConnect.on('error',(err)=>{
-        console.log("DB Error: ",err);
+        console.error("DB Error: ",err);
     if(err.code === 'PROTOCOL_CONNECTION_LOST') {
         dbConnect()
     } else {
-        console.log(err);
+        console.error(err);
     }    
     })
     }
@@ -69,18 +69,18 @@ dbConnect()
     
         DBConnect.connect((err)=>{
             if(err){
-                console.log("Error connecting db: ",err.code);
+                console.error("Error connecting db: ",err.code);
                 setTimeout(dbConnect,3000)
             } else {
             }
         })
     
         DBConnect.on('error',(err)=>{
-            console.log("DB Error: ",err);
+            console.error("DB Error: ",err);
         if(err.code === 'PROTOCOL_CONNECTION_LOST') {
             dbConnect()
         } else {
-            console.log(err);
+            console.error(err);
         }
             
         })
