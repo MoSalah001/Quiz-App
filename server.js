@@ -118,7 +118,7 @@ app.listen(port,()=>{
 app.post('/login',async (req,res)=>{
     DBConnect.query("SELECT StaffID , PHashed, Admin, Status, NTUser FROM Users WHERE NTUser =?",String(req.body.user).toUpperCase(),(error,result,fields)=>{
         if(error) {
-            res.send(result)
+            res.send(res)
             res.status(404).send({"msg":'Wrong User or Password'})
         }
         let data = result[0]
