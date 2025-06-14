@@ -34,6 +34,10 @@ if (dev){
         user : process.env.DBUserDev,
         password : process.env.DBPassDev,
         database : process.env.DBNameDev,
+        connectTimeout: 30000,
+        acquireTimeout: 30000,
+        waitForConnection: true,
+        keepAlive: 30,
         timezone: "UTC"
     }) 
 
@@ -60,10 +64,14 @@ dbConnect()
         function dbConnect(){
             DBConnect = mysql.createConnection({
             host : process.env.DBHost,
-            port: 80,
             user : process.env.DBUser,
             password : process.env.DBPass,
             database : process.env.DBName,
+            connectTimeout: 30000,
+            acquireTimeout: 30000,
+            waitForConnection: true,
+            keepAlive: 30,
+            charset: "utf8mb4",
             timezone: "UTC"
         }) 
     
@@ -90,7 +98,7 @@ dbConnect()
 
 }
 
-const port = process.env.PORT || 1234
+const port = process.env.PORT || 1212
 
 const admin = require('./Routes/admin')
 const agent = require('./Routes/agent')
