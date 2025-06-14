@@ -11,7 +11,7 @@
     z-index: 0;
     color: darkblue;
     text-shadow: 0px 0px 5px var(--nav-light-yellow);
-    font: 700 36px "Bodoni MT";
+    font: 700 24px "Bodoni MT";
 }
 
 .quizListTemp {
